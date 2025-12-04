@@ -9,4 +9,20 @@ import com.aan.LetsRide.repository.DriverRepository;
 public class DriverService {
 	@Autowired
 private DriverRepository driverrepo;
+	
+	//rakshitha
+
+	
+
+	//adarsh
+
+	
+
+	//vishnu
+
+	
+
+	//vamshi
+	
+	
 }
