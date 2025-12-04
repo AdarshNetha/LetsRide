@@ -16,17 +16,18 @@ private DriverService driverservice;
 
 @PostMapping("/driver/registerDriver")
 
-
+//rakshitha
 
 @DeleteMapping("/driver/deleteDriver")
 
+//adarsh
 
 @GetMapping("/driver/findDribver")
 
-
+//vishnu
 
 @PutMapping("/drivr/upadateCurrentVechileLocation")
 
-
+//vamshi
 
 }
