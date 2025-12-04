@@ -1,0 +1,107 @@
+package com.aan.LetsRide.entity;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
+
+@Entity
+public class Driver {
+	@Id
+private int id;
+private Long licenceNo;
+private String upiid;
+private String name;
+private String status="Available";
+private int age;
+private Long mobileNo;
+private String gender;
+private String mail;
+@OneToOne(cascade = CascadeType.ALL)
+private Vehicle vehicle;
+public int getId() {
+	return id;
+}
+public void setId(int id) {
+	this.id = id;
+}
+public Long getLicenceNo() {
+	return licenceNo;
+}
+public void setLicenceNo(Long licenceNo) {
+	this.licenceNo = licenceNo;
+}
+public String getUpiid() {
+	return upiid;
+}
+public void setUpiid(String upiid) {
+	this.upiid = upiid;
+}
+public String getName() {
+	return name;
+}
+public void setName(String name) {
+	this.name = name;
+}
+public String getStatus() {
+	return status;
+}
+public void setStatus(String status) {
+	this.status = status;
+}
+public int getAge() {
+	return age;
+}
+public void setAge(int age) {
+	this.age = age;
+}
+public Long getMobileNo() {
+	return mobileNo;
+}
+public void setMobileNo(Long mobileNo) {
+	this.mobileNo = mobileNo;
+}
+public String getGender() {
+	return gender;
+}
+public void setGender(String gender) {
+	this.gender = gender;
+}
+public String getMail() {
+	return mail;
+}
+public void setMail(String mail) {
+	this.mail = mail;
+}
+public Vehicle getVehicle() {
+	return vehicle;
+}
+public void setVehicle(Vehicle vehicle) {
+	this.vehicle = vehicle;
+}
+public Driver(int id, Long licenceNo, String upiid, String name, String status, int age, Long mobileNo, String gender,
+		String mail, Vehicle vehicle) {
+	super();
+	this.id = id;
+	this.licenceNo = licenceNo;
+	this.upiid = upiid;
+	this.name = name;
+	this.status = status;
+	this.age = age;
+	this.mobileNo = mobileNo;
+	this.gender = gender;
+	this.mail = mail;
+	this.vehicle = vehicle;
+}
+public Driver() {
+	super();
+	// TODO Auto-generated constructor stub
+}
+@Override
+public String toString() {
+	return "Driver [id=" + id + ", licenceNo=" + licenceNo + ", upiid=" + upiid + ", name=" + name + ", status="
+			+ status + ", age=" + age + ", mobileNo=" + mobileNo + ", gender=" + gender + ", mail=" + mail
+			+ ", vehicle=" + vehicle + "]";
+}
+
+}
