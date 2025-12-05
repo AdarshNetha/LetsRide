@@ -30,7 +30,6 @@ public ResponseStructure<Driver> saveregdriver(@RequestBody RegDriverVehicleDTO 
 }
 	
 
-<<<<<<< HEAD
 // vishnu
 
 
@@ -45,11 +44,9 @@ public ResponseStructure<Driver> deleteById(@RequestHeader int id)
 	return driverservice.deleteById(id);
 }
 
-=======
 @GetMapping("/driver/{mobileNo}")
 public  ResponseStructure<Driver>findDriver(@PathVariable long mobileNo){
 	return driverservice.findDriver(mobileNo);
->>>>>>> 8cd76de21bd5d03e4b3593e68ed8e806f310d546
 	
 }
 
