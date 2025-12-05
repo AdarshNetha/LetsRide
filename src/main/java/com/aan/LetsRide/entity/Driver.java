@@ -2,12 +2,15 @@ package com.aan.LetsRide.entity;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 
 @Entity
 public class Driver {
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 private int id;
 private Long licenceNo;
 private String upiid;
@@ -17,8 +20,9 @@ private int age;
 private Long mobileNo;
 private String gender;
 private String mail;
-@OneToOne(cascade = CascadeType.ALL)
+@OneToOne(mappedBy = "driver", cascade = CascadeType.ALL)
 private Vehicle vehicle;
+
 public int getId() {
 	return id;
 }
@@ -103,5 +107,7 @@ public String toString() {
 			+ status + ", age=" + age + ", mobileNo=" + mobileNo + ", gender=" + gender + ", mail=" + mail
 			+ ", vehicle=" + vehicle + "]";
 }
+
+
 
 }

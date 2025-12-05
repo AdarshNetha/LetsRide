@@ -1,7 +1,11 @@
 package com.aan.LetsRide.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.MapsId;
+import jakarta.persistence.OneToOne;
 
 @Entity
 public class Vehicle {
@@ -15,7 +19,11 @@ private String capacity;
 private String currentcity;
 private String availabilityStatus="Available";
 private double priceperKM;
+@OneToOne
+@MapsId  
+@JoinColumn(name = "id")
 private Driver driver;
+
 public int getId() {
 	return id;
 }
@@ -100,5 +108,8 @@ public String toString() {
 			+ model + ", capacity=" + capacity + ", currentcity=" + currentcity + ", availabilityStatus="
 			+ availabilityStatus + ", priceperKM=" + priceperKM + ", driver=" + driver + "]";
 }
+
+
+
 
 }
