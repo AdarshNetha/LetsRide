@@ -36,6 +36,12 @@ public  ResponseStructure<Driver>findDriver(@PathVariable long mobileNo){
 	return driverservice.findDriver(mobileNo);	
 }
 
+@PostMapping("/update")
+public ResponseStructure<Driver> updatemobilebylocation(@RequestParam double lattitude,@RequestParam double longitude,@RequestParam Long mobilenumber) {
+	
+	return driverservice.updateDriver(lattitude,longitude,mobilenumber);
+	
+}
 
 @DeleteMapping("/deleteByPhoneNO")
 public ResponseStructure<Driver> delete(@RequestParam long phno)

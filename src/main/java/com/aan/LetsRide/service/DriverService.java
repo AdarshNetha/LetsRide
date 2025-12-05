@@ -77,7 +77,19 @@ public class DriverService {
 			
 		}
 	    
-
+		public ResponseStructure<Driver> updateDriver(double lattitude, double longitude, Long mobilenumber) {
+		      Driver d = this.driverrepo.findByMobileNo(mobilenumber);
+		      String city = this.locationService.getCityFromCoordinates(lattitude, longitude);
+		      Vehicle v = d.getVehicle();
+		      v.setCurrentcity(city);
+		      d.setVehicle(v);
+		      this.driverrepo.save(d);
+		      ResponseStructure<Driver> Rs = new ResponseStructure();
+		      Rs.setStatuscode(HttpStatus.ACCEPTED.value());
+		      Rs.setMessage("Location updated");
+		      Rs.setData(d);
+		      return Rs;
+		   }
 
 	 
 
