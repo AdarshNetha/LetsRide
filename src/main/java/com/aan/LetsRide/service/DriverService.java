@@ -64,9 +64,7 @@ public class DriverService {
 	        return resp;
 	    }
 
-<<<<<<< HEAD
-		
-=======
+
 		public ResponseStructure<Driver> findDriver(long mobileNo) {
 			 Driver driver = driverrepo.findByMobileNo(mobileNo);
 			 ResponseStructure<Driver> rs =new ResponseStructure<Driver>();
@@ -79,44 +77,26 @@ public class DriverService {
 			
 		}
 	    
->>>>>>> 8cd76de21bd5d03e4b3593e68ed8e806f310d546
-	    
-	    
-
-	 // vishnu
 
 
 	 
 
-	 //vamshi
+
 
 
 	 
 
-	 //adarsh
-	    
-	    public ResponseStructure<Driver> deleteById(int id) {
-	    	Driver d=driverrepo.findById(id).get();
-	    	ResponseStructure<Driver> rs=new ResponseStructure<Driver>();
-	    	if(d!=null) {
-	    		driverrepo.deleteById(id);
-	    		rs.setStatuscode(HttpStatus.FOUND.value());
-	    		rs.setMessage("deleted succesfully");
-	    		rs.setData(d);	
-	    		return rs;
-	    	}
-	    	else {
-	    		rs.setStatuscode(HttpStatus.NOT_FOUND.value());
-	    		rs.setMessage("not found");
-	    		rs.setData(d);
-	    		return rs;
-	    	}
-			
-			
+		public ResponseStructure<Driver> deleteById(long mobileNo)
+		{
+			Driver driver = driverrepo.findByMobileNo(mobileNo);
+			driverrepo.delete(driver);
+			ResponseStructure<Driver> rs= new ResponseStructure<Driver>();
+			rs.setData(driver);
+			rs.setMessage("deleted successful");
+			rs.setStatuscode(HttpStatus.OK.value());
+			return rs;
 		}
-	    
-
-	}
+}
 
 	   
 	
