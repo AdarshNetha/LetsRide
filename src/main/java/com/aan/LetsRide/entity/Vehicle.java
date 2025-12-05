@@ -1,7 +1,11 @@
 package com.aan.LetsRide.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.MapsId;
+import jakarta.persistence.OneToOne;
 
 @Entity
 public class Vehicle {
@@ -15,7 +19,11 @@ private String capacity;
 private String currentcity;
 private String availabilityStatus="Available";
 private double priceperKM;
+@OneToOne
+@MapsId  
+@JoinColumn(name = "id")
 private Driver driver;
+
 public int getId() {
 	return id;
 }
@@ -76,20 +84,7 @@ public Driver getDriver() {
 public void setDriver(Driver driver) {
 	this.driver = driver;
 }
-public Vehicle(int id, String vehilename, String vehileno, String type, String model, String capacity,
-		String currentcity, String availabilityStatus, double priceperKM, Driver driver) {
-	super();
-	this.id = id;
-	this.vehilename = vehilename;
-	this.vehileno = vehileno;
-	this.type = type;
-	this.model = model;
-	this.capacity = capacity;
-	this.currentcity = currentcity;
-	this.availabilityStatus = availabilityStatus;
-	this.priceperKM = priceperKM;
-	this.driver = driver;
-}
+
 public Vehicle() {
 	super();
 	// TODO Auto-generated constructor stub
@@ -100,5 +95,8 @@ public String toString() {
 			+ model + ", capacity=" + capacity + ", currentcity=" + currentcity + ", availabilityStatus="
 			+ availabilityStatus + ", priceperKM=" + priceperKM + ", driver=" + driver + "]";
 }
+
+
+
 
 }

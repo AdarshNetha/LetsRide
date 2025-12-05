@@ -1,9 +1,7 @@
 package com.aan.LetsRide.DTO;
 
-
-
-
 public class RegDriverVehicleDTO {
+	
 private Long licenceNo;
 private String upiid;
 private String name;
@@ -19,6 +17,7 @@ private String capacity;
 private double longitude;
 private double lattitude;
 private double priceperKM;
+
 public Long getLicenceNo() {
 	return licenceNo;
 }
@@ -100,9 +99,7 @@ public void setLongitude(double longitude) {
 public double getLattitude() {
 	return lattitude;
 }
-public void setLattitude(double lattitude) {
-	this.lattitude = lattitude;
-}
+
 public double getPriceperKM() {
 	return priceperKM;
 }
