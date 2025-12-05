@@ -62,7 +62,8 @@ public class DriverService {
 
 	        return resp;
 	    }
-	    
+
+		
 	    
 	    
 
@@ -77,6 +78,27 @@ public class DriverService {
 	 
 
 	 //adarsh
+	    
+	    public ResponseStructure<Driver> deleteById(int id) {
+	    	Driver d=driverrepo.findById(id).get();
+	    	ResponseStructure<Driver> rs=new ResponseStructure<Driver>();
+	    	if(d!=null) {
+	    		driverrepo.deleteById(id);
+	    		rs.setStatuscode(HttpStatus.FOUND.value());
+	    		rs.setMessage("deleted succesfully");
+	    		rs.setData(d);	
+	    		return rs;
+	    	}
+	    	else {
+	    		rs.setStatuscode(HttpStatus.NOT_FOUND.value());
+	    		rs.setMessage("not found");
+	    		rs.setData(d);
+	    		return rs;
+	    	}
+			
+			
+		}
+	    
 
 	}
 
