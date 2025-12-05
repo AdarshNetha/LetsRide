@@ -13,6 +13,7 @@ import com.aan.LetsRide.entity.Driver;
 import com.aan.LetsRide.entity.Vehicle;
 import com.aan.LetsRide.repository.DriverRepository;
 
+
 @Service
 public class DriverService {
 
@@ -62,6 +63,18 @@ public class DriverService {
 
 	        return resp;
 	    }
+
+		public ResponseStructure<Driver> findDriver(long mobileNo) {
+			 Driver driver = driverrepo.findByMobileNo(mobileNo);
+			 ResponseStructure<Driver> rs =new ResponseStructure<Driver>();
+				
+				rs.setStatuscode(HttpStatus.FOUND.value());
+				rs.setMessage("Driver with monileNo " +mobileNo + "foundr succesfully");
+				rs.setData(driver);
+				return rs;
+				
+			
+		}
 	    
 	    
 	    
