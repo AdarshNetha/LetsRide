@@ -1,9 +1,7 @@
 package com.aan.LetsRide.DTO;
 
-
-
-
 public class RegDriverVehicleDTO {
+	
 private Long licenceNo;
 private String upiid;
 private String name;

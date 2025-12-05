@@ -83,20 +83,7 @@ public Vehicle getVehicle() {
 public void setVehicle(Vehicle vehicle) {
 	this.vehicle = vehicle;
 }
-public Driver(int id, Long licenceNo, String upiid, String name, String status, int age, Long mobileNo, String gender,
-		String mail, Vehicle vehicle) {
-	super();
-	this.id = id;
-	this.licenceNo = licenceNo;
-	this.upiid = upiid;
-	this.name = name;
-	this.status = status;
-	this.age = age;
-	this.mobileNo = mobileNo;
-	this.gender = gender;
-	this.mail = mail;
-	this.vehicle = vehicle;
-}
+
 public Driver() {
 	super();
 	// TODO Auto-generated constructor stub

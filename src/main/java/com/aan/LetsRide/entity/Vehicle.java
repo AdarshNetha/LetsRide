@@ -84,20 +84,7 @@ public Driver getDriver() {
 public void setDriver(Driver driver) {
 	this.driver = driver;
 }
-public Vehicle(int id, String vehilename, String vehileno, String type, String model, String capacity,
-		String currentcity, String availabilityStatus, double priceperKM, Driver driver) {
-	super();
-	this.id = id;
-	this.vehilename = vehilename;
-	this.vehileno = vehileno;
-	this.type = type;
-	this.model = model;
-	this.capacity = capacity;
-	this.currentcity = currentcity;
-	this.availabilityStatus = availabilityStatus;
-	this.priceperKM = priceperKM;
-	this.driver = driver;
-}
+
 public Vehicle() {
 	super();
 	// TODO Auto-generated constructor stub
