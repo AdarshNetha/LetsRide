@@ -11,7 +11,9 @@ import com.aan.LetsRide.ResponseStructure;
 import com.aan.LetsRide.DTO.RegDriverVehicleDTO;
 import com.aan.LetsRide.entity.Driver;
 import com.aan.LetsRide.entity.Vehicle;
+import com.aan.LetsRide.exception.DriverNOtFoundWiththismobileNO;
 import com.aan.LetsRide.repository.DriverRepository;
+
 
 
 @Service
@@ -67,6 +69,11 @@ public class DriverService {
 
 		public ResponseStructure<Driver> findDriver(long mobileNo) {
 			 Driver driver = driverrepo.findByMobileNo(mobileNo);
+			 if(driver==null) {
+				 throw new DriverNOtFoundWiththismobileNO(mobileNo);
+			 }
+			
+			 
 			 ResponseStructure<Driver> rs =new ResponseStructure<Driver>();
 				
 				rs.setStatuscode(HttpStatus.FOUND.value());
