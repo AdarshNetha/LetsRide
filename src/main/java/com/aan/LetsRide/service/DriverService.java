@@ -11,7 +11,9 @@ import com.aan.LetsRide.ResponseStructure;
 import com.aan.LetsRide.DTO.RegDriverVehicleDTO;
 import com.aan.LetsRide.entity.Driver;
 import com.aan.LetsRide.entity.Vehicle;
+import com.aan.LetsRide.exception.DriverNOtFoundWiththismobileNO;
 import com.aan.LetsRide.repository.DriverRepository;
+
 
 
 @Service
@@ -67,6 +69,11 @@ public class DriverService {
 
 		public ResponseStructure<Driver> findDriver(long mobileNo) {
 			 Driver driver = driverrepo.findByMobileNo(mobileNo);
+			 if(driver==null) {
+				 throw new DriverNOtFoundWiththismobileNO(mobileNo);
+			 }
+			
+			 
 			 ResponseStructure<Driver> rs =new ResponseStructure<Driver>();
 				
 				rs.setStatuscode(HttpStatus.FOUND.value());
@@ -77,7 +84,19 @@ public class DriverService {
 			
 		}
 	    
-
+		public ResponseStructure<Driver> updateDriver(double lattitude, double longitude, Long mobilenumber) {
+		      Driver d = this.driverrepo.findByMobileNo(mobilenumber);
+		      String city = this.locationService.getCityFromCoordinates(lattitude, longitude);
+		      Vehicle v = d.getVehicle();
+		      v.setCurrentcity(city);
+		      d.setVehicle(v);
+		      this.driverrepo.save(d);
+		      ResponseStructure<Driver> Rs = new ResponseStructure();
+		      Rs.setStatuscode(HttpStatus.ACCEPTED.value());
+		      Rs.setMessage("Location updated");
+		      Rs.setData(d);
+		      return Rs;
+		   }
 
 	 
 
@@ -96,6 +115,32 @@ public class DriverService {
 			rs.setStatuscode(HttpStatus.OK.value());
 			return rs;
 		}
+		
+		
+//		vamshi
+		
+		
+		
+		
+//		vishnu
+		
+		
+		
+		
+		
+//		rakshitha
+
+		
+		
+		
+		
+		
+		
+//	adarsh	
+		
+		
+		
+		
 }
 
 	   
