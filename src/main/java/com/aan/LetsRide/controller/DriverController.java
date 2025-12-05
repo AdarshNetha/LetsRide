@@ -27,6 +27,19 @@ public ResponseStructure<Driver> saveregdriver(@RequestBody RegDriverVehicleDTO 
     return driverservice.saveRegDriver(dto);
 }
 	
+//@GetMapping("/find")
+
+// vishnu
+
+
+//@PutMapping("/update")
+
+//vamshi
+
+
+//@DeleteMapping("/delete")
+
+//adarsh
 	
 }
 
