@@ -92,7 +92,7 @@ public Driver() {
 public String toString() {
 	return "Driver [id=" + id + ", licenceNo=" + licenceNo + ", upiid=" + upiid + ", name=" + name + ", status="
 			+ status + ", age=" + age + ", mobileNo=" + mobileNo + ", gender=" + gender + ", mail=" + mail
-			+ ", vehicle=" + vehicle + "]";
+			+  "]";
 }
 
 

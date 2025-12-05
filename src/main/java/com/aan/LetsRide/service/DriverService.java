@@ -66,6 +66,7 @@ public class DriverService {
 	        return resp;
 	    }
 
+
 		public ResponseStructure<Driver> findDriver(long mobileNo) {
 			 Driver driver = driverrepo.findByMobileNo(mobileNo);
 			 if(driver==null) {
@@ -83,22 +84,38 @@ public class DriverService {
 			
 		}
 	    
-	    
-	    
+		public ResponseStructure<Driver> updateDriver(double lattitude, double longitude, Long mobilenumber) {
+		      Driver d = this.driverrepo.findByMobileNo(mobilenumber);
+		      String city = this.locationService.getCityFromCoordinates(lattitude, longitude);
+		      Vehicle v = d.getVehicle();
+		      v.setCurrentcity(city);
+		      d.setVehicle(v);
+		      this.driverrepo.save(d);
+		      ResponseStructure<Driver> Rs = new ResponseStructure();
+		      Rs.setStatuscode(HttpStatus.ACCEPTED.value());
+		      Rs.setMessage("Location updated");
+		      Rs.setData(d);
+		      return Rs;
+		   }
 
-	 // vishnu
+	 
+
+
 
 
 	 
 
-	 //vamshi
-
-
-	 
-
-	 //adarsh
-
-	}
+		public ResponseStructure<Driver> deleteById(long mobileNo)
+		{
+			Driver driver = driverrepo.findByMobileNo(mobileNo);
+			driverrepo.delete(driver);
+			ResponseStructure<Driver> rs= new ResponseStructure<Driver>();
+			rs.setData(driver);
+			rs.setMessage("deleted successful");
+			rs.setStatuscode(HttpStatus.OK.value());
+			return rs;
+		}
+}
 
 	   
 	
