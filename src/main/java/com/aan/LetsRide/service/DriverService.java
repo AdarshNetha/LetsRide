@@ -14,6 +14,7 @@ import com.aan.LetsRide.DTO.RegDriverVehicleDTO;
 import com.aan.LetsRide.entity.Coustmer;
 import com.aan.LetsRide.entity.Driver;
 import com.aan.LetsRide.entity.Vehicle;
+import com.aan.LetsRide.exception.CustomerNotFoundWithMobile;
 import com.aan.LetsRide.exception.DriverNOtFoundWiththismobileNO;
 import com.aan.LetsRide.repository.CoustmerRepo;
 import com.aan.LetsRide.repository.DriverRepository;
@@ -148,6 +149,21 @@ public class DriverService {
 		
 		
 //		rakshitha
+		public ResponseStructure<Coustmer> findCustomer(long mobileno) {
+			Coustmer cust =coustmerRepo.findByMobileno(mobileno);
+			 if(cust==null) {
+				 throw new  CustomerNotFoundWithMobile(mobileno);
+			 }
+		
+			      ResponseStructure<Coustmer> rs =new ResponseStructure<Coustmer>();
+					
+					rs.setStatuscode(HttpStatus.FOUND.value());
+					rs.setMessage("customerwith mobileNo " +mobileno + "foundr succesfully");
+					rs.setData(cust);
+					return rs;
+		}
+			
+		
 
 		
 		
@@ -175,6 +191,7 @@ public class DriverService {
 			
 			
 		}
+
 
 
 		

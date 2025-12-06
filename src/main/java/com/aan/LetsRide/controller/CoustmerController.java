@@ -31,12 +31,14 @@ public class CoustmerController {
 		return ds.registerCoustmer(cdto);
 	}
 	
+	@GetMapping("/coustmer/Find")
 	
-	
-	
-//	@GetMapping("/coustmer/Find")
 	
 //	rakshitha
+public ResponseStructure<Coustmer> findcustomer(@RequestParam long mobileno){
+		return ds.findCustomer(mobileno);
+		
+	}
 	
 	
 	@GetMapping("/available")
