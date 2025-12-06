@@ -1,5 +1,6 @@
 package com.aan.LetsRide.service;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import com.aan.LetsRide.exception.CustomerNotFoundWithMobile;
 import com.aan.LetsRide.exception.DriverNOtFoundWiththismobileNO;
 import com.aan.LetsRide.repository.CoustmerRepo;
 import com.aan.LetsRide.repository.DriverRepository;
+import com.aan.LetsRide.repository.Vechilerepo;
 
 
 
@@ -30,6 +32,9 @@ public class DriverService {
 
 	    @Autowired
 	    private LocationService locationService;
+	    
+	    @Autowired
+	    private Vechilerepo vehiclerepo;
 
 	    public ResponseStructure<Driver> saveRegDriver(RegDriverVehicleDTO dto) {
 
@@ -127,7 +132,13 @@ public class DriverService {
 		
 		
 //		vamshi
-		
+		public ResponseStructure<List<Vehicle>> getAvailableVehiclesByCity(String city) {
+			List<Vehicle> list=vehiclerepo.findAvailableVehiclesBycity(city);
+			if(list.isEmpty()) {
+				return new ResponseStructure<>(HttpStatus.ACCEPTED.value(),"No vehicles found",null);
+			}
+			return new ResponseStructure<>(HttpStatus.ACCEPTED.value(),"Available vehicles",list);
+		}
 		
 		
 		
@@ -182,7 +193,7 @@ public class DriverService {
 		}
 
 
-		
+
 		
 		
 		
