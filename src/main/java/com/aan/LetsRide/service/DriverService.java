@@ -8,10 +8,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.aan.LetsRide.ResponseStructure;
+import com.aan.LetsRide.DTO.CoustmerDTO;
 import com.aan.LetsRide.DTO.RegDriverVehicleDTO;
+import com.aan.LetsRide.entity.Coustmer;
 import com.aan.LetsRide.entity.Driver;
 import com.aan.LetsRide.entity.Vehicle;
 import com.aan.LetsRide.exception.DriverNOtFoundWiththismobileNO;
+import com.aan.LetsRide.repository.CoustmerRepo;
 import com.aan.LetsRide.repository.DriverRepository;
 
 
@@ -21,6 +24,8 @@ public class DriverService {
 
 	    @Autowired
 	    private DriverRepository driverrepo;
+	    @Autowired
+	    private CoustmerRepo coustmerRepo;
 
 	    @Autowired
 	    private LocationService locationService;
@@ -115,6 +120,9 @@ public class DriverService {
 			rs.setStatuscode(HttpStatus.OK.value());
 			return rs;
 		}
+
+
+	
 		
 		
 //		vamshi
@@ -138,6 +146,24 @@ public class DriverService {
 		
 //	adarsh	
 		
+		public ResponseStructure<Coustmer> registerCoustmer(CoustmerDTO cdto) {
+			Coustmer coustmer=new Coustmer();
+			coustmer.setName(cdto.getName());
+			coustmer.setAge(cdto.getAge());
+			coustmer.setGender(cdto.getGender());
+			coustmer.setMobno(cdto.getMobileno());
+			coustmer.setMail(cdto.getEmail());
+			coustmer.setCurrentLoc(locationService.getCityFromCoordinates(cdto.getLatitude(),cdto.getLongutude()));
+			coustmerRepo.save(coustmer);
+			ResponseStructure<Coustmer> rs= new ResponseStructure<Coustmer>();
+			rs.setData(coustmer);
+			rs.setMessage("saved cousterm");
+			rs.setStatuscode(HttpStatus.CREATED.value());
+			return rs;
+			
+			
+			
+		}
 		
 		
 		

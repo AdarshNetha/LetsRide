@@ -4,20 +4,31 @@ import java.util.List;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 
 @Entity
 public class Coustmer {
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	private String name;
 	private int age;
 	private String gender;
 	private long mobno;
+	private String mail;
 	private String currentLoc;
 	@OneToMany(cascade = CascadeType.ALL)
 	List<Booking> bookinglist;
+	
+	public String getMail() {
+		return mail;
+	}
+	public void setMail(String mail) {
+		this.mail = mail;
+	}
 	public int getId() {
 		return id;
 	}
@@ -67,9 +78,9 @@ public class Coustmer {
 	@Override
 	public String toString() {
 		return "Coustmer [id=" + id + ", name=" + name + ", age=" + age + ", gender=" + gender + ", mobno=" + mobno
-				+ ", currentLoc=" + currentLoc + ", bookinglist=" + bookinglist + "]";
+				+ ", mail=" + mail + ", currentLoc=" + currentLoc + ", bookinglist=" + bookinglist + "]";
 	}
-	
+
 		
 
 }
