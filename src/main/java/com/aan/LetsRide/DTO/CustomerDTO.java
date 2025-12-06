@@ -1,6 +1,6 @@
 package com.aan.LetsRide.DTO;
 
-public class CoustmerDTO {
+public class CustomerDTO {
 	private String name;
 	private int age;
 	private String gender;
@@ -55,7 +55,7 @@ public class CoustmerDTO {
 		return "CoustmerDTO [name=" + name + ", age=" + age + ", gender=" + gender + ", mobileno=" + mobileno
 				+ ", email=" + email + ", latitude=" + latitude + ", longutude=" + longutude + "]";
 	}
-	public CoustmerDTO(String name, int age, String gender, long mobileno, String email, double latitude,
+	public CustomerDTO(String name, int age, String gender, long mobileno, String email, double latitude,
 			double longutude) {
 		super();
 		this.name = name;
@@ -66,7 +66,7 @@ public class CoustmerDTO {
 		this.latitude = latitude;
 		this.longutude = longutude;
 	}
-	public CoustmerDTO() {
+	public CustomerDTO() {
 		super();
 		// TODO Auto-generated constructor stub
 	}

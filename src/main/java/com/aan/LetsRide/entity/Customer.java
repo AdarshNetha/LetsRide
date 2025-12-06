@@ -10,7 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 
 @Entity
-public class Coustmer {
+public class Customer {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
@@ -71,13 +71,13 @@ public class Coustmer {
 	public void setBookinglist(List<Booking> bookinglist) {
 		this.bookinglist = bookinglist;
 	}
-	public Coustmer() {
+	public Customer() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 	@Override
 	public String toString() {
-		return "Coustmer [id=" + id + ", name=" + name + ", age=" + age + ", gender=" + gender + ", mobileno=" + mobileno
+		return "Customer [id=" + id + ", name=" + name + ", age=" + age + ", gender=" + gender + ", mobileno=" + mobileno
 				+ ", mail=" + mail + ", currentLoc=" + currentLoc + ", bookinglist=" + bookinglist + "]";
 	}
 	

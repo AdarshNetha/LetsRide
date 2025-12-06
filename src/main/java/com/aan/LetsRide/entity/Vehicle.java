@@ -21,12 +21,20 @@ private String capacity;
 private String currentcity;
 private String availabilityStatus="Available";
 private double priceperKM;
+private int averagespeed;
 @JsonIgnore
 @OneToOne(cascade = CascadeType.ALL)
 @MapsId  
 @JoinColumn(name = "id")
 private Driver driver;
 
+
+public int getAveragespeed() {
+	return averagespeed;
+}
+public void setAveragespeed(int averagespeed) {
+	this.averagespeed = averagespeed;
+}
 public int getId() {
 	return id;
 }
@@ -96,7 +104,9 @@ public Vehicle() {
 public String toString() {
 	return "Vehicle [id=" + id + ", vehilename=" + vehilename + ", vehileno=" + vehileno + ", type=" + type + ", model="
 			+ model + ", capacity=" + capacity + ", currentcity=" + currentcity + ", availabilityStatus="
-			+ availabilityStatus + ", priceperKM=" + priceperKM + "]";
+			+ availabilityStatus + ", priceperKM=" + priceperKM + ", averagespeed=" + averagespeed + ", driver="
+			+ driver + "]";
 }
+
 
 }
