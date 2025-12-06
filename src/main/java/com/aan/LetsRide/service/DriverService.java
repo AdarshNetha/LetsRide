@@ -1,5 +1,6 @@
 package com.aan.LetsRide.service;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +14,11 @@ import com.aan.LetsRide.DTO.RegDriverVehicleDTO;
 import com.aan.LetsRide.entity.Coustmer;
 import com.aan.LetsRide.entity.Driver;
 import com.aan.LetsRide.entity.Vehicle;
+import com.aan.LetsRide.exception.CustomerNotFoundWithMobile;
 import com.aan.LetsRide.exception.DriverNOtFoundWiththismobileNO;
 import com.aan.LetsRide.repository.CoustmerRepo;
 import com.aan.LetsRide.repository.DriverRepository;
+import com.aan.LetsRide.repository.Vechilerepo;
 
 
 
@@ -29,6 +32,9 @@ public class DriverService {
 
 	    @Autowired
 	    private LocationService locationService;
+	    
+	    @Autowired
+	    private Vechilerepo vehiclerepo;
 
 	    public ResponseStructure<Driver> saveRegDriver(RegDriverVehicleDTO dto) {
 
@@ -126,7 +132,13 @@ public class DriverService {
 		
 		
 //		vamshi
-		
+		public ResponseStructure<List<Vehicle>> getAvailableVehiclesByCity(String city) {
+			List<Vehicle> list=vehiclerepo.findAvailableVehiclesBycity(city);
+			if(list.isEmpty()) {
+				return new ResponseStructure<>(HttpStatus.ACCEPTED.value(),"No vehicles found",null);
+			}
+			return new ResponseStructure<>(HttpStatus.ACCEPTED.value(),"Available vehicles",list);
+		}
 		
 		
 		
@@ -137,6 +149,21 @@ public class DriverService {
 		
 		
 //		rakshitha
+		public ResponseStructure<Coustmer> findCustomer(long mobileno) {
+			Coustmer cust =coustmerRepo.findByMobileno(mobileno);
+			 if(cust==null) {
+				 throw new  CustomerNotFoundWithMobile(mobileno);
+			 }
+		
+			      ResponseStructure<Coustmer> rs =new ResponseStructure<Coustmer>();
+					
+					rs.setStatuscode(HttpStatus.FOUND.value());
+					rs.setMessage("customerwith mobileNo " +mobileno + "foundr succesfully");
+					rs.setData(cust);
+					return rs;
+		}
+			
+		
 
 		
 		
@@ -166,26 +193,15 @@ public class DriverService {
 		}
 
 
-		public ResponseStructure<Coustmer> deleteBymbno(long mobno) {
+
+		public ResponseStructure<Coustmer> deleteBymbno(long mobileno) {
 			
-			Coustmer cust= coustmerRepo.findBymobno(mobno);
+			Coustmer cust= coustmerRepo.findByMobileno(mobileno);
 			coustmerRepo.delete(cust);
 			ResponseStructure<Coustmer> rs= new ResponseStructure<Coustmer>();
 			rs.setData(cust);
-			rs.setMessage("delete coustmer by mobno"+mobno);
+			rs.setMessage("delete coustmer by mobno"+mobileno);
 			rs.setStatuscode(HttpStatus.CREATED.value());
 			return rs;
-			
-			
-			
-		}
-		
-		
-		
-}
-
-	   
-	
-
-
+		}}
 

@@ -17,7 +17,7 @@ public class Coustmer {
 	private String name;
 	private int age;
 	private String gender;
-	private long mobno;
+	private long mobileno;
 	private String mail;
 	private String currentLoc;
 	@OneToMany(cascade = CascadeType.ALL)
@@ -54,10 +54,10 @@ public class Coustmer {
 		this.gender = gender;
 	}
 	public long getMobno() {
-		return mobno;
+		return mobileno;
 	}
-	public void setMobno(long mobno) {
-		this.mobno = mobno;
+	public void setMobno(long mobileno) {
+		this.mobileno = mobileno;
 	}
 	public String getCurrentLoc() {
 		return currentLoc;
@@ -77,10 +77,10 @@ public class Coustmer {
 	}
 	@Override
 	public String toString() {
-		return "Coustmer [id=" + id + ", name=" + name + ", age=" + age + ", gender=" + gender + ", mobno=" + mobno
+		return "Coustmer [id=" + id + ", name=" + name + ", age=" + age + ", gender=" + gender + ", mobileno=" + mobileno
 				+ ", mail=" + mail + ", currentLoc=" + currentLoc + ", bookinglist=" + bookinglist + "]";
 	}
-
+	
 		
 
 }

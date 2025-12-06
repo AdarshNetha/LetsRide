@@ -1,5 +1,7 @@
 package com.aan.LetsRide.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -19,6 +21,7 @@ private String capacity;
 private String currentcity;
 private String availabilityStatus="Available";
 private double priceperKM;
+@JsonIgnore
 @OneToOne(cascade = CascadeType.ALL)
 @MapsId  
 @JoinColumn(name = "id")

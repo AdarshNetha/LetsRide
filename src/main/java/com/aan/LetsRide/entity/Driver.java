@@ -2,6 +2,8 @@ package com.aan.LetsRide.entity;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -23,6 +25,7 @@ private int age;
 private Long mobileNo;
 private String gender;
 private String mail;
+@JsonIgnore
 @OneToOne(mappedBy = "driver", cascade = CascadeType.ALL)
 private Vehicle vehicle;
 @OneToMany(mappedBy = "driver")
