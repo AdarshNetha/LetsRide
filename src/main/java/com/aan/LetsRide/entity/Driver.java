@@ -1,10 +1,13 @@
 package com.aan.LetsRide.entity;
 
+import java.util.List;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 
 @Entity
@@ -22,6 +25,9 @@ private String gender;
 private String mail;
 @OneToOne(mappedBy = "driver", cascade = CascadeType.ALL)
 private Vehicle vehicle;
+@OneToMany(mappedBy = "driver")
+private List<Booking> bookings;
+
 
 public int getId() {
 	return id;
@@ -92,7 +98,7 @@ public Driver() {
 public String toString() {
 	return "Driver [id=" + id + ", licenceNo=" + licenceNo + ", upiid=" + upiid + ", name=" + name + ", status="
 			+ status + ", age=" + age + ", mobileNo=" + mobileNo + ", gender=" + gender + ", mail=" + mail
-			+ ", vehicle=" + vehicle + "]";
+			+  "]";
 }
 
 

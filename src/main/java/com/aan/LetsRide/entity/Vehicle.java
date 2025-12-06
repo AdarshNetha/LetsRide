@@ -19,7 +19,7 @@ private String capacity;
 private String currentcity;
 private String availabilityStatus="Available";
 private double priceperKM;
-@OneToOne
+@OneToOne(cascade = CascadeType.ALL)
 @MapsId  
 @JoinColumn(name = "id")
 private Driver driver;
@@ -93,10 +93,7 @@ public Vehicle() {
 public String toString() {
 	return "Vehicle [id=" + id + ", vehilename=" + vehilename + ", vehileno=" + vehileno + ", type=" + type + ", model="
 			+ model + ", capacity=" + capacity + ", currentcity=" + currentcity + ", availabilityStatus="
-			+ availabilityStatus + ", priceperKM=" + priceperKM + ", driver=" + driver + "]";
+			+ availabilityStatus + ", priceperKM=" + priceperKM + "]";
 }
-
-
-
 
 }
