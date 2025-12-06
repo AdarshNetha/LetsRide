@@ -194,13 +194,14 @@ public class DriverService {
 
 
 
-		
-		
-		
-}
-
-	   
-	
-
-
+		public ResponseStructure<Coustmer> deleteBymbno(long mobileno) {
+			
+			Coustmer cust= coustmerRepo.findByMobileno(mobileno);
+			coustmerRepo.delete(cust);
+			ResponseStructure<Coustmer> rs= new ResponseStructure<Coustmer>();
+			rs.setData(cust);
+			rs.setMessage("delete coustmer by mobno"+mobileno);
+			rs.setStatuscode(HttpStatus.CREATED.value());
+			return rs;
+		}}
 

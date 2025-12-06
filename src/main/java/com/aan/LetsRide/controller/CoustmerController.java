@@ -51,7 +51,11 @@ public ResponseStructure<Coustmer> findcustomer(@RequestParam long mobileno){
 	
 	
 //	@DeleteMapping("/coustmer/DeleteCoustemr")
-	
+	@DeleteMapping("/deletebymobileNo")
+	public ResponseStructure<Coustmer> deleteCoustmer(@RequestParam long mobileno){
+		return ds.deleteBymbno(mobileno);
+		
+	}
 //	vishnu
 
 }

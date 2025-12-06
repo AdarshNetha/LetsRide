@@ -11,13 +11,6 @@ import com.aan.LetsRide.entity.Driver;
 import com.aan.LetsRide.entity.Vehicle;
 @Repository
 public interface DriverRepository extends JpaRepository<Driver, Integer>{
-	
-
 	 Driver findByMobileNo(long mobileNo);
-//	  Optional<Driver> findByMobileNo(Long mobileNo);
-	 
-
-	
-	
-
+	 //	  Optional<Driver> findByMobileNo(Long mobileNo);
 }
