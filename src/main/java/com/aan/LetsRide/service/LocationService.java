@@ -17,16 +17,23 @@ public class LocationService {
 
 		    public String getCityFromCoordinates(double lattitude, double longitude) {
 
-		        String url = "https://us1.locationiq.com/v1/reverse.php?key=" + API_KEY +
-		                     "&lat=" + lattitude +
-		                     "&lon=" + longitude +
-		                     "&format=json";
+		        String url = 
+		        		"https://us1.locationiq.com/v1/reverse.php?key=" + API_KEY +
+
+	                     "&lat=" + lattitude +
+
+	                     "&lon=" + longitude +
+
+	                     "&format=json"; 
+		        
+
 
 		        Map<String, Object> response = restTemplate.getForObject(url, Map.class);
 
 		        Map<String, Object> address = (Map<String, Object>) response.get("address");
 
 		        return (String) address.get("city");
+		        
 		    }
 
 			

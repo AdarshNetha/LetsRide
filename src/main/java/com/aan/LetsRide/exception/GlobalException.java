@@ -34,6 +34,19 @@ public class GlobalException {
 		        return rs;
 		
 	}
+	@ExceptionHandler(CustomerNotFoundWithMobile.class)
+	public ResponseStructure<String>  CustomerNotFoundWithMobile( CustomerNotFoundWithMobile custmob){
+		
+
+        ResponseStructure<String> rs = new ResponseStructure<>();
+        rs.setStatuscode(HttpStatus.NOT_FOUND.value());
+        rs.setMessage(custmob.getMessage());
+        rs.setData(null);
+
+        return rs;
+
+}
+
 	
 	
 	
