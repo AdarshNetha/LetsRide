@@ -6,16 +6,19 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.aan.LetsRide.ResponseStructure;
 import com.aan.LetsRide.DTO.AvailableVehicleDTO;
 import com.aan.LetsRide.DTO.CustomerDTO;
+import com.aan.LetsRide.DTO.LocationCoordinatesdto;
 import com.aan.LetsRide.DTO.RegDriverVehicleDTO;
 import com.aan.LetsRide.DTO.Vehicledetails;
 import com.aan.LetsRide.entity.Customer;
 import com.aan.LetsRide.entity.Driver;
+import com.aan.LetsRide.entity.LocationIQResponse;
 import com.aan.LetsRide.entity.Vehicle;
 import com.aan.LetsRide.exception.CustomerNotFoundWithMobile;
 import com.aan.LetsRide.exception.DriverNOtFoundWiththismobileNO;
@@ -35,9 +38,13 @@ public class DriverService {
 
 	    @Autowired
 	    private LocationService locationService;
+	    @Autowired
+	    private  LocationIQResponseService  locationiqservice;
 	    
 	    @Autowired
 	    private Vechilerepo vehiclerepo;
+	    @Autowired
+	    private DistanceService distanceService;
 
 	    public ResponseStructure<Driver> saveRegDriver(RegDriverVehicleDTO dto) {
 
@@ -135,41 +142,103 @@ public class DriverService {
 		
 		
 //		vamshi
-		public ResponseStructure<AvailableVehicleDTO> getAvailableVehiclesByCity(Long mobileno, String distinationLocation) {
-			
-			Customer c=customerRepo.findByMobileno(mobileno);
-			String Source=c.getCurrentLoc();
-			String DistinationLocation=distinationLocation;
-			int distance=200;
-			AvailableVehicleDTO AVD=new AvailableVehicleDTO();
-			
-			AVD.setC(c);
-			AVD.setSourceLocation(Source);
-			AVD.setDistance(distance);
-			AVD.setDestinationLocation(DistinationLocation);
-			List<Vehicledetails> l= new ArrayList<Vehicledetails>();
-			List<Vehicle> list=vehiclerepo.findAvailableVehiclesBycity(Source);
-			for (Vehicle vehicle : list) {
-				Vehicledetails vd= new Vehicledetails();
-				int A=vehicle.getAveragespeed();
-				double B=vehicle.getPriceperKM();
-				double fare=B*distance;
-				double time=distance/A;
-				vd.setV(vehicle);
-				vd.setFare(fare);
-				vd.setEstimationtime(time);
-			
-				l.add(vd);
-				
-				
-			}
-			AVD.setAvailablevehicles(l);
-			ResponseStructure <AvailableVehicleDTO>  rs=new ResponseStructure<AvailableVehicleDTO>();
-			rs.setStatuscode(HttpStatus.ACCEPTED.value());
-			rs.setMessage("Available vehicles");
-			rs.setData(AVD);
-			return rs;
+//		public ResponseStructure<AvailableVehicleDTO> getAvailableVehiclesByCity(Long mobileno, String destinationLocation) {
+//			
+//			Customer c=customerRepo.findByMobileno(mobileno);
+//			String Source=c.getCurrentLoc();
+//			String validatedCity = locationiqservice.validateCityFromAPI(destinationLocation);
+//		
+//			double distance = distanceService.getDrivingDistance(
+//		            sourceCoord.getLon(), sourceCoord.getLat(),
+//		            destCoord.getLon(), destCoord.getLat()
+//		    );
+//			AvailableVehicleDTO AVD=new AvailableVehicleDTO();
+//			
+//			AVD.setC(c);
+//			AVD.setSourceLocation(Source);
+//			AVD.setDistance(distance);
+//			AVD.setDestinationLocation(destinationLocation);
+//			List<Vehicledetails> l= new ArrayList<Vehicledetails>();
+//			List<Vehicle> list=vehiclerepo.findAvailableVehiclesBycity(Source);
+//			for (Vehicle vehicle : list) {
+//				Vehicledetails vd= new Vehicledetails();
+//				int A=vehicle.getAveragespeed();
+//				double B=vehicle.getPriceperKM();
+//				double fare=B*distance;
+//				double time=distance/A;
+//				vd.setV(vehicle);
+//				vd.setFare(fare);
+//				vd.setEstimationtime(time);
+//			
+//				l.add(vd);
+//				
+//				
+//			}
+//			AVD.setAvailablevehicles(l);
+//			ResponseStructure <AvailableVehicleDTO>  rs=new ResponseStructure<AvailableVehicleDTO>();
+//			rs.setStatuscode(HttpStatus.ACCEPTED.value());
+//			rs.setMessage("Available vehicles");
+//			rs.setData(AVD);
+//			return rs;
+//		}
+		
+		
+		
+		public ResponseStructure<AvailableVehicleDTO> getAvailableVehiclesByCity(
+		        Long mobileno, String destinationLocation) {
+
+		    Customer c = customerRepo.findByMobileno(mobileno);
+
+		    // 1. Get Source Coordinates
+		    LocationCoordinatesdto sourceCoord =
+		            locationService.getCoordinates(c.getCurrentLoc());
+
+		    // 2. Get Destination Coordinates
+		    LocationCoordinatesdto destCoord =
+		            locationService.getCoordinates(destinationLocation);
+
+		    // 3. Calculate real driving distance
+		    double distanceKm = distanceService.getDrivingDistance(
+		            sourceCoord.getLon(), sourceCoord.getLat(),
+		            destCoord.getLon(), destCoord.getLat()
+		    );
+
+		    AvailableVehicleDTO AVD = new AvailableVehicleDTO();
+		    AVD.setC(c);
+		    AVD.setSourceLocation(sourceCoord.getDisplayName());
+		    AVD.setDestinationLocation(destCoord.getDisplayName());
+		    AVD.setDistance((int) distanceKm);
+
+		    List<Vehicledetails> detailsList = new ArrayList<>();
+		    List<Vehicle> vehicles = vehiclerepo.findAvailableVehiclesBycity(sourceCoord.getDisplayName());
+
+		    for (Vehicle vehicle : vehicles) {
+		        Vehicledetails vd = new Vehicledetails();
+
+		        double fare = vehicle.getPriceperKM() * distanceKm;
+		        double time = distanceKm / vehicle.getAveragespeed();
+
+		        vd.setV(vehicle);
+		        vd.setFare(fare);
+		        vd.setEstimationtime(time);
+
+		        detailsList.add(vd);
+		    }
+
+		    AVD.setAvailablevehicles(detailsList);
+
+		    ResponseStructure<AvailableVehicleDTO> rs = new ResponseStructure<>();
+		    rs.setStatuscode(HttpStatus.ACCEPTED.value());
+		    rs.setMessage("Available vehicles");
+		    rs.setData(AVD);
+
+		    return rs;
 		}
+
+		
+		
+		
+
 		
 		
 		
