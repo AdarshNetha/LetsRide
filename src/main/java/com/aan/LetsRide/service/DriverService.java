@@ -1,5 +1,6 @@
 package com.aan.LetsRide.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -146,7 +147,7 @@ public class DriverService {
 			AVD.setSourceLocation(Source);
 			AVD.setDistance(distance);
 			AVD.setDestinationLocation(DistinationLocation);
-			List<Vehicledetails> l=AVD.getAvailablevehicles();
+			List<Vehicledetails> l= new ArrayList<Vehicledetails>();
 			List<Vehicle> list=vehiclerepo.findAvailableVehiclesBycity(Source);
 			for (Vehicle vehicle : list) {
 				Vehicledetails vd= new Vehicledetails();
@@ -157,12 +158,12 @@ public class DriverService {
 				vd.setV(vehicle);
 				vd.setFare(fare);
 				vd.setEstimationtime(time);
-				
-//				List<Vehicledetails> l=AVD.getAvailablevehicles();
+			
 				l.add(vd);
-				AVD.setAvailablevehicles(l);
+				
 				
 			}
+			AVD.setAvailablevehicles(l);
 			ResponseStructure <AvailableVehicleDTO>  rs=new ResponseStructure<AvailableVehicleDTO>();
 			rs.setStatuscode(HttpStatus.ACCEPTED.value());
 			rs.setMessage("Available vehicles");
