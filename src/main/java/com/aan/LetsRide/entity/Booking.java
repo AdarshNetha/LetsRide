@@ -19,11 +19,11 @@ public class Booking {
 	private int id;
 	  @ManyToOne
 	   @JoinColumn(name = "customer_id")
-	private Coustmer cust;
+	private Customer cust;
 	  @ManyToOne
 	    @JoinColumn(name = "driver_id")
 	private Driver driver;
-	private String sorceLocation;
+	private String sourceLocation;
 	private String destinationLocation;
 	private double distanceTravelled;
 	private double fare;
@@ -36,10 +36,10 @@ public class Booking {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public Coustmer getCust() {
+	public Customer getCust() {
 		return cust;
 	}
-	public void setCust(Coustmer cust) {
+	public void setCust(Customer cust) {
 		this.cust = cust;
 	}
 	public Driver getDriv() {
@@ -49,10 +49,10 @@ public class Booking {
 		this.driver = driv;
 	}
 	public String getSorceLocation() {
-		return sorceLocation;
+		return sourceLocation;
 	}
 	public void setSorceLocation(String sorceLocation) {
-		this.sorceLocation = sorceLocation;
+		this.sourceLocation = sorceLocation;
 	}
 	public String getDestinationLocation() {
 		return destinationLocation;

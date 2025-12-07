@@ -9,14 +9,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.aan.LetsRide.ResponseStructure;
-import com.aan.LetsRide.DTO.CoustmerDTO;
+import com.aan.LetsRide.DTO.AvailableVehicleDTO;
+import com.aan.LetsRide.DTO.CustomerDTO;
 import com.aan.LetsRide.DTO.RegDriverVehicleDTO;
-import com.aan.LetsRide.entity.Coustmer;
+import com.aan.LetsRide.DTO.Vehicledetails;
+import com.aan.LetsRide.entity.Customer;
 import com.aan.LetsRide.entity.Driver;
 import com.aan.LetsRide.entity.Vehicle;
 import com.aan.LetsRide.exception.CustomerNotFoundWithMobile;
 import com.aan.LetsRide.exception.DriverNOtFoundWiththismobileNO;
-import com.aan.LetsRide.repository.CoustmerRepo;
+import com.aan.LetsRide.repository.CustomerRepo;
 import com.aan.LetsRide.repository.DriverRepository;
 import com.aan.LetsRide.repository.Vechilerepo;
 
@@ -28,7 +30,7 @@ public class DriverService {
 	    @Autowired
 	    private DriverRepository driverrepo;
 	    @Autowired
-	    private CoustmerRepo coustmerRepo;
+	    private CustomerRepo customerRepo;
 
 	    @Autowired
 	    private LocationService locationService;
@@ -62,7 +64,7 @@ public class DriverService {
 	        vehicle.setModel(dto.getModel());
 	        vehicle.setCapacity(dto.getCapacity());
 	        vehicle.setCurrentcity(city);
-	        
+	        vehicle.setAveragespeed(dto.getAveragespeed());
 	        vehicle.setPriceperKM(dto.getPriceperKM());
 
 	        driver.setVehicle(vehicle);
@@ -96,12 +98,12 @@ public class DriverService {
 		}
 	    
 		public ResponseStructure<Driver> updateDriver(double lattitude, double longitude, Long mobilenumber) {
-		      Driver d = this.driverrepo.findByMobileNo(mobilenumber);
-		      String city = this.locationService.getCityFromCoordinates(lattitude, longitude);
+		      Driver d = driverrepo.findByMobileNo(mobilenumber);
+		      String city = locationService.getCityFromCoordinates(lattitude, longitude);
 		      Vehicle v = d.getVehicle();
 		      v.setCurrentcity(city);
 		      d.setVehicle(v);
-		      this.driverrepo.save(d);
+		       driverrepo.save(d);
 		      ResponseStructure<Driver> Rs = new ResponseStructure();
 		      Rs.setStatuscode(HttpStatus.ACCEPTED.value());
 		      Rs.setMessage("Location updated");
@@ -132,12 +134,40 @@ public class DriverService {
 		
 		
 //		vamshi
-		public ResponseStructure<List<Vehicle>> getAvailableVehiclesByCity(String city) {
-			List<Vehicle> list=vehiclerepo.findAvailableVehiclesBycity(city);
-			if(list.isEmpty()) {
-				return new ResponseStructure<>(HttpStatus.ACCEPTED.value(),"No vehicles found",null);
+		public ResponseStructure<AvailableVehicleDTO> getAvailableVehiclesByCity(Long mobileno, String distinationLocation) {
+			
+			Customer c=customerRepo.findByMobileno(mobileno);
+			String Source=c.getCurrentLoc();
+			String DistinationLocation=distinationLocation;
+			int distance=200;
+			AvailableVehicleDTO AVD=new AvailableVehicleDTO();
+			
+			AVD.setC(c);
+			AVD.setSourceLocation(Source);
+			AVD.setDistance(distance);
+			AVD.setDestinationLocation(DistinationLocation);
+			List<Vehicledetails> l=AVD.getAvailablevehicles();
+			List<Vehicle> list=vehiclerepo.findAvailableVehiclesBycity(Source);
+			for (Vehicle vehicle : list) {
+				Vehicledetails vd= new Vehicledetails();
+				int A=vehicle.getAveragespeed();
+				double B=vehicle.getPriceperKM();
+				double fare=B*distance;
+				double time=distance/A;
+				vd.setV(vehicle);
+				vd.setFare(fare);
+				vd.setEstimationtime(time);
+				
+//				List<Vehicledetails> l=AVD.getAvailablevehicles();
+				l.add(vd);
+				AVD.setAvailablevehicles(l);
+				
 			}
-			return new ResponseStructure<>(HttpStatus.ACCEPTED.value(),"Available vehicles",list);
+			ResponseStructure <AvailableVehicleDTO>  rs=new ResponseStructure<AvailableVehicleDTO>();
+			rs.setStatuscode(HttpStatus.ACCEPTED.value());
+			rs.setMessage("Available vehicles");
+			rs.setData(AVD);
+			return rs;
 		}
 		
 		
@@ -149,13 +179,13 @@ public class DriverService {
 		
 		
 //		rakshitha
-		public ResponseStructure<Coustmer> findCustomer(long mobileno) {
-			Coustmer cust =coustmerRepo.findByMobileno(mobileno);
+		public ResponseStructure<Customer> findCustomer(long mobileno) {
+			Customer cust =customerRepo.findByMobileno(mobileno);
 			 if(cust==null) {
 				 throw new  CustomerNotFoundWithMobile(mobileno);
 			 }
 		
-			      ResponseStructure<Coustmer> rs =new ResponseStructure<Coustmer>();
+			      ResponseStructure<Customer> rs =new ResponseStructure<Customer>();
 					
 					rs.setStatuscode(HttpStatus.FOUND.value());
 					rs.setMessage("customerwith mobileNo " +mobileno + "foundr succesfully");
@@ -173,17 +203,17 @@ public class DriverService {
 		
 //	adarsh	
 		
-		public ResponseStructure<Coustmer> registerCoustmer(CoustmerDTO cdto) {
-			Coustmer coustmer=new Coustmer();
-			coustmer.setName(cdto.getName());
-			coustmer.setAge(cdto.getAge());
-			coustmer.setGender(cdto.getGender());
-			coustmer.setMobno(cdto.getMobileno());
-			coustmer.setMail(cdto.getEmail());
-			coustmer.setCurrentLoc(locationService.getCityFromCoordinates(cdto.getLatitude(),cdto.getLongutude()));
-			coustmerRepo.save(coustmer);
-			ResponseStructure<Coustmer> rs= new ResponseStructure<Coustmer>();
-			rs.setData(coustmer);
+		public ResponseStructure<Customer> registerCustomer(CustomerDTO cdto) {
+			Customer customer=new Customer();
+			customer.setName(cdto.getName());
+			customer.setAge(cdto.getAge());
+			customer.setGender(cdto.getGender());
+			customer.setMobno(cdto.getMobileno());
+			customer.setMail(cdto.getEmail());
+			customer.setCurrentLoc(locationService.getCityFromCoordinates(cdto.getLatitude(),cdto.getLongutude()));
+			customerRepo.save(customer);
+			ResponseStructure<Customer> rs= new ResponseStructure<Customer>();
+			rs.setData(customer);
 			rs.setMessage("saved cousterm");
 			rs.setStatuscode(HttpStatus.CREATED.value());
 			return rs;
@@ -194,11 +224,11 @@ public class DriverService {
 
 
 
-		public ResponseStructure<Coustmer> deleteBymbno(long mobileno) {
+		public ResponseStructure<Customer> deleteBymbno(long mobileno) {
 			
-			Coustmer cust= coustmerRepo.findByMobileno(mobileno);
-			coustmerRepo.delete(cust);
-			ResponseStructure<Coustmer> rs= new ResponseStructure<Coustmer>();
+			Customer cust= customerRepo.findByMobileno(mobileno);
+			customerRepo.delete(cust);
+			ResponseStructure<Customer> rs= new ResponseStructure<Customer>();
 			rs.setData(cust);
 			rs.setMessage("delete coustmer by mobno"+mobileno);
 			rs.setStatuscode(HttpStatus.CREATED.value());

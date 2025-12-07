@@ -13,8 +13,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.aan.LetsRide.ResponseStructure;
-import com.aan.LetsRide.DTO.CoustmerDTO;
-import com.aan.LetsRide.entity.Coustmer;
+import com.aan.LetsRide.DTO.AvailableVehicleDTO;
+import com.aan.LetsRide.DTO.CustomerDTO;
+import com.aan.LetsRide.entity.Customer;
 import com.aan.LetsRide.entity.Vehicle;
 import com.aan.LetsRide.service.DriverService;
 
@@ -26,33 +27,33 @@ public class CoustmerController {
 	
 	@PostMapping("/coustmer/register")
 //	adarsh
-	public ResponseStructure<Coustmer> registerCoustmer(@RequestBody CoustmerDTO cdto)
+	public ResponseStructure<Customer> registerCoustmer(@RequestBody CustomerDTO cdto)
 	{
-		return ds.registerCoustmer(cdto);
+		return ds.registerCustomer(cdto);
 	}
 	
 	@GetMapping("/coustmer/Find")
 	
 	
 //	rakshitha
-public ResponseStructure<Coustmer> findcustomer(@RequestParam long mobileno){
+public ResponseStructure<Customer> findcustomer(@RequestParam long mobileno){
 		return ds.findCustomer(mobileno);
 		
 	}
 	
 	
 	@GetMapping("/available")
-	public ResponseStructure<List<Vehicle>> getAvailableVehicles(@RequestParam String city) {
-		return ds.getAvailableVehiclesByCity(city);
+	public ResponseStructure<AvailableVehicleDTO> getAvailableVehicles(@RequestParam Long mobileno ,@RequestParam String distinationLocation) {
+		return ds.getAvailableVehiclesByCity(mobileno,distinationLocation);
 		
 	}
 	
 //	vamshi
 	
 	
-//	@DeleteMapping("/coustmer/DeleteCoustemr")
+//	@DeleteMapping("/customer/DeleteCoustemr")
 	@DeleteMapping("/deletebymobileNo")
-	public ResponseStructure<Coustmer> deleteCoustmer(@RequestParam long mobileno){
+	public ResponseStructure<Customer> deleteCoustmer(@RequestParam long mobileno){
 		return ds.deleteBymbno(mobileno);
 		
 	}

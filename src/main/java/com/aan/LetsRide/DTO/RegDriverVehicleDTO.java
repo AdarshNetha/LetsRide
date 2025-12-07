@@ -17,7 +17,17 @@ private String capacity;
 private double longitude;
 private double lattitude;
 private double priceperKM;
+private int averagespeed;
 
+public int getAveragespeed() {
+	return averagespeed;
+}
+public void setAveragespeed(int averagespeed) {
+	this.averagespeed = averagespeed;
+}
+public void setLattitude(double lattitude) {
+	this.lattitude = lattitude;
+}
 public Long getLicenceNo() {
 	return licenceNo;
 }
@@ -106,9 +116,10 @@ public double getPriceperKM() {
 public void setPriceperKM(double priceperKM) {
 	this.priceperKM = priceperKM;
 }
+
 public RegDriverVehicleDTO(Long licenceNo, String upiid, String name, int age, Long mobileNo, String gender,
 		String mail, String vehilename, String vehileno, String type, String model, String capacity, double longitude,
-		double lattitude, double priceperKM) {
+		double lattitude, double priceperKM, int averagespeed) {
 	super();
 	this.licenceNo = licenceNo;
 	this.upiid = upiid;
@@ -125,6 +136,7 @@ public RegDriverVehicleDTO(Long licenceNo, String upiid, String name, int age, L
 	this.longitude = longitude;
 	this.lattitude = lattitude;
 	this.priceperKM = priceperKM;
+	this.averagespeed = averagespeed;
 }
 public RegDriverVehicleDTO() {
 	super();
@@ -135,7 +147,9 @@ public String toString() {
 	return "RegDriverVehicleDTO [licenceNo=" + licenceNo + ", upiid=" + upiid + ", name=" + name + ", age=" + age
 			+ ", mobileNo=" + mobileNo + ", gender=" + gender + ", mail=" + mail + ", vehilename=" + vehilename
 			+ ", vehileno=" + vehileno + ", type=" + type + ", model=" + model + ", capacity=" + capacity
-			+ ", longitude=" + longitude + ", lattitude=" + lattitude + ", priceperKM=" + priceperKM + "]";
+			+ ", longitude=" + longitude + ", lattitude=" + lattitude + ", priceperKM=" + priceperKM + ", Averagespeed="
+			+ averagespeed + "]";
 }
+
 
 }
