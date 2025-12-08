@@ -37,13 +37,6 @@ public class LocationService {
 		    }
 
 			
-<<<<<<< HEAD
-
-			
-		    
-			
-=======
->>>>>>> eb8576fa38f0cac061090cd8612fc954210ea86d
 
 			
 	}

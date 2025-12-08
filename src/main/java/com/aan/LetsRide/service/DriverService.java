@@ -98,8 +98,8 @@ public class DriverService {
 			
 		}
 	    
-		public ResponseStructure<Driver> updateDriver(double lattitude, double longitude, Long mobilenumber) {
-		      Driver d = driverrepo.findByMobileNo(mobilenumber);
+		public ResponseStructure<Driver> updateDriver(double lattitude, double longitude, Long mobileNo) {
+		      Driver d = driverrepo.findByMobileNo(mobileNo);
 		      String city = locationService.getCityFromCoordinates(lattitude, longitude);
 		      Vehicle v = d.getVehicle();
 		      v.setCurrentcity(city);
@@ -134,100 +134,11 @@ public class DriverService {
 	
 		
 		
-//		vamshi
-<<<<<<< HEAD
-//		public ResponseStructure<AvailableVehicleDTO> getAvailableVehiclesByCity(Long mobileno, String destinationLocation) {
-//			
-//			Customer c=customerRepo.findByMobileno(mobileno);
-//			String Source=c.getCurrentLoc();
-//			String validatedCity = locationiqservice.validateCityFromAPI(destinationLocation);
-//		
-//			double distance = distanceService.getDrivingDistance(
-//		            sourceCoord.getLon(), sourceCoord.getLat(),
-//		            destCoord.getLon(), destCoord.getLat()
-//		    );
-//			AvailableVehicleDTO AVD=new AvailableVehicleDTO();
-//			
-//			AVD.setC(c);
-//			AVD.setSourceLocation(Source);
-//			AVD.setDistance(distance);
-//			AVD.setDestinationLocation(destinationLocation);
-//			List<Vehicledetails> l= new ArrayList<Vehicledetails>();
-//			List<Vehicle> list=vehiclerepo.findAvailableVehiclesBycity(Source);
-//			for (Vehicle vehicle : list) {
-//				Vehicledetails vd= new Vehicledetails();
-//				int A=vehicle.getAveragespeed();
-//				double B=vehicle.getPriceperKM();
-//				double fare=B*distance;
-//				double time=distance/A;
-//				vd.setV(vehicle);
-//				vd.setFare(fare);
-//				vd.setEstimationtime(time);
-//			
-//				l.add(vd);
-//				
-//				
-//			}
-//			AVD.setAvailablevehicles(l);
-//			ResponseStructure <AvailableVehicleDTO>  rs=new ResponseStructure<AvailableVehicleDTO>();
-//			rs.setStatuscode(HttpStatus.ACCEPTED.value());
-//			rs.setMessage("Available vehicles");
-//			rs.setData(AVD);
-//			return rs;
-//		}
 		
 		
 		
-		public ResponseStructure<AvailableVehicleDTO> getAvailableVehiclesByCity(
-		        Long mobileno, String destinationLocation) {
-
-		    Customer c = customerRepo.findByMobileno(mobileno);
-
-		    // 1. Get Source Coordinates
-		    LocationCoordinatesdto sourceCoord =
-		    		locationiqservice.validateDestination(c.getCurrentLoc());
-
-		    // 2. Get Destination Coordinates
-		    LocationCoordinatesdto destCoord =
-		    		locationiqservice .validateDestination(destinationLocation);
-
-		    // 3. Calculate real driving distance
-		    double distanceKm = distanceService.getDrivingDistance(
-		            sourceCoord.getLon(), sourceCoord.getLat(),
-		            destCoord.getLon(), destCoord.getLat()
-		    );
-
-		    AvailableVehicleDTO AVD = new AvailableVehicleDTO();
-		    AVD.setC(c);
-		    AVD.setSourceLocation(sourceCoord.getDisplayName());
-		    AVD.setDestinationLocation(destCoord.getDisplayName());
-		    AVD.setDistance((int) distanceKm);
-
-		    List<Vehicledetails> detailsList = new ArrayList<>();
-		    List<Vehicle> vehicles = vehiclerepo.findAvailableVehiclesBycity(sourceCoord.getDisplayName());
-
-		    for (Vehicle vehicle : vehicles) {
-		        Vehicledetails vd = new Vehicledetails();
-
-		        double fare = vehicle.getPriceperKM() * distanceKm;
-		        double time = distanceKm / vehicle.getAveragespeed();
-
-		        vd.setV(vehicle);
-		        vd.setFare(fare);
-		        vd.setEstimationtime(time);
-
-		        detailsList.add(vd);
-		    }
-
-		    AVD.setAvailablevehicles(detailsList);
-
-		    ResponseStructure<AvailableVehicleDTO> rs = new ResponseStructure<>();
-		    rs.setStatuscode(HttpStatus.ACCEPTED.value());
-		    rs.setMessage("Available vehicles");
-		    rs.setData(AVD);
-
-		    return rs;
-=======
+		
+		
 		public ResponseStructure<AvailableVehicleDTO> getAvailableVehiclesByCity(Long mobileno, String distinationLocation) {
 			
 			Customer c=customerRepo.findByMobileno(mobileno);
@@ -262,7 +173,7 @@ public class DriverService {
 			rs.setMessage("Available vehicles");
 			rs.setData(AVD);
 			return rs;
->>>>>>> eb8576fa38f0cac061090cd8612fc954210ea86d
+
 		}
 		
 		
@@ -305,7 +216,7 @@ public class DriverService {
 			customer.setGender(cdto.getGender());
 			customer.setMobno(cdto.getMobileno());
 			customer.setMail(cdto.getEmail());
-			customer.setCurrentLoc(locationService.getCityFromCoordinates(cdto.getLatitude(),cdto.getLongutude()));
+			customer.setCurrentLoc(locationService.getCityFromCoordinates(cdto.getLatitude(),cdto.getLongitude()));
 			customerRepo.save(customer);
 			ResponseStructure<Customer> rs= new ResponseStructure<Customer>();
 			rs.setData(customer);
@@ -328,5 +239,9 @@ public class DriverService {
 			rs.setMessage("delete coustmer by mobno"+mobileno);
 			rs.setStatuscode(HttpStatus.CREATED.value());
 			return rs;
-		}}
+		}
+
+
+		
+		}
 
