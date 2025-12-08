@@ -3,12 +3,8 @@ package com.aan.LetsRide.service;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
-import com.aan.LetsRide.DTO.LocationCoordinatesdto;
-import com.aan.LetsRide.entity.LocationIQResponse;
 
 @Service
 public class LocationService {
@@ -41,10 +37,13 @@ public class LocationService {
 		    }
 
 			
+<<<<<<< HEAD
 
 			
 		    
 			
+=======
+>>>>>>> eb8576fa38f0cac061090cd8612fc954210ea86d
 
 			
 	}
