@@ -43,8 +43,8 @@ public ResponseStructure<Customer> findcustomer(@RequestParam long mobileno){
 	
 	
 	@GetMapping("/available")
-	public ResponseStructure<AvailableVehicleDTO> getAvailableVehicles(@RequestParam Long mobileno ,@RequestParam String destinationLocation) {
-		return ds.getAvailableVehiclesByCity(mobileno,destinationLocation);
+	public ResponseStructure<AvailableVehicleDTO> getAvailableVehicles(@RequestParam Long mobileno ,@RequestParam String distinationLocation) {
+		return ds.getAvailableVehiclesByCity(mobileno,distinationLocation);
 		
 	}
 	
