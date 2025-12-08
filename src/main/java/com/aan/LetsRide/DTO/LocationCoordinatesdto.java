@@ -5,6 +5,7 @@ public class LocationCoordinatesdto {
     private double lat;
     private double lon;
 	private double double1;
+	
 	public String getDisplayName() {
 		return displayName;
 	}
@@ -30,10 +31,15 @@ public class LocationCoordinatesdto {
 		this.lat = lat;
 		this.lon = lon;
 	}
+	@Override
+	public String toString() {
+		return "LocationCoordinatesdto [displayName=" + displayName + ", lat=" + lat + ", lon=" + lon + "]";
+	}
 	public void setLat(double double1) {
 		this.double1=double1;
 		
 	}
+	
 	
 	
 	}

@@ -3,36 +3,72 @@ package com.aan.LetsRide.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import com.aan.LetsRide.DTO.LocationCoordinatesdto;
 import com.aan.LetsRide.entity.LocationIQResponse;
 @Service
 public class LocationIQResponseService {
-	@Autowired
-	private RestTemplate restTemplate;
 
-	
+    @Autowired
+    private RestTemplate restTemplate;
 
-	    private String LOCATIONIQ_API = "https://us1.locationiq.com/v1/search";
+    private static final String API_URL =
+            "https://us1.locationiq.com/v1/search?key={key}&q={location}&format=json";
 
-	    public String validateCityFromAPI(String cityName) {
-	        try {
-	            String url = LOCATIONIQ_API + "?key=YOUR_API_KEY&q=" + cityName + "&format=json";
+    private static final String API_KEY =
+            "eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6IjA3ZGFjYjc2ODY1MzQzMDJhYzFjMjRkZmRjN2EyY2E2IiwiaCI6Im11cm11cjY0In0=";
 
-	            ResponseEntity<LocationIQResponse[]> response =
-	                    restTemplate.getForEntity(url, LocationIQResponse[].class);
+    public LocationCoordinatesdto validateDestination(String destinationLocation) {
 
-	            if (response.getBody() != null && response.getBody().length > 0) {
-	                return response.getBody()[0].getDisplay_name();
-	            }
+        ResponseEntity<LocationIQResponse[]> response = restTemplate.getForEntity(
+                API_URL,
+                LocationIQResponse[].class,
+                API_KEY,
+                destinationLocation
+        );
 
-	        } catch (Exception e) {
-	            e.printStackTrace();
-	        }
+        LocationIQResponse[] locations = response.getBody();
 
-	        return cityName;
-	    }
-	}
+        if (locations == null || locations.length == 0) {
+            throw new RuntimeException("Invalid Destination Location");
+        }
+
+        double lat = Double.parseDouble(locations[0].getLat());
+        double lon = Double.parseDouble(locations[0].getLon());
+
+        return new double[]{lat, lon};
+    }
+    public LocationCoordinatesdto getCoordinates(String location) {
+
+        ResponseEntity<LocationIQResponse[]> response = restTemplate.getForEntity(
+                API_URL,
+                LocationIQResponse[].class,
+                API_KEY,
+                location
+        );
+
+        LocationIQResponse[] body = response.getBody();
+
+        // VALIDATION
+        if (body == null || body.length == 0) {
+            throw new InvalidLocationException("Invalid Location: " + location);
+        }
+
+        LocationIQResponse loc = body[0];
+
+        LocationCoordinatesdto dto = new LocationCoordinatesdto();
+        dto.setLat(Double.parseDouble(loc.getLat()));
+        dto.setLon(Double.parseDouble(loc.getLon()));
+        dto.setDisplayName(location);
+
+        return dto;
+    }
+
+}
+
+
 
 
 

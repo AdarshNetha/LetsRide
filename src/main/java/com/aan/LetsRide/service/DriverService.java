@@ -191,11 +191,11 @@ public class DriverService {
 
 		    // 1. Get Source Coordinates
 		    LocationCoordinatesdto sourceCoord =
-		            locationService.getCoordinates(c.getCurrentLoc());
+		    		locationiqservice.validateDestination(c.getCurrentLoc());
 
 		    // 2. Get Destination Coordinates
 		    LocationCoordinatesdto destCoord =
-		            locationService.getCoordinates(destinationLocation);
+		    		locationiqservice .validateDestination(destinationLocation);
 
 		    // 3. Calculate real driving distance
 		    double distanceKm = distanceService.getDrivingDistance(
