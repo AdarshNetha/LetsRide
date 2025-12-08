@@ -98,8 +98,8 @@ public class DriverService {
 			
 		}
 	    
-		public ResponseStructure<Driver> updateDriver(double lattitude, double longitude, Long mobilenumber) {
-		      Driver d = driverrepo.findByMobileNo(mobilenumber);
+		public ResponseStructure<Driver> updateDriver(double lattitude, double longitude, Long mobileNo) {
+		      Driver d = driverrepo.findByMobileNo(mobileNo);
 		      String city = locationService.getCityFromCoordinates(lattitude, longitude);
 		      Vehicle v = d.getVehicle();
 		      v.setCurrentcity(city);
@@ -134,7 +134,11 @@ public class DriverService {
 	
 		
 		
-//		vamshi
+		
+		
+		
+		
+		
 		public ResponseStructure<AvailableVehicleDTO> getAvailableVehiclesByCity(Long mobileno, String distinationLocation) {
 			
 			Customer c=customerRepo.findByMobileno(mobileno);
@@ -169,6 +173,7 @@ public class DriverService {
 			rs.setMessage("Available vehicles");
 			rs.setData(AVD);
 			return rs;
+
 		}
 		
 		
@@ -211,7 +216,7 @@ public class DriverService {
 			customer.setGender(cdto.getGender());
 			customer.setMobno(cdto.getMobileno());
 			customer.setMail(cdto.getEmail());
-			customer.setCurrentLoc(locationService.getCityFromCoordinates(cdto.getLatitude(),cdto.getLongutude()));
+			customer.setCurrentLoc(locationService.getCityFromCoordinates(cdto.getLatitude(),cdto.getLongitude()));
 			customerRepo.save(customer);
 			ResponseStructure<Customer> rs= new ResponseStructure<Customer>();
 			rs.setData(customer);
@@ -234,5 +239,9 @@ public class DriverService {
 			rs.setMessage("delete coustmer by mobno"+mobileno);
 			rs.setStatuscode(HttpStatus.CREATED.value());
 			return rs;
-		}}
+		}
+
+
+		
+		}
 
