@@ -1,5 +1,6 @@
 package com.aan.LetsRide.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -28,10 +29,18 @@ private String mail;
 @JsonIgnore
 @OneToOne(mappedBy = "driver", cascade = CascadeType.ALL)
 private Vehicle vehicle;
-@OneToMany(mappedBy = "driver")
-private List<Booking> bookings;
+@OneToMany(cascade = CascadeType.ALL)
+List<Booking> bookinglist;
 
 
+
+
+public List<Booking> getBookinglist() {
+	return bookinglist;
+}
+public void setBookinglist(List<Booking> bookinglist) {
+	this.bookinglist = bookinglist;
+}
 public int getId() {
 	return id;
 }
@@ -97,11 +106,27 @@ public Driver() {
 	super();
 	// TODO Auto-generated constructor stub
 }
+
+public Driver(int id, Long licenceNo, String upiid, String name, String status, int age, Long mobileNo, String gender,
+		String mail, Vehicle vehicle, List<Booking> bookinglist) {
+	super();
+	this.id = id;
+	this.licenceNo = licenceNo;
+	this.upiid = upiid;
+	this.name = name;
+	this.status = status;
+	this.age = age;
+	this.mobileNo = mobileNo;
+	this.gender = gender;
+	this.mail = mail;
+	this.vehicle = vehicle;
+	this.bookinglist = bookinglist;
+}
 @Override
 public String toString() {
 	return "Driver [id=" + id + ", licenceNo=" + licenceNo + ", upiid=" + upiid + ", name=" + name + ", status="
 			+ status + ", age=" + age + ", mobileNo=" + mobileNo + ", gender=" + gender + ", mail=" + mail
-			+  "]";
+			+ ", vehicle=" + vehicle + ", bookinglist=" + bookinglist + "]";
 }
 
 

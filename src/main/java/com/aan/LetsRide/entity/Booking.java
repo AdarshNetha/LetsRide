@@ -29,6 +29,11 @@ public class Booking {
 	private double fare;
 	private String estimationTravelTime;
 	private LocalDateTime bookingDate;
+	private String paymentStatus="Not paid";
+	@OneToOne
+	private  Payment  payment;
+	private  String bookingStatus="pending";
+	
 	
 	public int getId() {
 		return id;
@@ -42,17 +47,17 @@ public class Booking {
 	public void setCust(Customer cust) {
 		this.cust = cust;
 	}
-	public Driver getDriv() {
+	public Driver getDriver() {
 		return driver;
 	}
-	public void setDriv(Driver driv) {
-		this.driver = driv;
+	public void setDriver(Driver driver) {
+		this.driver = driver;
 	}
-	public String getSorceLocation() {
+	public String getSourceLocation() {
 		return sourceLocation;
 	}
-	public void setSorceLocation(String sorceLocation) {
-		this.sourceLocation = sorceLocation;
+	public void setSourceLocation(String sourceLocation) {
+		this.sourceLocation = sourceLocation;
 	}
 	public String getDestinationLocation() {
 		return destinationLocation;
@@ -84,9 +89,52 @@ public class Booking {
 	public void setBookingDate(LocalDateTime bookingDate) {
 		this.bookingDate = bookingDate;
 	}
+	public String getPaymentStatus() {
+		return paymentStatus;
+	}
+	public void setPaymentStatus(String paymentStatus) {
+		this.paymentStatus = paymentStatus;
+	}
+	public Payment getPayment() {
+		return payment;
+	}
+	public void setPayment(Payment payment) {
+		this.payment = payment;
+	}
+	public String getBookingStatus() {
+		return bookingStatus;
+	}
+	public void setBookingStatus(String bookingStatus) {
+		this.bookingStatus = bookingStatus;
+	}
+	
 	public Booking() {
 		super();
-		// TODO Auto-generated constructor stub
+	}
+	@Override
+	public String toString() {
+		return "Booking [id=" + id + ", cust=" + cust + ", driver=" + driver + ", sourceLocation=" + sourceLocation
+				+ ", destinationLocation=" + destinationLocation + ", distanceTravelled=" + distanceTravelled
+				+ ", fare=" + fare + ", estimationTravelTime=" + estimationTravelTime + ", bookingDate=" + bookingDate
+				+ ", paymentStatus=" + paymentStatus + ", payment=" + payment + ", bookingStatus=" + bookingStatus
+				+ "]";
+	}
+	public Booking(int id, Customer cust, Driver driver, String sourceLocation, String destinationLocation,
+			double distanceTravelled, double fare, String estimationTravelTime, LocalDateTime bookingDate,
+			String paymentStatus, Payment payment, String bookingStatus) {
+		super();
+		this.id = id;
+		this.cust = cust;
+		this.driver = driver;
+		this.sourceLocation = sourceLocation;
+		this.destinationLocation = destinationLocation;
+		this.distanceTravelled = distanceTravelled;
+		this.fare = fare;
+		this.estimationTravelTime = estimationTravelTime;
+		this.bookingDate = bookingDate;
+		this.paymentStatus = paymentStatus;
+		this.payment = payment;
+		this.bookingStatus = bookingStatus;
 	}
 	
 	

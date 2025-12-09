@@ -35,6 +35,10 @@ public class CustomerDTO {
 	public String getEmail() {
 		return email;
 	}
+	
+	public void setLongitude(double longitude) {
+		this.longitude = longitude;
+	}
 	public void setEmail(String email) {
 		this.email = email;
 	}

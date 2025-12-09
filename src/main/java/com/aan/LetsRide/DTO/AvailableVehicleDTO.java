@@ -44,6 +44,17 @@ public AvailableVehicleDTO() {
 	super();
 	// TODO Auto-generated constructor stub
 }
+
+
+public AvailableVehicleDTO(Customer c, int distance, String sourceLocation, String destinationLocation,
+		List<Vehicledetails> availablevehicles) {
+	super();
+	this.c = c;
+	this.distance = distance;
+	this.sourceLocation = sourceLocation;
+	this.destinationLocation = destinationLocation;
+	this.availablevehicles = availablevehicles;
+}
 @Override
 public String toString() {
 	return "AvailableVehicleDTO [c=" + c + ", distance=" + distance + ", sourceLocation=" + sourceLocation
