@@ -42,7 +42,9 @@ public void setAvailablevehicles(List<Vehicledetails> availablevehicles) {
 }
 public AvailableVehicleDTO() {
 	super();
-	// TODO Auto-generated constructor stub
+
+	
+	
 }
 @Override
 public String toString() {
