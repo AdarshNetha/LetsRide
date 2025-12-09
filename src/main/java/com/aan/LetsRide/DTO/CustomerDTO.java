@@ -47,7 +47,7 @@ public class CustomerDTO {
 	public double getLongitude() {
 		return longitude;
 	}
-	public void setLongutude(double longutude) {
+	public void setLongutude(double longitude) {
 		this.longitude = longitude;
 	}
 	@Override

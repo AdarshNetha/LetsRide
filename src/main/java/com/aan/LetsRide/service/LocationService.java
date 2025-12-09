@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.aan.LetsRide.DTO.api.LocationRangeDTO;
+import com.aan.LetsRide.DTO.api.ValidatingDestination;
+
 @Service
 public class LocationService {
 
@@ -36,6 +39,51 @@ public class LocationService {
 		        
 		    }
 
+		    public boolean validatingCity(String city)
+		    {
+		    	
+		    	String url="https://us1.locationiq.com/v1/search?key="+API_KEY+"&q="+city+",%20India&format=json";
+		    	
+		    	ValidatingDestination[] validatingCity=restTemplate.getForObject(url, ValidatingDestination[].class);
+		    	
+		    	String apiCity=validatingCity[0].getDisplay_name();
+		    	apiCity=apiCity.substring(0, city.length());		    	
+		    	if(city.toUpperCase().equals(apiCity.toUpperCase())){
+		    		return true;
+		    	}
+		    	else
+		    	{
+		    		return false;
+		    	}
+		    }
+		    
+		    public LocationRangeDTO getFromAndToCoordinates(String source,String destinatio )
+		    {
+
+		    	String sourceurl="https://us1.locationiq.com/v1/search?key="+API_KEY+"&q="+source+",%20India&format=json";
+		    	
+		    	ValidatingDestination[] sourcevalidatingCity=restTemplate.getForObject(sourceurl, ValidatingDestination[].class);
+		    	
+		    	double sourceLongutude=Double.parseDouble(sourcevalidatingCity[0].getLon());
+		    	double sourceLatudue=Double.parseDouble(sourcevalidatingCity[0].getLat());
+		    	
+		    	String url="https://us1.locationiq.com/v1/search?key="+API_KEY+"&q="+destinatio+",%20India&format=json";
+		    	
+		    	ValidatingDestination[] validatingCity=restTemplate.getForObject(url, ValidatingDestination[].class);
+		    	
+		    	double destlongute=Double.parseDouble(validatingCity[0].getLon());
+		    	double destLatudue=Double.parseDouble(validatingCity[0].getLat());
+		    	
+		    	LocationRangeDTO locationRangeDTO=new LocationRangeDTO();
+		    	
+		    	locationRangeDTO.setFromLatitude(sourceLatudue);	
+		    	locationRangeDTO.setFromLongitude(sourceLongutude);
+		    	locationRangeDTO.setToLatitude(destLatudue);
+		    	locationRangeDTO.setToLongitude(destlongute);
+		    	return locationRangeDTO;
+		    	
+		    	
+		    }
 			
 
 			

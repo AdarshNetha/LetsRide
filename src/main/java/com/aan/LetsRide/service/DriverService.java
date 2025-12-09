@@ -14,6 +14,7 @@ import com.aan.LetsRide.DTO.AvailableVehicleDTO;
 import com.aan.LetsRide.DTO.CustomerDTO;
 import com.aan.LetsRide.DTO.RegDriverVehicleDTO;
 import com.aan.LetsRide.DTO.Vehicledetails;
+import com.aan.LetsRide.DTO.api.LocationRangeDTO;
 import com.aan.LetsRide.entity.Customer;
 import com.aan.LetsRide.entity.Driver;
 import com.aan.LetsRide.entity.Vehicle;
@@ -144,6 +145,17 @@ public class DriverService {
 			Customer c=customerRepo.findByMobileno(mobileno);
 			String Source=c.getCurrentLoc();
 			String DistinationLocation=distinationLocation;
+			boolean check=locationService.validatingCity(DistinationLocation);
+			if(!check)
+			{
+				System.out.println("false location");
+				return null;
+			}
+			
+			
+			LocationRangeDTO locationRangeDTO=locationService.getFromAndToCoordinates(Source, DistinationLocation);
+			
+			System.err.println(locationRangeDTO);
 			int distance=200;
 			AvailableVehicleDTO AVD=new AvailableVehicleDTO();
 			
