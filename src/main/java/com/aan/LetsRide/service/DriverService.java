@@ -1,5 +1,7 @@
 package com.aan.LetsRide.service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -11,15 +13,18 @@ import org.springframework.web.client.RestTemplate;
 
 import com.aan.LetsRide.ResponseStructure;
 import com.aan.LetsRide.DTO.AvailableVehicleDTO;
+import com.aan.LetsRide.DTO.BookingDto;
 import com.aan.LetsRide.DTO.CustomerDTO;
 import com.aan.LetsRide.DTO.RegDriverVehicleDTO;
 import com.aan.LetsRide.DTO.Vehicledetails;
 import com.aan.LetsRide.DTO.api.LocationRangeDTO;
+import com.aan.LetsRide.entity.Booking;
 import com.aan.LetsRide.entity.Customer;
 import com.aan.LetsRide.entity.Driver;
 import com.aan.LetsRide.entity.Vehicle;
 import com.aan.LetsRide.exception.CustomerNotFoundWithMobile;
 import com.aan.LetsRide.exception.DriverNOtFoundWiththismobileNO;
+import com.aan.LetsRide.repository.BookingRepo;
 import com.aan.LetsRide.repository.CustomerRepo;
 import com.aan.LetsRide.repository.DriverRepository;
 import com.aan.LetsRide.repository.Vechilerepo;
@@ -39,6 +44,8 @@ public class DriverService {
 	    
 	    @Autowired
 	    private Vechilerepo vehiclerepo;
+	    @Autowired
+	     private BookingRepo bookingrepo;
 
 	    public ResponseStructure<Driver> saveRegDriver(RegDriverVehicleDTO dto) {
 
@@ -156,6 +163,8 @@ public class DriverService {
 			LocationRangeDTO locationRangeDTO=locationService.getFromAndToCoordinates(Source, DistinationLocation);
 			
 			System.err.println(locationRangeDTO);
+			
+			
 			int distance=200;
 			AvailableVehicleDTO AVD=new AvailableVehicleDTO();
 			
@@ -251,6 +260,48 @@ public class DriverService {
 			rs.setMessage("delete coustmer by mobno"+mobileno);
 			rs.setStatuscode(HttpStatus.CREATED.value());
 			return rs;
+		}
+
+
+		public ResponseStructure<Booking> bookVehicle(Long mobno, BookingDto bookingdto) {
+			Customer customer=customerRepo.findByMobileno(mobno);
+			
+			Vehicle vehicle=vehiclerepo.findById(bookingdto.getVehicleid()).orElseThrow(() -> new RuntimeException("Vehicle not found for id: " + bookingdto.getVehicleid())); 
+			
+			 Booking booking = new Booking();
+			 booking .setCust(customer);
+			 booking.setDriver(vehicle.getDriver());
+			 booking.setSourceLocation(bookingdto.getSourceLocation());
+			 booking.setDestinationLocation(bookingdto.getDestinationLocation());
+			 booking.setFare(bookingdto.getFare());
+			 booking.setEstimationTravelTime(bookingdto.getEstimationTravelTime());
+			 booking.setDistanceTravelled(bookingdto.getDistanceTravelled());
+			 booking.setBookingDate(LocalDateTime.now());
+			 vehicle.setAvailabilityStatus("booked");
+			Booking confBooking= bookingrepo.save(booking);
+			 
+			 List<Booking> bookingList=new ArrayList<Booking>();
+			 bookingList=customer.getBookinglist();
+			 bookingList.add(booking);
+			 customer.setBookinglist(bookingList);
+			 customerRepo.save(customer);
+			 
+			 
+			 Driver driver	= vehicle.getDriver();
+			 List<Booking> driverookinglist= new ArrayList<Booking>();
+			 driverookinglist= driver.getBookinglist();
+			 driverookinglist.add(booking);
+			 driver.setBookinglist(driverookinglist);
+			 driverrepo.save(driver);
+			
+			 ResponseStructure<Booking> rs= new ResponseStructure<Booking>();
+			 rs.setMessage("booking succesfullay");
+			 rs.setStatuscode(HttpStatus.ACCEPTED.value());
+			 rs.setData(confBooking);
+			 
+			 return rs;
+			 		
+			
 		}
 
 

@@ -8,13 +8,16 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.aan.LetsRide.ResponseStructure;
 import com.aan.LetsRide.DTO.AvailableVehicleDTO;
+import com.aan.LetsRide.DTO.BookingDto;
 import com.aan.LetsRide.DTO.CustomerDTO;
+import com.aan.LetsRide.entity.Booking;
 import com.aan.LetsRide.entity.Customer;
 import com.aan.LetsRide.entity.Vehicle;
 import com.aan.LetsRide.service.DriverService;
@@ -58,5 +61,11 @@ public ResponseStructure<Customer> findcustomer(@RequestParam long mobileno){
 		
 	}
 //	vishnu
+	@PutMapping("/bookVehicle/{mobno}")
+	public ResponseStructure<Booking> bookVehicle(@PathVariable Long mobno,@RequestBody BookingDto bookingdto) {
+		 return ds.bookVehicle(mobno,bookingdto);
+	}
+	
+	
 
 }
