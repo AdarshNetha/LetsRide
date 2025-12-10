@@ -46,7 +46,33 @@ public class GlobalException {
         return rs;
 
 }
+	
+//	customeralreadyExits
+	@ExceptionHandler(CustomeralreadyExists.class)
+public ResponseStructure<String> CustomeralreadyExists( CustomeralreadyExists ex){
+		
+        ResponseStructure<String> rs = new ResponseStructure<>();
+        rs.setStatuscode(HttpStatus.NOT_FOUND.value());
+        rs.setMessage(ex.getMessage());
+        rs.setData(null);
 
+        return rs;
+	
+	
+	}
+	
+	
+	//vehicalesareNotavaliabletoDestinationLocation
+	@ExceptionHandler(VehiclesareNotavilabletoDestinationLocation.class)
+public ResponseStructure<String> VehiclesareNotavilabletoDestinationLocation( VehiclesareNotavilabletoDestinationLocation ex){
+		
+        ResponseStructure<String> responseStructure = new ResponseStructure<>();
+        responseStructure .setStatuscode(HttpStatus.NOT_FOUND.value());
+        responseStructure .setMessage(ex.getMessage());
+        responseStructure .setData(null);
+
+        return responseStructure ;
+	}
 	
 	
 	

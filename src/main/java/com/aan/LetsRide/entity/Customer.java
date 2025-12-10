@@ -22,12 +22,20 @@ public class Customer {
 	private String currentLoc;
 	@OneToMany(cascade = CascadeType.ALL)
 	List<Booking> bookinglist;
-	
-	public String getMail() {
-		return mail;
-	}
-	public void setMail(String mail) {
+	public Customer(int id, String name, int age, String gender, long mobileno, String mail, String currentLoc,
+			List<Booking> bookinglist) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.age = age;
+		this.gender = gender;
+		this.mobileno = mobileno;
 		this.mail = mail;
+		this.currentLoc = currentLoc;
+		this.bookinglist = bookinglist;
+	}
+	public Customer() {
+		super();
 	}
 	public int getId() {
 		return id;
@@ -53,11 +61,17 @@ public class Customer {
 	public void setGender(String gender) {
 		this.gender = gender;
 	}
-	public long getMobno() {
+	public long getMobileno() {
 		return mobileno;
 	}
-	public void setMobno(long mobileno) {
+	public void setMobileno(long mobileno) {
 		this.mobileno = mobileno;
+	}
+	public String getMail() {
+		return mail;
+	}
+	public void setMail(String mail) {
+		this.mail = mail;
 	}
 	public String getCurrentLoc() {
 		return currentLoc;
@@ -71,16 +85,12 @@ public class Customer {
 	public void setBookinglist(List<Booking> bookinglist) {
 		this.bookinglist = bookinglist;
 	}
-	public Customer() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
 	@Override
 	public String toString() {
-		return "Customer [id=" + id + ", name=" + name + ", age=" + age + ", gender=" + gender + ", mobileno=" + mobileno
-				+ ", mail=" + mail + ", currentLoc=" + currentLoc + ", bookinglist=" + bookinglist + "]";
+		return "Customer [id=" + id + ", name=" + name + ", age=" + age + ", gender=" + gender + ", mobileno="
+				+ mobileno + ", mail=" + mail + ", currentLoc=" + currentLoc + ", bookinglist=" + bookinglist + "]";
 	}
 	
-		
+	
 
 }

@@ -2,11 +2,11 @@ package com.aan.LetsRide.DTO;
 
 public class RegDriverVehicleDTO {
 	
-private Long licenceNo;
+private long licenceNo;
 private String upiid;
 private String name;
 private int age;
-private Long mobileNo;
+private long mobileNo;
 private String gender;
 private String mail;
 private String vehilename;
@@ -31,7 +31,7 @@ public void setLattitude(double lattitude) {
 public Long getLicenceNo() {
 	return licenceNo;
 }
-public void setLicenceNo(Long licenceNo) {
+public void setLicenceNo(long licenceNo) {
 	this.licenceNo = licenceNo;
 }
 public String getUpiid() {
@@ -55,7 +55,7 @@ public void setAge(int age) {
 public Long getMobileNo() {
 	return mobileNo;
 }
-public void setMobileNo(Long mobileNo) {
+public void setMobileNo(long mobileNo) {
 	this.mobileNo = mobileNo;
 }
 public String getGender() {
@@ -117,7 +117,7 @@ public void setPriceperKM(double priceperKM) {
 	this.priceperKM = priceperKM;
 }
 
-public RegDriverVehicleDTO(Long licenceNo, String upiid, String name, int age, Long mobileNo, String gender,
+public RegDriverVehicleDTO(long licenceNo, String upiid, String name, int age, long mobileNo, String gender,
 		String mail, String vehilename, String vehileno, String type, String model, String capacity, double longitude,
 		double lattitude, double priceperKM, int averagespeed) {
 	super();

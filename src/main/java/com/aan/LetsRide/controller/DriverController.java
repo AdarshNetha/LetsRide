@@ -30,7 +30,6 @@ public ResponseStructure<Driver> saveregdriver(@RequestBody RegDriverVehicleDTO 
     return driverservice.saveRegDriver(dto);
 }
 
-
 @GetMapping("/driver/{mobileNo}")
 public  ResponseStructure<Driver>findDriver(@PathVariable long mobileNo){
 	return driverservice.findDriver(mobileNo);	
