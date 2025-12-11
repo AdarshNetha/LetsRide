@@ -36,8 +36,6 @@ public class CoustmerController {
 	}
 	
 	@GetMapping("/coustmer/Find")
-	
-	
 //	rakshitha
 public ResponseStructure<Customer> findcustomer(@RequestParam long mobileno){
 		return ds.findCustomer(mobileno);
@@ -63,7 +61,7 @@ public ResponseStructure<Customer> findcustomer(@RequestParam long mobileno){
 //	vishnu
 	@PutMapping("/bookVehicle/{mobno}")
 	public ResponseStructure<Booking> bookVehicle(@PathVariable Long mobno,@RequestBody BookingDto bookingdto) {
-		 return ds.bookVehicle(mobno,bookingdto);
+		return ds.bookVehicle(mobno,bookingdto);
 	}
 	
 	

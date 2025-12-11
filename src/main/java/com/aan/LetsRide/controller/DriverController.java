@@ -37,7 +37,7 @@ public  ResponseStructure<Driver>findDriver(@PathVariable long mobileNo){
 }
 
 @PostMapping("/update")
-public ResponseStructure<Driver> updatemobilebylocation(@RequestParam double lattitude,@RequestParam double longitude,@RequestParam Long mobileNo) {
+public ResponseStructure<Driver> updatemobilebylocation(@RequestParam double lattitude,@RequestParam double longitude,@RequestParam("mobileNo") Long mobileNo) {
 	
 	return driverservice.updateDriver(lattitude,longitude,mobileNo);
 	

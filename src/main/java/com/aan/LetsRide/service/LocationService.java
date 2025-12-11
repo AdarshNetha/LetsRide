@@ -8,6 +8,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.aan.LetsRide.DTO.api.LocationRangeDTO;
 import com.aan.LetsRide.DTO.api.ValidatingDestination;
+import com.aan.LetsRide.exception.InvaildLocationException;
 
 @Service
 public class LocationService {
@@ -32,9 +33,9 @@ public class LocationService {
 
 
 		        Map<String, Object> response = restTemplate.getForObject(url, Map.class);
-
+		      
 		        Map<String, Object> address = (Map<String, Object>) response.get("address");
-
+                   
 		        return (String) address.get("city");
 		        
 		    }

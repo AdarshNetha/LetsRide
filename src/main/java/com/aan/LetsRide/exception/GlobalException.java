@@ -22,6 +22,22 @@ public class GlobalException {
 		
 	}
 	
+	
+	      @ExceptionHandler(DriveralreayExists.class)
+	      public ResponseStructure<String> DriverAlreadyExist(DriveralreayExists dr){
+	  		
+
+		        ResponseStructure<String> rs = new ResponseStructure<>();
+		        rs.setStatuscode(HttpStatus.NOT_FOUND.value());
+		        rs.setMessage(dr.getMessage());
+		        rs.setData(null);
+
+		        return rs;
+	      }
+	      
+	      
+	      
+	      
 	@ExceptionHandler(VehicleOtFoundWiththismobileNO.class)
 	public ResponseStructure<String> VehicleNOtFoundmobile(VehicleOtFoundWiththismobileNO vh){
 		
@@ -46,7 +62,25 @@ public class GlobalException {
         return rs;
 
 }
+        @ExceptionHandler(CustomeralreayExists.class)
+        public ResponseStructure<String>CustomeralreayExists(CustomeralreayExists custmob){
+        	 ResponseStructure<String> rs = new ResponseStructure<>();
+             rs.setStatuscode(HttpStatus.NOT_FOUND.value());
+             rs.setMessage(custmob.getMessage());
+             rs.setData(null);
 
+             return rs;
+        }
+        @ExceptionHandler(VehiclesareNotavilabletoDestinationLocation.class)
+        public ResponseStructure<String>VehiclesareNotavilabletoDestinationLocation(VehiclesareNotavilabletoDestinationLocation custmob){
+       	 ResponseStructure<String> rs = new ResponseStructure<>();
+            rs.setStatuscode(HttpStatus.NOT_FOUND.value());
+            rs.setMessage(custmob.getMessage());
+            rs.setData(null);
+
+            return rs;
+       }
+        
 	
 	
 	
