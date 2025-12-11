@@ -6,4 +6,8 @@ public class CustomerNotFoundWithMobile extends RuntimeException{
 		super();
 	}
 
+	public CustomerNotFoundWithMobile(String string) {
+		// TODO Auto-generated constructor stub
+	}
+
 }

@@ -47,7 +47,16 @@ public class GlobalException {
 
 }
 
-	
+	@ExceptionHandler(VehicleAlreadyBookedException.class)
+	public ResponseStructure<String> VehicleAlreadyBooked(VehicleAlreadyBookedException vehiclebooked){
+		
+		ResponseStructure<String> responseStructure = new ResponseStructure<String>();
+		responseStructure.setStatuscode(HttpStatus.BAD_REQUEST.value());
+		responseStructure.setMessage(vehiclebooked.getMessage());
+		responseStructure.setData(null);
+		
+	   return responseStructure;
+	}
 	
 	
 	

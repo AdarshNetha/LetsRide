@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.aan.LetsRide.ResponseStructure;
+import com.aan.LetsRide.DTO.ActiveBookingDTO;
 import com.aan.LetsRide.DTO.AvailableVehicleDTO;
 import com.aan.LetsRide.DTO.BookingDto;
 import com.aan.LetsRide.DTO.CustomerDTO;
@@ -22,6 +23,7 @@ import com.aan.LetsRide.entity.Booking;
 import com.aan.LetsRide.entity.Customer;
 import com.aan.LetsRide.entity.Driver;
 import com.aan.LetsRide.entity.Vehicle;
+import com.aan.LetsRide.exception.ActivebookingNotFoundwithcustomer;
 import com.aan.LetsRide.exception.CustomerNotFoundWithMobile;
 import com.aan.LetsRide.exception.DriverNOtFoundWiththismobileNO;
 import com.aan.LetsRide.repository.BookingRepo;
@@ -278,7 +280,7 @@ public class DriverService {
 			 booking.setDistanceTravelled(bookingdto.getDistanceTravelled());
 			 booking.setBookingDate(LocalDateTime.now());
 			 vehicle.setAvailabilityStatus("booked");
-			Booking confBooking= bookingrepo.save(booking);
+			 Booking confBooking= bookingrepo.save(booking);
 			 
 			 List<Booking> bookingList=new ArrayList<Booking>();
 			 bookingList=customer.getBookinglist();
@@ -305,6 +307,28 @@ public class DriverService {
 		}
 
 
-		
+		public ActiveBookingDTO  Seeactivebooking(long mobileno) {
+			Customer customer=customerRepo.findByMobileno(mobileno);
+			if(customer==null) {
+				throw new CustomerNotFoundWithMobile("Customer Not Found Mobileno:"+mobileno);
+			}
+			
+			Booking booking=bookingrepo.findBycustmobilenoAndBookingstatus(mobileno,"pending");
+			if(booking==null){
+				throw new ActivebookingNotFoundwithcustomer("No Active Booking found for this customer");
+			}
+			
+			ActiveBookingDTO activebooking=new ActiveBookingDTO();
+			activebooking.setCustname(customer.getName());
+			activebooking.setCustmobileno(customer.getMobileno());
+			activebooking.setCurrentlocation(customer.getCurrentLoc());
+			activebooking.setBooking(booking);
+			ResponseStructure<ActiveBookingDTO> activebooking1=new ResponseStructure<ActiveBookingDTO>();
+			activebooking1.setStatuscode(HttpStatus.ACCEPTED.value());
+			activebooking1.setMessage("Active Booking");
+			activebooking1.setData(activebooking);
+			return activebooking;
+		}
+ 
 		}
 
