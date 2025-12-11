@@ -2,8 +2,10 @@ package com.aan.LetsRide.exception;
 
 public class CustomerNotFoundWithMobile extends RuntimeException{
 
-	public CustomerNotFoundWithMobile(long mobno) {
-		super();
+
+	public CustomerNotFoundWithMobile(String string) {
+		super("CustomerNotFoundWithMobile"+string);
+
 	}
 
 }
