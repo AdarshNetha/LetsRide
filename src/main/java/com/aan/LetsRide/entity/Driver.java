@@ -1,6 +1,5 @@
 package com.aan.LetsRide.entity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -18,12 +17,12 @@ public class Driver {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 private int id;
-private Long licenceNo;
+private long licenceNo;
 private String upiid;
 private String name;
 private String status="Available";
 private int age;
-private Long mobileNo;
+private long mobileNo;
 private String gender;
 private String mail;
 @JsonIgnore
@@ -50,7 +49,7 @@ public void setId(int id) {
 public Long getLicenceNo() {
 	return licenceNo;
 }
-public void setLicenceNo(Long licenceNo) {
+public void setLicenceNo(long licenceNo) {
 	this.licenceNo = licenceNo;
 }
 public String getUpiid() {
@@ -80,7 +79,7 @@ public void setAge(int age) {
 public Long getMobileNo() {
 	return mobileNo;
 }
-public void setMobileNo(Long mobileNo) {
+public void setMobileNo(long mobileNo) {
 	this.mobileNo = mobileNo;
 }
 public String getGender() {

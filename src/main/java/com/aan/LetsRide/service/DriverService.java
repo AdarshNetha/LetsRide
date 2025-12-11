@@ -25,8 +25,13 @@ import com.aan.LetsRide.entity.Driver;
 import com.aan.LetsRide.entity.Vehicle;
 import com.aan.LetsRide.exception.ActivebookingNotFoundwithcustomer;
 import com.aan.LetsRide.exception.CustomerNotFoundWithMobile;
+import com.aan.LetsRide.exception.CustomeralreayExists;
 import com.aan.LetsRide.exception.DriverNOtFoundWiththismobileNO;
+import com.aan.LetsRide.exception.DriveralreayExists;
+import com.aan.LetsRide.exception.VehiclesareNotavilabletoDestinationLocation;
 import com.aan.LetsRide.repository.BookingRepo;
+
+import com.aan.LetsRide.exception.VehicleOtFoundWiththismobileNO;
 import com.aan.LetsRide.repository.CustomerRepo;
 import com.aan.LetsRide.repository.DriverRepository;
 import com.aan.LetsRide.repository.Vechilerepo;
@@ -50,13 +55,17 @@ public class DriverService {
 	     private BookingRepo bookingrepo;
 
 	    public ResponseStructure<Driver> saveRegDriver(RegDriverVehicleDTO dto) {
-
+	    if(dto!=null) {
+	    	throw new DriveralreayExists("DriveralreayExists "+dto.getMobileNo());
+	    }
+	    	
 	        // Fetch city using LocationService
 	        String city = locationService.getCityFromCoordinates(
 	                dto.getLattitude(),
 	                dto.getLongitude()
 	        );
 
+	        
 	        Driver driver = new Driver();
 	        driver.setLicenceNo(dto.getLicenceNo());
 	        driver.setName(dto.getName());
@@ -94,7 +103,7 @@ public class DriverService {
 		public ResponseStructure<Driver> findDriver(long mobileNo) {
 			 Driver driver = driverrepo.findByMobileNo(mobileNo);
 			 if(driver==null) {
-				 throw new DriverNOtFoundWiththismobileNO(mobileNo);
+				 throw new DriverNOtFoundWiththismobileNO("DriverNOtFoundWiththismobileNO"+mobileNo);
 			 }
 			
 			 
@@ -108,8 +117,11 @@ public class DriverService {
 			
 		}
 	    
-		public ResponseStructure<Driver> updateDriver(double lattitude, double longitude, Long mobileNo) {
-		      Driver d = driverrepo.findByMobileNo(mobileNo);
+
+
+		public ResponseStructure<Driver> updateDriver(double lattitude, double longitude, Long mobilenumber) {
+		      Driver d = driverrepo.findByMobileNo(mobilenumber);
+		      
 		      String city = locationService.getCityFromCoordinates(lattitude, longitude);
 		      Vehicle v = d.getVehicle();
 		      v.setCurrentcity(city);
@@ -132,6 +144,11 @@ public class DriverService {
 		public ResponseStructure<Driver> deleteById(long mobileNo)
 		{
 			Driver driver = driverrepo.findByMobileNo(mobileNo);
+
+			if(driver==null) {
+				 throw new DriverNOtFoundWiththismobileNO("DriverNOtFoundWiththismobileNO"+mobileNo);
+			}
+
 			driverrepo.delete(driver);
 			ResponseStructure<Driver> rs= new ResponseStructure<Driver>();
 			rs.setData(driver);
@@ -152,6 +169,10 @@ public class DriverService {
 		public ResponseStructure<AvailableVehicleDTO> getAvailableVehiclesByCity(Long mobileno, String distinationLocation) {
 			
 			Customer c=customerRepo.findByMobileno(mobileno);
+			if(c==null) {
+				 throw new  CustomerNotFoundWithMobile("CustomerNotFoundWithMobile"+mobileno);
+
+			}
 			String Source=c.getCurrentLoc();
 			String DistinationLocation=distinationLocation;
 			boolean check=locationService.validatingCity(DistinationLocation);
@@ -175,7 +196,12 @@ public class DriverService {
 			AVD.setDistance(distance);
 			AVD.setDestinationLocation(DistinationLocation);
 			List<Vehicledetails> l= new ArrayList<Vehicledetails>();
+					
 			List<Vehicle> list=vehiclerepo.findAvailableVehiclesBycity(Source);
+			if(list==null) {
+				throw new VehiclesareNotavilabletoDestinationLocation("No vehicles available in city"+Source);
+			}
+			
 			for (Vehicle vehicle : list) {
 				Vehicledetails vd= new Vehicledetails();
 				int A=vehicle.getAveragespeed();
@@ -211,7 +237,7 @@ public class DriverService {
 		public ResponseStructure<Customer> findCustomer(long mobileno) {
 			Customer cust =customerRepo.findByMobileno(mobileno);
 			 if(cust==null) {
-				 throw new  CustomerNotFoundWithMobile(mobileno);
+				 throw new  CustomerNotFoundWithMobile("CustomerNotFoundWithMobile"+mobileno);
 			 }
 		
 			      ResponseStructure<Customer> rs =new ResponseStructure<Customer>();
@@ -233,11 +259,21 @@ public class DriverService {
 //	adarsh	
 		
 		public ResponseStructure<Customer> registerCustomer(CustomerDTO cdto) {
+
+			Customer cust =customerRepo.findByMobileno(cdto.getMobileno());
+			 if(cust!=null) {
+				 throw new  CustomeralreayExists("CustomeralreayExists"+cdto.getMobileno());
+			 }
+
+			
+		
+
 			Customer customer=new Customer();
+			
 			customer.setName(cdto.getName());
 			customer.setAge(cdto.getAge());
 			customer.setGender(cdto.getGender());
-			customer.setMobno(cdto.getMobileno());
+			customer.setMobileno(cdto.getMobileno());
 			customer.setMail(cdto.getEmail());
 			customer.setCurrentLoc(locationService.getCityFromCoordinates(cdto.getLatitude(),cdto.getLongitude()));
 			customerRepo.save(customer);
@@ -256,6 +292,12 @@ public class DriverService {
 		public ResponseStructure<Customer> deleteBymbno(long mobileno) {
 			
 			Customer cust= customerRepo.findByMobileno(mobileno);
+			 if(cust==null) {
+
+				 throw new  CustomerNotFoundWithMobile("CustomerNotFoundWithMobile"+mobileno);
+			 }
+
+
 			customerRepo.delete(cust);
 			ResponseStructure<Customer> rs= new ResponseStructure<Customer>();
 			rs.setData(cust);

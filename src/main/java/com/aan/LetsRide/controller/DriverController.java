@@ -30,14 +30,13 @@ public ResponseStructure<Driver> saveregdriver(@RequestBody RegDriverVehicleDTO 
     return driverservice.saveRegDriver(dto);
 }
 
-
 @GetMapping("/driver/{mobileNo}")
 public  ResponseStructure<Driver>findDriver(@PathVariable long mobileNo){
 	return driverservice.findDriver(mobileNo);	
 }
 
 @PostMapping("/update")
-public ResponseStructure<Driver> updatemobilebylocation(@RequestParam double lattitude,@RequestParam double longitude,@RequestParam Long mobileNo) {
+public ResponseStructure<Driver> updatemobilebylocation(@RequestParam double lattitude,@RequestParam double longitude,@RequestParam("mobileNo") Long mobileNo) {
 	
 	return driverservice.updateDriver(lattitude,longitude,mobileNo);
 	
