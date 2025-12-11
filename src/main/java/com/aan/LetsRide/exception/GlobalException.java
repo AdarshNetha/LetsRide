@@ -63,6 +63,9 @@ public class GlobalException {
 
 }
 
+
+	
+
         @ExceptionHandler(CustomeralreayExists.class)
         public ResponseStructure<String>CustomeralreayExists(CustomeralreayExists custmob){
         	 ResponseStructure<String> rs = new ResponseStructure<>();
@@ -97,6 +100,7 @@ public ResponseStructure<String> CustomeralreadyExists( CustomeralreayExists ex)
 	
 	
 	}
+
 
 	
 	

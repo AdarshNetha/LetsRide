@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.aan.LetsRide.ResponseStructure;
+import com.aan.LetsRide.DTO.ActiveBookingDTO;
 import com.aan.LetsRide.DTO.AvailableVehicleDTO;
 import com.aan.LetsRide.DTO.BookingDto;
 import com.aan.LetsRide.DTO.CustomerDTO;
@@ -63,7 +64,11 @@ public ResponseStructure<Customer> findcustomer(@RequestParam long mobileno){
 	public ResponseStructure<Booking> bookVehicle(@PathVariable Long mobno,@RequestBody BookingDto bookingdto) {
 		return ds.bookVehicle(mobno,bookingdto);
 	}
-	
+	  
+	@GetMapping("/customer/seeactivebooking/{mobileno}")
+	public ActiveBookingDTO Seeactivebooking(@PathVariable long mobileno) {
+		return ds.Seeactivebooking(mobileno);
+	}
 	
 
 }
