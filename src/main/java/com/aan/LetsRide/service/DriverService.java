@@ -1,17 +1,13 @@
 package com.aan.LetsRide.service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-
 import com.aan.LetsRide.ResponseStructure;
+import com.aan.LetsRide.DTO.ActiveBookingDTO;
 import com.aan.LetsRide.DTO.AvailableVehicleDTO;
 import com.aan.LetsRide.DTO.BookingDto;
 import com.aan.LetsRide.DTO.CustomerDTO;
@@ -29,7 +25,6 @@ import com.aan.LetsRide.exception.DriveralreayExists;
 import com.aan.LetsRide.exception.VehiclesareNotavilabletoDestinationLocation;
 import com.aan.LetsRide.repository.BookingRepo;
 
-import com.aan.LetsRide.exception.VehicleOtFoundWiththismobileNO;
 import com.aan.LetsRide.repository.CustomerRepo;
 import com.aan.LetsRide.repository.DriverRepository;
 import com.aan.LetsRide.repository.Vechilerepo;
@@ -53,7 +48,8 @@ public class DriverService {
 	     private BookingRepo bookingrepo;
 
 	    public ResponseStructure<Driver> saveRegDriver(RegDriverVehicleDTO dto) {
-	    if(dto!=null) {
+	    	Driver driver1= driverrepo.findByMobileNo(dto.getMobileNo());
+	    if(driver1!=null) {
 	    	throw new DriveralreayExists("DriveralreayExists "+dto.getMobileNo());
 	    }
 	    	
@@ -320,7 +316,7 @@ public class DriverService {
 			 booking.setDistanceTravelled(bookingdto.getDistanceTravelled());
 			 booking.setBookingDate(LocalDateTime.now());
 			 vehicle.setAvailabilityStatus("booked");
-			Booking confBooking= bookingrepo.save(booking);
+			 Booking confBooking= bookingrepo.save(booking);
 			 
 			 List<Booking> bookingList=new ArrayList<Booking>();
 			 bookingList=customer.getBookinglist();
@@ -347,6 +343,52 @@ public class DriverService {
 		}
 
 
-		
+		public ResponseStructure<ActiveBookingDTO>  Seeactivebooking(long mobileno) {
+			Customer customer=customerRepo.findByMobileno(mobileno);
+			if(customer==null) {
+				throw new CustomerNotFoundWithMobile("Customer Not Found Mobileno:"+mobileno);
+			}
+			
+//			Booking booking=bookingrepo.findBycustmobilenoAndBookingstatus(mobileno,"pending");
+//			if(booking==null){
+//				throw new ActivebookingNotFoundwithcustomer("No Active Booking found for this customer");
+//			}
+			
+			ActiveBookingDTO activebooking=new ActiveBookingDTO();
+			activebooking.setCustname(customer.getName());
+			activebooking.setCustmobileno(customer.getMobileno());
+			activebooking.setCurrentlocation(customer.getCurrentLoc());
+			
+			List<Booking> bookinglist=new ArrayList<Booking>();
+			bookinglist=customer.getBookinglist();
+			
+			ResponseStructure<ActiveBookingDTO> activebooking1=new ResponseStructure<ActiveBookingDTO>();
+			for (Booking booking : bookinglist) {
+				if(booking.getBookingDate().equals("pending"))
+				{
+					
+					activebooking.setBooking(booking);
+					activebooking1.setStatuscode(HttpStatus.ACCEPTED.value());
+					activebooking1.setMessage("Active Booking");
+					activebooking1.setData(activebooking);
+				}
+				else {
+					activebooking.setBooking(booking);
+					activebooking1.setStatuscode(HttpStatus.ACCEPTED.value());
+					activebooking1.setMessage("Active Booking");
+					activebooking1.setData(null);
+					
+					
+					
+				}
+			}
+			
+			
+			return activebooking1;
+			
+
+			
+		}
+ 
 		}
 
