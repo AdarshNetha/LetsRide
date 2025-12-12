@@ -24,6 +24,13 @@ public double getEstimationtime() {
 public void setEstimationtime(double estimationtime) {
 	this.estimationtime = estimationtime;
 }
+
+public Vehicledetails(Vehicle v, double fare, double estimationtime) {
+	super();
+	this.v = v;
+	this.fare = fare;
+	this.estimationtime = estimationtime;
+}
 public Vehicledetails() {
 	super();
 	// TODO Auto-generated constructor stub
