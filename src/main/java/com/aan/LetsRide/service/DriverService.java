@@ -365,6 +365,7 @@ public class DriverService {
 			activebooking.setCustmobileno(customer.getMobileno());
 			activebooking.setCurrentlocation(customer.getCurrentLoc());
 			activebooking.setBooking(booking);
+			
 			ResponseStructure<ActiveBookingDTO> activebooking1=new ResponseStructure<ActiveBookingDTO>();
 			activebooking1.setStatuscode(HttpStatus.ACCEPTED.value());
 			activebooking1.setMessage("Active Booking");
