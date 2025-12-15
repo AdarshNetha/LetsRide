@@ -1,5 +1,6 @@
 package com.aan.LetsRide.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -22,8 +23,15 @@ public class Customer {
 	private String currentLoc;
 	@OneToMany(cascade = CascadeType.ALL)
 	List<Booking> bookinglist;
+	private boolean activeBookingFlag;
 	
 	
+	public boolean isActiveBookingFlag() {
+		return activeBookingFlag;
+	}
+	public void setActiveBookingFlag(boolean activeBookingFlag) {
+		this.activeBookingFlag = activeBookingFlag;
+	}
 	public long getMobileno() {
 		return mobileno;
 	}
@@ -83,7 +91,7 @@ public class Customer {
 		// TODO Auto-generated constructor stub
 	}
 	public Customer(int id, String name, int age, String gender, long mobileno, String mail, String currentLoc,
-			List<Booking> bookinglist) {
+			List<Booking> bookinglist, boolean activeBookingFlag) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -93,12 +101,17 @@ public class Customer {
 		this.mail = mail;
 		this.currentLoc = currentLoc;
 		this.bookinglist = bookinglist;
+		this.activeBookingFlag = activeBookingFlag;
 	}
 	@Override
 	public String toString() {
 		return "Customer [id=" + id + ", name=" + name + ", age=" + age + ", gender=" + gender + ", mobileno="
-				+ mobileno + ", mail=" + mail + ", currentLoc=" + currentLoc + ", bookinglist=" + bookinglist + "]";
+				+ mobileno + ", mail=" + mail + ", currentLoc=" + currentLoc + ", bookinglist=" + bookinglist
+				+ ", activeBookingFlag=" + activeBookingFlag + "]";
 	}
+	
+	
+	
 	
 	
 		

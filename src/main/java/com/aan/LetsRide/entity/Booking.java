@@ -29,6 +29,7 @@ public class Booking {
 	private String estimationTravelTime;
 	private LocalDateTime bookingDate;
 	private String paymentStatus="Not paid";
+	
 	@OneToOne
 	private  Payment  payment;
 	private  String bookingStatus="pending";
@@ -135,6 +136,7 @@ public class Booking {
 		this.payment = payment;
 		this.bookingStatus = bookingStatus;
 	}
+	
 	
 	
 }
