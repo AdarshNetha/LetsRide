@@ -328,8 +328,7 @@ public class DriverService {
 
 			Booking confBooking= bookingrepo.save(booking);
 
-			 Booking confBooking1= bookingrepo.save(booking);
-			 
+			
 			 List<Booking> bookingList=new ArrayList<Booking>();
 			 bookingList=customer.getBookinglist();
 			 bookingList.add(booking);
@@ -347,7 +346,7 @@ public class DriverService {
 			 ResponseStructure<Booking> rs= new ResponseStructure<Booking>();
 			 rs.setMessage("booking succesfullay");
 			 rs.setStatuscode(HttpStatus.ACCEPTED.value());
-			 rs.setData(confBooking1);
+			 rs.setData(confBooking);
 			 
 			 return rs;
 			 		
