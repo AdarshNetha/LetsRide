@@ -48,6 +48,9 @@ public AvailableVehicleDTO() {
 }
 
 
+
+
+
 public AvailableVehicleDTO(Customer c, int distance, String sourceLocation, String destinationLocation,
 		List<Vehicledetails> availablevehicles) {
 	super();

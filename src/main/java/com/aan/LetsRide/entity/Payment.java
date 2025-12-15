@@ -1,6 +1,8 @@
 package com.aan.LetsRide.entity;
 
+
 import org.hibernate.annotations.ManyToAny;
+
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
