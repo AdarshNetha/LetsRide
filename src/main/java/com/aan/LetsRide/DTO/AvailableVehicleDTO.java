@@ -42,8 +42,13 @@ public void setAvailablevehicles(List<Vehicledetails> availablevehicles) {
 }
 public AvailableVehicleDTO() {
 	super();
-	// TODO Auto-generated constructor stub
+
+	
+	
 }
+
+
+
 
 
 public AvailableVehicleDTO(Customer c, int distance, String sourceLocation, String destinationLocation,

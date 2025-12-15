@@ -1,5 +1,8 @@
 package com.aan.LetsRide.service;
 
+
+import java.time.LocalDate;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +17,7 @@ import com.aan.LetsRide.DTO.ActiveBookingDTO;
 import com.aan.LetsRide.DTO.AvailableVehicleDTO;
 import com.aan.LetsRide.DTO.BookingDto;
 import com.aan.LetsRide.DTO.CustomerDTO;
+import com.aan.LetsRide.DTO.Paymentresponedto;
 import com.aan.LetsRide.DTO.RegDriverVehicleDTO;
 import com.aan.LetsRide.DTO.UPIpaymentdto;
 import com.aan.LetsRide.DTO.Vehicledetails;
@@ -21,16 +25,19 @@ import com.aan.LetsRide.DTO.api.LocationRangeDTO;
 import com.aan.LetsRide.entity.Booking;
 import com.aan.LetsRide.entity.Customer;
 import com.aan.LetsRide.entity.Driver;
+import com.aan.LetsRide.entity.Payment;
 import com.aan.LetsRide.entity.Vehicle;
 import com.aan.LetsRide.exception.CustomerNotFoundWithMobile;
 import com.aan.LetsRide.exception.CustomeralreayExists;
 import com.aan.LetsRide.exception.DriverNOtFoundWiththismobileNO;
+import com.aan.LetsRide.repository.BookingRepo;
+
 import com.aan.LetsRide.exception.DriveralreayExists;
 import com.aan.LetsRide.exception.VehiclesareNotavilabletoDestinationLocation;
 import com.aan.LetsRide.repository.BookingRepo;
-
 import com.aan.LetsRide.repository.CustomerRepo;
 import com.aan.LetsRide.repository.DriverRepository;
+import com.aan.LetsRide.repository.Paymentrepo;
 import com.aan.LetsRide.repository.Vechilerepo;
 
 
@@ -50,6 +57,8 @@ public class DriverService {
 	    private Vechilerepo vehiclerepo;
 	    @Autowired
 	     private BookingRepo bookingrepo;
+	    @Autowired
+	    private Paymentrepo paymentre;
 
 	    public ResponseStructure<Driver> saveRegDriver(RegDriverVehicleDTO dto) {
 	    	Driver driver1= driverrepo.findByMobileNo(dto.getMobileNo());
@@ -320,8 +329,10 @@ public class DriverService {
 			 booking.setDistanceTravelled(bookingdto.getDistanceTravelled());
 			 booking.setBookingDate(LocalDateTime.now());
 			 vehicle.setAvailabilityStatus("booked");
-			 Booking confBooking= bookingrepo.save(booking);
-			 
+
+			Booking confBooking= bookingrepo.save(booking);
+
+			
 			 List<Booking> bookingList=new ArrayList<Booking>();
 			 bookingList=customer.getBookinglist();
 			 bookingList.add(booking);
@@ -345,6 +356,7 @@ public class DriverService {
 			 		
 			
 		}
+
 
 
 		public ResponseStructure<ActiveBookingDTO>  Seeactivebooking(long mobileno) {
@@ -426,7 +438,45 @@ public class DriverService {
 		
 		
 //		rakshitha
+		public ResponseStructure<Payment> confirmPayment(int bookingId, String paymentType) {
+
+		    Booking booking = bookingrepo.findById(bookingId)
+		            .orElseThrow(() -> new RuntimeException("Booking not found"));
+
+		    booking.setBookingStatus("COMPLETED");
+		    booking.setPaymentStatus("PAID");
+		    Customer customer = booking.getCust();
+		    customer.setActiveBookingFlag(false);
+		    
+		    Vehicle vehicle = booking.getDriver().getVehicle();
+		    vehicle.setAvailabilityStatus("AVAILABLE");
+		    Payment payment = new Payment();
+		    payment.setVehicle(vehicle);
+		    payment.setCustomer(customer);
+		    payment.setBooking(booking);
+		    payment.setAmount(booking.getFare());
+		    payment.setPaymentType(paymentType);
+		    paymentre.save(payment);
+		    bookingrepo.save(booking);
+		    customerRepo.save(customer);
+		    vehiclerepo.save(vehicle);
+            ResponseStructure<Payment> response = new ResponseStructure<>();
+		    response.setStatuscode(HttpStatus.OK.value());
+		    response.setMessage("Payment confirmed successfully");
+		    response.setData(payment);
+
+		    return response;
+		}
+
+
+		public ResponseStructure<Payment> confirmPaymentbycash(int id, String paymentType) {
+			
+			return confirmPayment(id,paymentType) ;
+		}
+
+
 		
  
+
 		}
 
