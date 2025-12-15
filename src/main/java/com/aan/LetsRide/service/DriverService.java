@@ -1,14 +1,12 @@
 package com.aan.LetsRide.service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 
 import com.aan.LetsRide.ResponseStructure;
@@ -17,13 +15,13 @@ import com.aan.LetsRide.DTO.AvailableVehicleDTO;
 import com.aan.LetsRide.DTO.BookingDto;
 import com.aan.LetsRide.DTO.CustomerDTO;
 import com.aan.LetsRide.DTO.RegDriverVehicleDTO;
+import com.aan.LetsRide.DTO.UPIpaymentdto;
 import com.aan.LetsRide.DTO.Vehicledetails;
 import com.aan.LetsRide.DTO.api.LocationRangeDTO;
 import com.aan.LetsRide.entity.Booking;
 import com.aan.LetsRide.entity.Customer;
 import com.aan.LetsRide.entity.Driver;
 import com.aan.LetsRide.entity.Vehicle;
-import com.aan.LetsRide.exception.ActivebookingNotFoundwithcustomer;
 import com.aan.LetsRide.exception.CustomerNotFoundWithMobile;
 import com.aan.LetsRide.exception.CustomeralreayExists;
 import com.aan.LetsRide.exception.DriverNOtFoundWiththismobileNO;
@@ -31,7 +29,6 @@ import com.aan.LetsRide.exception.DriveralreayExists;
 import com.aan.LetsRide.exception.VehiclesareNotavilabletoDestinationLocation;
 import com.aan.LetsRide.repository.BookingRepo;
 
-import com.aan.LetsRide.exception.VehicleOtFoundWiththismobileNO;
 import com.aan.LetsRide.repository.CustomerRepo;
 import com.aan.LetsRide.repository.DriverRepository;
 import com.aan.LetsRide.repository.Vechilerepo;
@@ -55,7 +52,8 @@ public class DriverService {
 	     private BookingRepo bookingrepo;
 
 	    public ResponseStructure<Driver> saveRegDriver(RegDriverVehicleDTO dto) {
-	    if(dto!=null) {
+	    	Driver driver1= driverrepo.findByMobileNo(dto.getMobileNo());
+	    if(driver1!=null) {
 	    	throw new DriveralreayExists("DriveralreayExists "+dto.getMobileNo());
 	    }
 	    	
@@ -349,30 +347,86 @@ public class DriverService {
 		}
 
 
-		public ActiveBookingDTO  Seeactivebooking(long mobileno) {
+		public ResponseStructure<ActiveBookingDTO>  Seeactivebooking(long mobileno) {
 			Customer customer=customerRepo.findByMobileno(mobileno);
 			if(customer==null) {
 				throw new CustomerNotFoundWithMobile("Customer Not Found Mobileno:"+mobileno);
-			}
-			
-			Booking booking=bookingrepo.findBycustmobilenoAndBookingstatus(mobileno,"pending");
-			if(booking==null){
-				throw new ActivebookingNotFoundwithcustomer("No Active Booking found for this customer");
 			}
 			
 			ActiveBookingDTO activebooking=new ActiveBookingDTO();
 			activebooking.setCustname(customer.getName());
 			activebooking.setCustmobileno(customer.getMobileno());
 			activebooking.setCurrentlocation(customer.getCurrentLoc());
-			activebooking.setBooking(booking);
+
+			
+			List<Booking> bookinglist=new ArrayList<Booking>();
+			bookinglist=customer.getBookinglist();
 			
 			ResponseStructure<ActiveBookingDTO> activebooking1=new ResponseStructure<ActiveBookingDTO>();
-			activebooking1.setStatuscode(HttpStatus.ACCEPTED.value());
-			activebooking1.setMessage("Active Booking");
-			activebooking1.setData(activebooking);
-			return activebooking;
+			for (Booking booking : bookinglist) {
+				if(booking.getBookingDate().equals("pending"))
+				{
+					
+					activebooking.setBooking(booking);
+					activebooking1.setStatuscode(HttpStatus.ACCEPTED.value());
+					activebooking1.setMessage("Active Booking");
+					activebooking1.setData(activebooking);
+				}
+				else {
+					activebooking.setBooking(booking);
+					activebooking1.setStatuscode(HttpStatus.ACCEPTED.value());
+					activebooking1.setMessage("Active Booking");
+					activebooking1.setData(null);
+					
+					
+					
+				}
+			}
+			
+			
+			return activebooking1;
+	
+
+
+
+    }
+
+
+		
+		
+		
+		
+		
+//		vamshi
+		
+		public ResponseStructure<byte[]> Saveupi(int bookingid) {
+			Booking b=bookingrepo.findById(bookingid).get();
+			String upiid=b.getDriver().getUpiid();
+			byte[] qr=QRcode(upiid);
+			UPIpaymentdto upipaydto=new UPIpaymentdto();
+			upipaydto.setFare(b.getFare());
+			upipaydto.setQr(qr);
+			ResponseStructure<byte []> rs=new ResponseStructure<byte []>();
+			rs.setStatuscode(HttpStatus.ACCEPTED.value());
+			rs.setMessage("Payment Completed");
+			rs.setData(qr);
+			return rs;
 			
 		}
+			public byte[] QRcode(String UPIid) {
+				String UPIurl="http://api.qrserver.com/v1/create-qr-code/?size=300x300&data=upi://pay?pa="+UPIid;
+		    	RestTemplate rt=new RestTemplate();
+		    	byte[] qr=rt.getForObject(UPIurl,byte[].class);
+				return qr;
+			}
+		
+		
+		
+		
+		
+		
+//		rakshitha
+		
  
 		}
 

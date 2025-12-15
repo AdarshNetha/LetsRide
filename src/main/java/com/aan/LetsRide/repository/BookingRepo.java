@@ -10,11 +10,4 @@ public interface BookingRepo  extends JpaRepository<Booking, Integer>{
 
 	
 
-	Booking findBymobileno(long mobileno);
-
-	Booking findBycustmobilenoAndBookingstatus(long mobileno, String string);
-
-	
-	
-
 }

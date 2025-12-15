@@ -1,9 +1,6 @@
 package com.aan.LetsRide.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,7 +17,6 @@ import com.aan.LetsRide.DTO.BookingDto;
 import com.aan.LetsRide.DTO.CustomerDTO;
 import com.aan.LetsRide.entity.Booking;
 import com.aan.LetsRide.entity.Customer;
-import com.aan.LetsRide.entity.Vehicle;
 import com.aan.LetsRide.service.DriverService;
 
 @RestController
@@ -28,6 +24,7 @@ public class CoustmerController {
 	
 	@Autowired
 	private DriverService ds;
+	 
 	
 	@PostMapping("/coustmer/register")
 //	adarsh
@@ -66,9 +63,25 @@ public ResponseStructure<Customer> findcustomer(@RequestParam long mobileno){
 	}
 	  
 	@GetMapping("/customer/seeactivebooking/{mobileno}")
-	public ActiveBookingDTO Seeactivebooking(@PathVariable long mobileno) {
+	public ResponseStructure<ActiveBookingDTO> Seeactivebooking(@PathVariable long mobileno) {
 		return ds.Seeactivebooking(mobileno);
 	}
+	
+//	vamshi
+	
+	@PostMapping("/paybyupi")
+	public ResponseStructure<byte[]> PaybyUPI(@RequestParam int bookingid) {
+		return ds.Saveupi(bookingid);
+	}
+	
+	
+	
+//	rakshitha
+	
+	
+	
+	
+	
 	
 
 }

@@ -87,16 +87,7 @@ public class GlobalException {
         
 
 	
-//	customeralreadyExits
-	@ExceptionHandler(CustomeralreayExists.class)
-public ResponseStructure<String> CustomeralreadyExists( CustomeralreayExists ex){
-		
-        ResponseStructure<String> rs = new ResponseStructure<>();
-        rs.setStatuscode(HttpStatus.NOT_FOUND.value());
-        rs.setMessage(ex.getMessage());
-        rs.setData(null);
 
-        return rs;
 	
 	
 	}
@@ -109,4 +100,4 @@ public ResponseStructure<String> CustomeralreadyExists( CustomeralreayExists ex)
 	
 	
 	
-}
+

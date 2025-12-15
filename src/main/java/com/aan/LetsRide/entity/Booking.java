@@ -1,4 +1,4 @@
-package com.aan.LetsRide.entity;
+ package com.aan.LetsRide.entity;
 
 import java.time.LocalDateTime;
 
@@ -33,8 +33,8 @@ public class Booking {
 	@OneToOne
 	private  Payment  payment;
 	private  String bookingStatus="pending";
-	
-	
+	  
+
 	public int getId() {
 		return id;
 	}
