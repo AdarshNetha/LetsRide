@@ -431,14 +431,14 @@ public class DriverService {
 		    payment.setBooking(booking);
 		    payment.setAmount(booking.getFare());
 		    payment.setPaymentType(paymentType);
-		    paymentre.save(payment);
+		 Payment paymentsave  = paymentre.save(payment);
 		    bookingrepo.save(booking);
 		    customerRepo.save(customer);
 		    vehiclerepo.save(vehicle);
             ResponseStructure<Payment> response = new ResponseStructure<>();
 		    response.setStatuscode(HttpStatus.OK.value());
 		    response.setMessage("Payment confirmed successfully");
-		    response.setData(payment);
+		    response.setData(paymentsave);
 
 		    return response;
 		}
