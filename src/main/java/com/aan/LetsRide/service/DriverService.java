@@ -20,11 +20,10 @@ import com.aan.LetsRide.DTO.BookingHistoryDto;
 import com.aan.LetsRide.DTO.CustomerDTO;
 import com.aan.LetsRide.DTO.Paymentresponedto;
 import com.aan.LetsRide.DTO.RegDriverVehicleDTO;
-<<<<<<< HEAD
+
 import com.aan.LetsRide.DTO.RideDTO;
-=======
 import com.aan.LetsRide.DTO.UPIpaymentdto;
->>>>>>> f862eb8e2673bab3497f212e127f3b1fa092a8e7
+
 import com.aan.LetsRide.DTO.Vehicledetails;
 import com.aan.LetsRide.DTO.api.LocationRangeDTO;
 import com.aan.LetsRide.entity.Booking;
@@ -403,8 +402,6 @@ public class DriverService {
 			
 			return activebooking1;
 	
-
-<<<<<<< HEAD
 			
 		}
 
@@ -427,14 +424,14 @@ public class DriverService {
 		 
 		 return rs;
 		}
-=======
 
 
-    }
+
+    
 
 
 		
->>>>>>> f862eb8e2673bab3497f212e127f3b1fa092a8e7
+
 		
 		
 		
@@ -471,10 +468,7 @@ public class DriverService {
 		
 		
 //		rakshitha
-<<<<<<< HEAD
-		
-}
-=======
+
 		public ResponseStructure<Payment> confirmPayment(int bookingId, String paymentType) {
 
 		    Booking booking = bookingrepo.findById(bookingId)
@@ -523,4 +517,4 @@ public class DriverService {
 
 		}
 
->>>>>>> f862eb8e2673bab3497f212e127f3b1fa092a8e7
+

@@ -69,10 +69,7 @@ public class CoustmerController {
 	public ResponseStructure<ActiveBookingDTO> Seeactivebooking(@PathVariable long mobileno) {
 		return ds.Seeactivebooking(mobileno);
 	}
-<<<<<<< HEAD
 
-	
-=======
 	
 //	vamshi
 	
@@ -92,8 +89,7 @@ public class CoustmerController {
 	public ResponseStructure<Payment> bookingCompleted(@RequestParam int id, @RequestParam String paymentType) {
 		 return ds.confirmPaymentbycash(id,paymentType);
 	}
->>>>>>> f862eb8e2673bab3497f212e127f3b1fa092a8e7
-	
+
 	
 	
 	
