@@ -1,34 +1,48 @@
 package com.aan.LetsRide.service;
 
+
+import java.time.LocalDate;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.client.RestTemplate;
+
 import com.aan.LetsRide.ResponseStructure;
 import com.aan.LetsRide.DTO.ActiveBookingDTO;
 import com.aan.LetsRide.DTO.AvailableVehicleDTO;
 import com.aan.LetsRide.DTO.BookingDto;
 import com.aan.LetsRide.DTO.BookingHistoryDto;
 import com.aan.LetsRide.DTO.CustomerDTO;
+import com.aan.LetsRide.DTO.Paymentresponedto;
 import com.aan.LetsRide.DTO.RegDriverVehicleDTO;
+<<<<<<< HEAD
 import com.aan.LetsRide.DTO.RideDTO;
+=======
+import com.aan.LetsRide.DTO.UPIpaymentdto;
+>>>>>>> f862eb8e2673bab3497f212e127f3b1fa092a8e7
 import com.aan.LetsRide.DTO.Vehicledetails;
 import com.aan.LetsRide.DTO.api.LocationRangeDTO;
 import com.aan.LetsRide.entity.Booking;
 import com.aan.LetsRide.entity.Customer;
 import com.aan.LetsRide.entity.Driver;
+import com.aan.LetsRide.entity.Payment;
 import com.aan.LetsRide.entity.Vehicle;
 import com.aan.LetsRide.exception.CustomerNotFoundWithMobile;
 import com.aan.LetsRide.exception.CustomeralreayExists;
 import com.aan.LetsRide.exception.DriverNOtFoundWiththismobileNO;
+import com.aan.LetsRide.repository.BookingRepo;
+
 import com.aan.LetsRide.exception.DriveralreayExists;
 import com.aan.LetsRide.exception.VehiclesareNotavilabletoDestinationLocation;
 import com.aan.LetsRide.repository.BookingRepo;
-
 import com.aan.LetsRide.repository.CustomerRepo;
 import com.aan.LetsRide.repository.DriverRepository;
+import com.aan.LetsRide.repository.Paymentrepo;
 import com.aan.LetsRide.repository.Vechilerepo;
 
 
@@ -48,6 +62,8 @@ public class DriverService {
 	    private Vechilerepo vehiclerepo;
 	    @Autowired
 	     private BookingRepo bookingrepo;
+	    @Autowired
+	    private Paymentrepo paymentre;
 
 	    public ResponseStructure<Driver> saveRegDriver(RegDriverVehicleDTO dto) {
 	    	Driver driver1= driverrepo.findByMobileNo(dto.getMobileNo());
@@ -318,8 +334,10 @@ public class DriverService {
 			 booking.setDistanceTravelled(bookingdto.getDistanceTravelled());
 			 booking.setBookingDate(LocalDateTime.now());
 			 vehicle.setAvailabilityStatus("booked");
-			 Booking confBooking= bookingrepo.save(booking);
-			 
+
+			Booking confBooking= bookingrepo.save(booking);
+
+			
 			 List<Booking> bookingList=new ArrayList<Booking>();
 			 bookingList=customer.getBookinglist();
 			 bookingList.add(booking);
@@ -345,21 +363,18 @@ public class DriverService {
 		}
 
 
+
 		public ResponseStructure<ActiveBookingDTO>  Seeactivebooking(long mobileno) {
 			Customer customer=customerRepo.findByMobileno(mobileno);
 			if(customer==null) {
 				throw new CustomerNotFoundWithMobile("Customer Not Found Mobileno:"+mobileno);
 			}
 			
-//			Booking booking=bookingrepo.findBycustmobilenoAndBookingstatus(mobileno,"pending");
-//			if(booking==null){
-//				throw new ActivebookingNotFoundwithcustomer("No Active Booking found for this customer");
-//			}
-			
 			ActiveBookingDTO activebooking=new ActiveBookingDTO();
 			activebooking.setCustname(customer.getName());
 			activebooking.setCustmobileno(customer.getMobileno());
 			activebooking.setCurrentlocation(customer.getCurrentLoc());
+
 			
 			List<Booking> bookinglist=new ArrayList<Booking>();
 			bookinglist=customer.getBookinglist();
@@ -387,8 +402,9 @@ public class DriverService {
 			
 			
 			return activebooking1;
-			
+	
 
+<<<<<<< HEAD
 			
 		}
 
@@ -411,17 +427,100 @@ public class DriverService {
 		 
 		 return rs;
 		}
+=======
+
+
+    }
+
+
+		
+>>>>>>> f862eb8e2673bab3497f212e127f3b1fa092a8e7
 		
 		
 		
 		
 //		vamshi
 		
+		public ResponseStructure<byte[]> Saveupi(int bookingid) {
+			Booking b=bookingrepo.findById(bookingid).get();
+			String upiid=b.getDriver().getUpiid();
+			byte[] qr=QRcode(upiid);
+			UPIpaymentdto upipaydto=new UPIpaymentdto();
+			upipaydto.setFare(b.getFare());
+			upipaydto.setQr(qr);
+			ResponseStructure<byte []> rs=new ResponseStructure<byte []>();
+			rs.setStatuscode(HttpStatus.ACCEPTED.value());
+			rs.setMessage("Payment Completed");
+			rs.setData(qr);
+			return rs;
+			
+		}
+			public byte[] QRcode(String UPIid) {
+				String UPIurl="http://api.qrserver.com/v1/create-qr-code/?size=300x300&data=upi://pay?pa="+UPIid;
+		    	RestTemplate rt=new RestTemplate();
+		    	byte[] qr=rt.getForObject(UPIurl,byte[].class);
+				return qr;
+			}
 		
+			public void ConfirmPaymentbyQR(int id, String paymentType) {
+				confirmPayment(id,paymentType);
+			
+			}
 		
 		
 		
 		
 //		rakshitha
+<<<<<<< HEAD
 		
 }
+=======
+		public ResponseStructure<Payment> confirmPayment(int bookingId, String paymentType) {
+
+		    Booking booking = bookingrepo.findById(bookingId)
+		            .orElseThrow(() -> new RuntimeException("Booking not found"));
+
+		    booking.setBookingStatus("COMPLETED");
+		    booking.setPaymentStatus("PAID");
+		    Customer customer = booking.getCust();
+		    customer.setActiveBookingFlag(false);
+		    
+		    Vehicle vehicle = booking.getDriver().getVehicle();
+		    vehicle.setAvailabilityStatus("AVAILABLE");
+		    Payment payment = new Payment();
+		    payment.setVehicle(vehicle);
+		    payment.setCustomer(customer);
+		    payment.setBooking(booking);
+		    payment.setAmount(booking.getFare());
+		    payment.setPaymentType(paymentType);
+		    paymentre.save(payment);
+		    bookingrepo.save(booking);
+		    customerRepo.save(customer);
+		    vehiclerepo.save(vehicle);
+            ResponseStructure<Payment> response = new ResponseStructure<>();
+		    response.setStatuscode(HttpStatus.OK.value());
+		    response.setMessage("Payment confirmed successfully");
+		    response.setData(payment);
+
+		    return response;
+		}
+
+
+		public ResponseStructure<Payment> confirmPaymentbycash(int id, String paymentType) {
+			
+			return confirmPayment(id,paymentType) ;
+		}
+
+
+		
+
+
+		
+
+
+		 
+ 
+
+		}
+
+>>>>>>> f862eb8e2673bab3497f212e127f3b1fa092a8e7

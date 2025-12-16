@@ -17,6 +17,7 @@ import com.aan.LetsRide.DTO.BookingDto;
 import com.aan.LetsRide.DTO.CustomerDTO;
 import com.aan.LetsRide.entity.Booking;
 import com.aan.LetsRide.entity.Customer;
+import com.aan.LetsRide.entity.Payment;
 import com.aan.LetsRide.service.DriverService;
 
 @RestController
@@ -24,6 +25,7 @@ public class CoustmerController {
 	
 	@Autowired
 	private DriverService ds;
+	 
 	
 	@PostMapping("/coustmer/register")
 //	adarsh
@@ -34,7 +36,7 @@ public class CoustmerController {
 	
 	@GetMapping("/coustmer/Find")
 //	rakshitha
-public ResponseStructure<Customer> findcustomer(@RequestParam long mobileno){
+    public ResponseStructure<Customer> findcustomer(@RequestParam long mobileno){
 		return ds.findCustomer(mobileno);
 		
 	}
@@ -58,18 +60,43 @@ public ResponseStructure<Customer> findcustomer(@RequestParam long mobileno){
 //	vishnu
 	@PutMapping("/bookVehicle/{mobno}")
 	public ResponseStructure<Booking> bookVehicle(@PathVariable Long mobno,@RequestBody BookingDto bookingdto) {
-		return ds.bookVehicle(mobno,bookingdto);
+		 return ds.bookVehicle(mobno,bookingdto);
 	}
+	
+
 	  
 	@GetMapping("/customer/seeactivebooking/{mobileno}")
 	public ResponseStructure<ActiveBookingDTO> Seeactivebooking(@PathVariable long mobileno) {
 		return ds.Seeactivebooking(mobileno);
 	}
+<<<<<<< HEAD
 
 	
+=======
+	
+//	vamshi
+	
+	@PostMapping("/paybyupi")
+	public ResponseStructure<byte[]> PaybyUPI(@RequestParam int bookingid) {
+		return ds.Saveupi(bookingid);
+	}
+	
+	@PostMapping("/paybyQR")
+	public void PaymentCompleted(@RequestParam int id, @RequestParam String paymentType) {
+		  ds.ConfirmPaymentbyQR(id,paymentType);
+	}
+	
+	
+//	rakshitha
+	@PostMapping("/driver/completedride/paybycash")
+	public ResponseStructure<Payment> bookingCompleted(@RequestParam int id, @RequestParam String paymentType) {
+		 return ds.confirmPaymentbycash(id,paymentType);
+	}
+>>>>>>> f862eb8e2673bab3497f212e127f3b1fa092a8e7
 	
 	
 	
 	
 
 }
+
