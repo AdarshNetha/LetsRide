@@ -10,8 +10,10 @@ import com.aan.LetsRide.ResponseStructure;
 import com.aan.LetsRide.DTO.ActiveBookingDTO;
 import com.aan.LetsRide.DTO.AvailableVehicleDTO;
 import com.aan.LetsRide.DTO.BookingDto;
+import com.aan.LetsRide.DTO.BookingHistoryDto;
 import com.aan.LetsRide.DTO.CustomerDTO;
 import com.aan.LetsRide.DTO.RegDriverVehicleDTO;
+import com.aan.LetsRide.DTO.RideDTO;
 import com.aan.LetsRide.DTO.Vehicledetails;
 import com.aan.LetsRide.DTO.api.LocationRangeDTO;
 import com.aan.LetsRide.entity.Booking;
@@ -389,6 +391,26 @@ public class DriverService {
 
 			
 		}
+
+
+		public ResponseStructure<BookingHistoryDto> seeBookingHistory(long mobileNo) {
+		 Driver driver=driverrepo.findByMobileNo(mobileNo);
+		 List<Booking> bList=driver.getBookinglist();
+		 List<RideDTO> rideDTOs=new ArrayList<RideDTO>();
+		 double total=0;
+		 for(Booking b : bList) {
+			RideDTO rideDTO=new RideDTO(b.getSourceLocation(), b.getDestinationLocation(), b.getDistanceTravelled(), b.getFare());
+			total+=b.getFare();
+			rideDTOs.add(rideDTO);			
+		}
+		 BookingHistoryDto bookingHistoryDto=new BookingHistoryDto(rideDTOs, total);
+		 ResponseStructure<BookingHistoryDto> rs= new ResponseStructure<BookingHistoryDto>();
+		 rs.setData(bookingHistoryDto);
+		 rs.setMessage("booking history");
+		 rs.setStatuscode(HttpStatus.FOUND.value());
+		 
+		 return rs;
+		}
 		
 		
 		
@@ -402,6 +424,4 @@ public class DriverService {
 		
 //		rakshitha
 		
- 
-		}
-
+}

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.aan.LetsRide.ResponseStructure;
+import com.aan.LetsRide.DTO.BookingHistoryDto;
 import com.aan.LetsRide.DTO.RegDriverVehicleDTO;
 import com.aan.LetsRide.entity.Driver;
 import com.aan.LetsRide.service.DriverService;
@@ -43,6 +44,12 @@ public ResponseStructure<Driver> delete(@RequestParam long mobileNo)
 }
 
 
+//adarsh
+@PostMapping("/driver/seeAllbooking")
+public ResponseStructure<BookingHistoryDto> seeBookingHistory(@RequestParam long mobileNo)
+{
+	return driverservice.seeBookingHistory(mobileNo);
+}
 //vamshi
 
 
@@ -51,6 +58,8 @@ public ResponseStructure<Driver> delete(@RequestParam long mobileNo)
 
 
 //rakshitha
+
+
 
 
 

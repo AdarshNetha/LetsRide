@@ -65,16 +65,7 @@ public ResponseStructure<Customer> findcustomer(@RequestParam long mobileno){
 	public ResponseStructure<ActiveBookingDTO> Seeactivebooking(@PathVariable long mobileno) {
 		return ds.Seeactivebooking(mobileno);
 	}
-	
-//	vamshi
-	
-	
-	
-	
-	
-	
-//	rakshitha
-	
+
 	
 	
 	
