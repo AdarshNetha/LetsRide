@@ -9,6 +9,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.client.RestTemplate;
+
 import com.aan.LetsRide.ResponseStructure;
 import com.aan.LetsRide.DTO.ActiveBookingDTO;
 import com.aan.LetsRide.DTO.AvailableVehicleDTO;
@@ -16,6 +19,7 @@ import com.aan.LetsRide.DTO.BookingDto;
 import com.aan.LetsRide.DTO.CustomerDTO;
 import com.aan.LetsRide.DTO.Paymentresponedto;
 import com.aan.LetsRide.DTO.RegDriverVehicleDTO;
+import com.aan.LetsRide.DTO.UPIpaymentdto;
 import com.aan.LetsRide.DTO.Vehicledetails;
 import com.aan.LetsRide.DTO.api.LocationRangeDTO;
 import com.aan.LetsRide.entity.Booking;
@@ -361,15 +365,11 @@ public class DriverService {
 				throw new CustomerNotFoundWithMobile("Customer Not Found Mobileno:"+mobileno);
 			}
 			
-//			Booking booking=bookingrepo.findBycustmobilenoAndBookingstatus(mobileno,"pending");
-//			if(booking==null){
-//				throw new ActivebookingNotFoundwithcustomer("No Active Booking found for this customer");
-//			}
-			
 			ActiveBookingDTO activebooking=new ActiveBookingDTO();
 			activebooking.setCustname(customer.getName());
 			activebooking.setCustmobileno(customer.getMobileno());
 			activebooking.setCurrentlocation(customer.getCurrentLoc());
+
 			
 			List<Booking> bookinglist=new ArrayList<Booking>();
 			bookinglist=customer.getBookinglist();
@@ -397,17 +397,45 @@ public class DriverService {
 			
 			
 			return activebooking1;
-			
+	
 
-			
-		}
+
+
+    }
+
+
+		
 		
 		
 		
 		
 //		vamshi
 		
+		public ResponseStructure<byte[]> Saveupi(int bookingid) {
+			Booking b=bookingrepo.findById(bookingid).get();
+			String upiid=b.getDriver().getUpiid();
+			byte[] qr=QRcode(upiid);
+			UPIpaymentdto upipaydto=new UPIpaymentdto();
+			upipaydto.setFare(b.getFare());
+			upipaydto.setQr(qr);
+			ResponseStructure<byte []> rs=new ResponseStructure<byte []>();
+			rs.setStatuscode(HttpStatus.ACCEPTED.value());
+			rs.setMessage("Payment Completed");
+			rs.setData(qr);
+			return rs;
+			
+		}
+			public byte[] QRcode(String UPIid) {
+				String UPIurl="http://api.qrserver.com/v1/create-qr-code/?size=300x300&data=upi://pay?pa="+UPIid;
+		    	RestTemplate rt=new RestTemplate();
+		    	byte[] qr=rt.getForObject(UPIurl,byte[].class);
+				return qr;
+			}
 		
+			public void ConfirmPaymentbyQR(int id, String paymentType) {
+				confirmPayment(id,paymentType);
+			
+			}
 		
 		
 		
@@ -451,6 +479,12 @@ public class DriverService {
 
 
 		
+
+
+		
+
+
+		 
  
 
 		}
