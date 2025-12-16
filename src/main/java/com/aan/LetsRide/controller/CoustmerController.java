@@ -36,7 +36,7 @@ public class CoustmerController {
 	
 	@GetMapping("/coustmer/Find")
 //	rakshitha
-public ResponseStructure<Customer> findcustomer(@RequestParam long mobileno){
+    public ResponseStructure<Customer> findcustomer(@RequestParam long mobileno){
 		return ds.findCustomer(mobileno);
 		
 	}
@@ -77,6 +77,10 @@ public ResponseStructure<Customer> findcustomer(@RequestParam long mobileno){
 		return ds.Saveupi(bookingid);
 	}
 	
+	@PostMapping("/paybyQR")
+	public void PaymentCompleted(@RequestParam int id, @RequestParam String paymentType) {
+		  ds.ConfirmPaymentbyQR(id,paymentType);
+	}
 	
 	
 //	rakshitha

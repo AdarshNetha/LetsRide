@@ -432,7 +432,10 @@ public class DriverService {
 				return qr;
 			}
 		
-		
+			public void ConfirmPaymentbyQR(int id, String paymentType) {
+				confirmPayment(id,paymentType);
+			
+			}
 		
 		
 		
@@ -476,6 +479,12 @@ public class DriverService {
 
 
 		
+
+
+		
+
+
+		 
  
 
 		}
