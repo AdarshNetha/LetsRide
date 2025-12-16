@@ -9,13 +9,21 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.client.RestTemplate;
+
 import com.aan.LetsRide.ResponseStructure;
 import com.aan.LetsRide.DTO.ActiveBookingDTO;
 import com.aan.LetsRide.DTO.AvailableVehicleDTO;
 import com.aan.LetsRide.DTO.BookingDto;
+import com.aan.LetsRide.DTO.BookingHistoryDto;
 import com.aan.LetsRide.DTO.CustomerDTO;
 import com.aan.LetsRide.DTO.Paymentresponedto;
 import com.aan.LetsRide.DTO.RegDriverVehicleDTO;
+
+import com.aan.LetsRide.DTO.RideDTO;
+import com.aan.LetsRide.DTO.UPIpaymentdto;
+
 import com.aan.LetsRide.DTO.Vehicledetails;
 import com.aan.LetsRide.DTO.api.LocationRangeDTO;
 import com.aan.LetsRide.entity.Booking;
@@ -361,15 +369,11 @@ public class DriverService {
 				throw new CustomerNotFoundWithMobile("Customer Not Found Mobileno:"+mobileno);
 			}
 			
-//			Booking booking=bookingrepo.findBycustmobilenoAndBookingstatus(mobileno,"pending");
-//			if(booking==null){
-//				throw new ActivebookingNotFoundwithcustomer("No Active Booking found for this customer");
-//			}
-			
 			ActiveBookingDTO activebooking=new ActiveBookingDTO();
 			activebooking.setCustname(customer.getName());
 			activebooking.setCustmobileno(customer.getMobileno());
 			activebooking.setCurrentlocation(customer.getCurrentLoc());
+
 			
 			List<Booking> bookinglist=new ArrayList<Booking>();
 			bookinglist=customer.getBookinglist();
@@ -397,22 +401,74 @@ public class DriverService {
 			
 			
 			return activebooking1;
-			
-
+	
 			
 		}
+
+
+		public ResponseStructure<BookingHistoryDto> seeBookingHistory(long mobileNo) {
+		 Driver driver=driverrepo.findByMobileNo(mobileNo);
+		 List<Booking> bList=driver.getBookinglist();
+		 List<RideDTO> rideDTOs=new ArrayList<RideDTO>();
+		 double total=0;
+		 for(Booking b : bList) {
+			RideDTO rideDTO=new RideDTO(b.getSourceLocation(), b.getDestinationLocation(), b.getDistanceTravelled(), b.getFare());
+			total+=b.getFare();
+			rideDTOs.add(rideDTO);			
+		}
+		 BookingHistoryDto bookingHistoryDto=new BookingHistoryDto(rideDTOs, total);
+		 ResponseStructure<BookingHistoryDto> rs= new ResponseStructure<BookingHistoryDto>();
+		 rs.setData(bookingHistoryDto);
+		 rs.setMessage("booking history");
+		 rs.setStatuscode(HttpStatus.FOUND.value());
+		 
+		 return rs;
+		}
+
+
+
+    
+
+
+		
+
 		
 		
 		
 		
 //		vamshi
 		
+		public ResponseStructure<byte[]> Saveupi(int bookingid) {
+			Booking b=bookingrepo.findById(bookingid).get();
+			String upiid=b.getDriver().getUpiid();
+			byte[] qr=QRcode(upiid);
+			UPIpaymentdto upipaydto=new UPIpaymentdto();
+			upipaydto.setFare(b.getFare());
+			upipaydto.setQr(qr);
+			ResponseStructure<byte []> rs=new ResponseStructure<byte []>();
+			rs.setStatuscode(HttpStatus.ACCEPTED.value());
+			rs.setMessage("Payment Completed");
+			rs.setData(qr);
+			return rs;
+			
+		}
+			public byte[] QRcode(String UPIid) {
+				String UPIurl="http://api.qrserver.com/v1/create-qr-code/?size=300x300&data=upi://pay?pa="+UPIid;
+		    	RestTemplate rt=new RestTemplate();
+		    	byte[] qr=rt.getForObject(UPIurl,byte[].class);
+				return qr;
+			}
 		
+			public void ConfirmPaymentbyQR(int id, String paymentType) {
+				confirmPayment(id,paymentType);
+			
+			}
 		
 		
 		
 		
 //		rakshitha
+
 		public ResponseStructure<Payment> confirmPayment(int bookingId, String paymentType) {
 
 		    Booking booking = bookingrepo.findById(bookingId)
@@ -451,7 +507,14 @@ public class DriverService {
 
 
 		
+
+
+		
+
+
+		 
  
 
 		}
+
 

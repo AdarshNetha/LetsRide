@@ -14,7 +14,9 @@ import com.aan.LetsRide.service.LocationService;
 public class LocationController {
 	@Autowired
     private LocationService locationService;
-	
+	 
+	@Autowired
+	private LocationService ls;
 
 	    @GetMapping("/getLocation")
 	    public ResponseEntity<ResponseStructure<String>> getLocation(
@@ -31,5 +33,7 @@ public class LocationController {
 	        return ResponseEntity.ok(rs);
 	        
 	    }
-
+	    
+	    
+	    
 }

@@ -25,6 +25,7 @@ public class CoustmerController {
 	
 	@Autowired
 	private DriverService ds;
+	 
 	
 	@PostMapping("/coustmer/register")
 //	adarsh
@@ -35,7 +36,7 @@ public class CoustmerController {
 	
 	@GetMapping("/coustmer/Find")
 //	rakshitha
-public ResponseStructure<Customer> findcustomer(@RequestParam long mobileno){
+    public ResponseStructure<Customer> findcustomer(@RequestParam long mobileno){
 		return ds.findCustomer(mobileno);
 		
 	}
@@ -58,7 +59,7 @@ public ResponseStructure<Customer> findcustomer(@RequestParam long mobileno){
 	}
 //	vishnu
 	@PutMapping("/bookVehicle/{mobno}")
-	public ResponseStructure<Booking> bookVehicle(@PathVariable Long mobno,@RequestBody BookingDto bookingdto) {
+	public ResponseStructure<Booking> bookVehicle(@PathVariable Long mobno,@RequestParam BookingDto bookingdto) {
 		 return ds.bookVehicle(mobno,bookingdto);
 	}
 	
@@ -68,12 +69,19 @@ public ResponseStructure<Customer> findcustomer(@RequestParam long mobileno){
 	public ResponseStructure<ActiveBookingDTO> Seeactivebooking(@PathVariable long mobileno) {
 		return ds.Seeactivebooking(mobileno);
 	}
+
 	
 //	vamshi
 	
+	@PostMapping("/paybyupi")
+	public ResponseStructure<byte[]> PaybyUPI(@RequestParam int bookingid) {
+		return ds.Saveupi(bookingid);
+	}
 	
-	
-	
+	@PostMapping("/paybyQR")
+	public void PaymentCompleted(@RequestParam int id, @RequestParam String paymentType) {
+		  ds.ConfirmPaymentbyQR(id,paymentType);
+	}
 	
 	
 //	rakshitha
@@ -81,7 +89,7 @@ public ResponseStructure<Customer> findcustomer(@RequestParam long mobileno){
 	public ResponseStructure<Payment> bookingCompleted(@RequestParam int id, @RequestParam String paymentType) {
 		 return ds.confirmPaymentbycash(id,paymentType);
 	}
-	
+
 	
 	
 	
