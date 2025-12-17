@@ -59,7 +59,7 @@ public class CoustmerController {
 	}
 //	vishnu
 	@PutMapping("/bookVehicle/{mobno}")
-	public ResponseStructure<Booking> bookVehicle(@PathVariable Long mobno,@RequestParam BookingDto bookingdto) {
+	public ResponseStructure<Booking> bookVehicle(@PathVariable Long mobno,@RequestBody BookingDto bookingdto) {
 		 return ds.bookVehicle(mobno,bookingdto);
 	}
 	
@@ -91,12 +91,10 @@ public class CoustmerController {
 	}
 
 	
-<<<<<<< HEAD
-	
-=======
+
 //	//vamshi
 //do driver cancelation
->>>>>>> c9ce84564c07a4d14b14527f3319b5b105a13bfc
+
 	
 
 }
