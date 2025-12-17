@@ -6,6 +6,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -427,7 +429,11 @@ public class DriverService {
 
 
 
+
     
+
+//    adarsh
+//		custmer booking histry
 
 
 		
@@ -509,12 +515,70 @@ public class DriverService {
 		
 
 
+
+
 		
 
 
+
+		
+
+
+	
+		//vamshi
+// do driver cancelatio
+		
+
+
+//		 rakshith
+//		do coustmer cancelation
+
+
+
+
+public ResponseStructure<Booking> cancellationBookingByDriver(int driverId, int bookingId) {
+	int consecutiveCancelCount = 0;
+	 Booking booking = bookingrepo.findByIdAndDriverId(bookingId, driverId)
+         .orElseThrow(() -> new RuntimeException("Booking not found"));
+           
+	 List<Booking> bookingList =bookingrepo.findByDriverIdAndBookingDateOrderByBookingDateDesc(
+                             driverId, LocalDateTime.now() );
+	 Booking book= bookingrepo.findById(bookingId).get();
+	 for (Booking b : bookingList) {
+		 if(b.getBookingStatus().equals("cancel by driver")) {
+			 consecutiveCancelCount ++;
+			 
+		 }
+	 }
+		 Driver d=driverrepo.findById(driverId).get();
+		 if(consecutiveCancelCount >=4) {
+			 d.setStatus("BOOKED");
+			 book.setBookingStatus("Cancelled");
+		 }else if(consecutiveCancelCount <4){
+			 book.setBookingStatus("Cancelled");
+		 }
+		 bookingrepo.save(book);
+		 driverrepo.save(d);
+		 ResponseStructure<Booking> response= new ResponseStructure<>();
+		 response.setStatuscode(HttpStatus.OK.value());
+		 response.setData(booking);
+         return response;
 		 
+		 
+		 
+	 }
+	 
+	 
+	 
+
+	 
+	
+}
+
+		
+
  
 
-		}
+		
 
 
