@@ -42,6 +42,7 @@ public class CustomerDTO {
 	public void setEmail(String email) {
 		this.email = email;
 	}
+	
 	public double getLatitude() {
 		return latitude;
 	}
@@ -54,9 +55,11 @@ public class CustomerDTO {
 	public void setLongutude(double longitude) {
 		this.longitude = longitude;
 	}
+	
+	
 	@Override
 	public String toString() {
-		return "CoustmerDTO [name=" + name + ", age=" + age + ", gender=" + gender + ", mobileno=" + mobileno
+		return "CustomerDTO [name=" + name + ", age=" + age + ", gender=" + gender + ", mobileno=" + mobileno
 				+ ", email=" + email + ", latitude=" + latitude + ", longitude=" + longitude + "]";
 	}
 	public CustomerDTO(String name, int age, String gender, long mobileno, String email, double latitude,

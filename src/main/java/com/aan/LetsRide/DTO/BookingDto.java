@@ -37,13 +37,14 @@ public class BookingDto {
 	public void setFare(double fare) {
 		this.fare = fare;
 	}
+	
+	
 	public String getEstimationTravelTime() {
 		return estimationTravelTime;
 	}
 	public void setEstimationTravelTime(String estimationTravelTime) {
 		this.estimationTravelTime = estimationTravelTime;
 	}
-
 	public BookingDto(int vehicleid, String sourceLocation, String destinationLocation, double distanceTravelled,
 			double fare, String estimationTravelTime) {
 		super();
@@ -54,17 +55,13 @@ public class BookingDto {
 		this.fare = fare;
 		this.estimationTravelTime = estimationTravelTime;
 	}
-	public BookingDto() {
-		super();
-	}
-	
 	@Override
 	public String toString() {
 		return "BookingDto [vehicleid=" + vehicleid + ", sourceLocation=" + sourceLocation + ", destinationLocation="
 				+ destinationLocation + ", distanceTravelled=" + distanceTravelled + ", fare=" + fare
 				+ ", estimationTravelTime=" + estimationTravelTime + "]";
 	}
-
+	
 	
 	
 }
