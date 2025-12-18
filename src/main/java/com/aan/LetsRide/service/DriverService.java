@@ -6,6 +6,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -427,6 +429,9 @@ public class DriverService {
 
 
 
+
+    
+
 //    adarsh
 //		custmer booking histry
 		public ResponseStructure<BookingHistoryDto> seeBookingHistoryOfCustmer(long mobileNO) {
@@ -506,14 +511,14 @@ public class DriverService {
 		    payment.setBooking(booking);
 		    payment.setAmount(booking.getFare());
 		    payment.setPaymentType(paymentType);
-		    paymentre.save(payment);
+		 Payment paymentsave  = paymentre.save(payment);
 		    bookingrepo.save(booking);
 		    customerRepo.save(customer);
 		    vehiclerepo.save(vehicle);
             ResponseStructure<Payment> response = new ResponseStructure<>();
 		    response.setStatuscode(HttpStatus.OK.value());
 		    response.setMessage("Payment confirmed successfully");
-		    response.setData(payment);
+		    response.setData(paymentsave);
 
 		    return response;
 		}
@@ -527,9 +532,6 @@ public class DriverService {
 
 		
 
-
-		
-
 		//vamshi
 // do driver cancelatio
 		
@@ -537,10 +539,53 @@ public class DriverService {
 
 //		 rakshith
 //		do coustmer cancelation
+
+
+
+
+public ResponseStructure<Booking> cancellationBookingByDriver(int driverId, int bookingId) {
+	int consecutiveCancelCount = 0;
+	 Booking booking = bookingrepo.findByIdAndDriverId(bookingId, driverId)
+         .orElseThrow(() -> new RuntimeException("Booking not found"));
+           
+	 List<Booking> bookingList =bookingrepo.findByDriverIdAndBookingDateOrderByBookingDateDesc(
+                             driverId, LocalDateTime.now() );
+	 Booking book= bookingrepo.findById(bookingId).get();
+	 for (Booking b : bookingList) {
+		 if(b.getBookingStatus().equals("cancel by driver")) {
+			 consecutiveCancelCount ++;
+			 
+		 }
+	 }
+		 Driver d=driverrepo.findById(driverId).get();
+		 if(consecutiveCancelCount >=4) {
+			 d.setStatus("BOOKED");
+			 book.setBookingStatus("Cancelled");
+		 }else if(consecutiveCancelCount <4){
+			 book.setBookingStatus("Cancelled");
+		 }
+		 bookingrepo.save(book);
+		 driverrepo.save(d);
+		 ResponseStructure<Booking> response= new ResponseStructure<>();
+		 response.setStatuscode(HttpStatus.OK.value());
+		 response.setData(booking);
+         return response;
+		 
+		 
+		 
+	 }
+	 
+	 
+	 
+
+	 
+	
+}
+
 		
 
  
 
-		}
+		
 
 
