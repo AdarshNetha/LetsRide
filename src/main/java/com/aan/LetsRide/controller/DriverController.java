@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.aan.LetsRide.ResponseStructure;
 import com.aan.LetsRide.DTO.BookingHistoryDto;
 import com.aan.LetsRide.DTO.RegDriverVehicleDTO;
+import com.aan.LetsRide.entity.Booking;
 import com.aan.LetsRide.entity.Driver;
 import com.aan.LetsRide.service.DriverService;
 
@@ -53,8 +54,22 @@ public ResponseStructure<BookingHistoryDto> seeBookingHistory(@RequestParam long
 
 //rakshitha
 
+
+
+//vamshi
+
 //do custmer cancellation
-   
+
+@GetMapping("/driver/cancelbooking")
+public ResponseStructure<Booking> cancelBooking(@RequestParam int DriverId,@RequestParam int bookingId){
+	return driverservice.cancellationBookingByDriver(DriverId,bookingId);
+	
+	
+}
+
+
+
+
 
 
 
