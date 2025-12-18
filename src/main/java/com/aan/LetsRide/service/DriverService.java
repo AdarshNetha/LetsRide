@@ -439,6 +439,24 @@ public class DriverService {
 
 //    adarsh
 //		custmer booking histry
+		public ResponseStructure<BookingHistoryDto> seeBookingHistoryOfCustmer(long mobileNO) {
+			Customer customer=customerRepo.findByMobileno(mobileNO);
+			 List<Booking> bList=customer.getBookinglist();
+			 List<RideDTO> rideDTOs=new ArrayList<RideDTO>();
+			 double total=0;
+			 for(Booking b : bList) {
+				RideDTO rideDTO=new RideDTO(b.getSourceLocation(), b.getDestinationLocation(), b.getDistanceTravelled(), b.getFare());
+				total+=b.getFare();
+				rideDTOs.add(rideDTO);			
+			}
+			 BookingHistoryDto bookingHistoryDto=new BookingHistoryDto(rideDTOs, total);
+			 ResponseStructure<BookingHistoryDto> rs= new ResponseStructure<BookingHistoryDto>();
+			 rs.setData(bookingHistoryDto);
+			 rs.setMessage("booking history");
+			 rs.setStatuscode(HttpStatus.FOUND.value());
+			 
+			 return rs;
+		}
 
 
 		
@@ -521,17 +539,6 @@ public class DriverService {
 
 		
 
-
-
-
-		
-
-
-
-		
-
-
-	
 		//vamshi
 // do customer cancelatio
 

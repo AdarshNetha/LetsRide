@@ -14,6 +14,7 @@ import com.aan.LetsRide.ResponseStructure;
 import com.aan.LetsRide.DTO.ActiveBookingDTO;
 import com.aan.LetsRide.DTO.AvailableVehicleDTO;
 import com.aan.LetsRide.DTO.BookingDto;
+import com.aan.LetsRide.DTO.BookingHistoryDto;
 import com.aan.LetsRide.DTO.CustomerDTO;
 import com.aan.LetsRide.entity.Booking;
 import com.aan.LetsRide.entity.Customer;
@@ -91,6 +92,14 @@ public class CoustmerController {
 	}
 
 	
+
+	@GetMapping("/coustmer/seeBookingHistory")
+	public ResponseStructure<BookingHistoryDto> seeBookingHistory(@RequestParam long mobileNO)
+	{
+		return ds.seeBookingHistoryOfCustmer(mobileNO);
+	}
+
+
 
 //	//vamshi
 //do driver cancelation
