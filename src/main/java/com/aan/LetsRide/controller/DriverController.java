@@ -52,19 +52,21 @@ public ResponseStructure<BookingHistoryDto> seeBookingHistory(@RequestParam long
 	return driverservice.seeBookingHistory(mobileNo);
 }
 
-//vamshi
-
-
-
 //rakshitha
 
+
+
+//vamshi
+
 //do custmer cancellation
+
 @GetMapping("/driver/cancelbooking")
 public ResponseStructure<Booking> cancelBooking(@RequestParam int DriverId,@RequestParam int bookingId){
 	return driverservice.cancellationBookingByDriver(DriverId,bookingId);
 	
 	
 }
+
 
 
 

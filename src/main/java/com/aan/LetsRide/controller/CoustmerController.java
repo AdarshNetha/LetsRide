@@ -104,6 +104,15 @@ public class CoustmerController {
 //	//vamshi
 //do driver cancelation
 
+	@PostMapping("/customer/cancelbooking")
+	public ResponseStructure<Customer> Customercancelbooking(@RequestParam int bookingid,@RequestParam int customerid)
+	{
+		  return ds.CustomerCancelBooking(bookingid,customerid);
+		  
+		  
+	 }
+
+
 	
 
 }

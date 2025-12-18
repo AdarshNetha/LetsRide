@@ -29,6 +29,7 @@ public class Booking {
 	private double fare;
 	private String estimationTravelTime;
 	private LocalDateTime bookingDate;
+	private String cancellationstatus;
 	private String paymentStatus="Not paid";
 	
 	@OneToOne
@@ -90,6 +91,13 @@ public class Booking {
 	public void setBookingDate(LocalDateTime bookingDate) {
 		this.bookingDate = bookingDate;
 	}
+	
+	public String getCancellationstatus() {
+		return cancellationstatus;
+	}
+	public void setCancellationstatus(String cancellationstatus) {
+		this.cancellationstatus = cancellationstatus;
+	}
 	public String getPaymentStatus() {
 		return paymentStatus;
 	}
@@ -112,17 +120,9 @@ public class Booking {
 	public Booking() {
 		super();
 	}
-	@Override
-	public String toString() {
-		return "Booking [id=" + id + ", cust=" + cust + ", driver=" + driver + ", sourceLocation=" + sourceLocation
-				+ ", destinationLocation=" + destinationLocation + ", distanceTravelled=" + distanceTravelled
-				+ ", fare=" + fare + ", estimationTravelTime=" + estimationTravelTime + ", bookingDate=" + bookingDate
-				+ ", paymentStatus=" + paymentStatus + ", payment=" + payment + ", bookingStatus=" + bookingStatus
-				+ "]";
-	}
 	public Booking(int id, Customer cust, Driver driver, String sourceLocation, String destinationLocation,
 			double distanceTravelled, double fare, String estimationTravelTime, LocalDateTime bookingDate,
-			String paymentStatus, Payment payment, String bookingStatus) {
+			String cancellationstatus, String paymentStatus, Payment payment, String bookingStatus) {
 		super();
 		this.id = id;
 		this.cust = cust;
@@ -133,9 +133,18 @@ public class Booking {
 		this.fare = fare;
 		this.estimationTravelTime = estimationTravelTime;
 		this.bookingDate = bookingDate;
+		this.cancellationstatus = cancellationstatus;
 		this.paymentStatus = paymentStatus;
 		this.payment = payment;
 		this.bookingStatus = bookingStatus;
+	}
+	@Override
+	public String toString() {
+		return "Booking [id=" + id + ", cust=" + cust + ", driver=" + driver + ", sourceLocation=" + sourceLocation
+				+ ", destinationLocation=" + destinationLocation + ", distanceTravelled=" + distanceTravelled
+				+ ", fare=" + fare + ", estimationTravelTime=" + estimationTravelTime + ", bookingDate=" + bookingDate
+				+ ", cancellationstatus=" + cancellationstatus + ", paymentStatus=" + paymentStatus + ", payment="
+				+ payment + ", bookingStatus=" + bookingStatus + "]";
 	}
 	
 	

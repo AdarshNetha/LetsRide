@@ -21,6 +21,7 @@ public class Customer {
 	private long mobileno;
 	private String mail;
 	private String currentLoc;
+	private int penalty=0;
 	@OneToMany(cascade = CascadeType.ALL)
 	List<Booking> bookinglist;
 	private boolean activeBookingFlag;
@@ -80,6 +81,13 @@ public class Customer {
 	public void setCurrentLoc(String currentLoc) {
 		this.currentLoc = currentLoc;
 	}
+	
+	public int getPenalty() {
+		return penalty;
+	}
+	public void setPenalty(int penalty) {
+		this.penalty = penalty;
+	}
 	public List<Booking> getBookinglist() {
 		return bookinglist;
 	}
@@ -91,7 +99,7 @@ public class Customer {
 		// TODO Auto-generated constructor stub
 	}
 	public Customer(int id, String name, int age, String gender, long mobileno, String mail, String currentLoc,
-			List<Booking> bookinglist, boolean activeBookingFlag) {
+			int penalty, List<Booking> bookinglist, boolean activeBookingFlag) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -100,20 +108,16 @@ public class Customer {
 		this.mobileno = mobileno;
 		this.mail = mail;
 		this.currentLoc = currentLoc;
+		this.penalty = penalty;
 		this.bookinglist = bookinglist;
 		this.activeBookingFlag = activeBookingFlag;
 	}
 	@Override
 	public String toString() {
 		return "Customer [id=" + id + ", name=" + name + ", age=" + age + ", gender=" + gender + ", mobileno="
-				+ mobileno + ", mail=" + mail + ", currentLoc=" + currentLoc + ", bookinglist=" + bookinglist
-				+ ", activeBookingFlag=" + activeBookingFlag + "]";
+				+ mobileno + ", mail=" + mail + ", currentLoc=" + currentLoc + ", penalty=" + penalty + ", bookinglist="
+				+ bookinglist + ", activeBookingFlag=" + activeBookingFlag + "]";
 	}
 	
-	
-	
-	
-	
-		
 
 }

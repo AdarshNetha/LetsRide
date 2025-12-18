@@ -6,7 +6,12 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+
+import org.slf4j.helpers.Reporter;
+
 import java.util.Optional;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -530,15 +535,30 @@ public class DriverService {
 		}
 
 
+
+
 		
 
 		//vamshi
-// do driver cancelatio
-		
+// do customer cancelatio
+
+		public ResponseStructure<Customer> CustomerCancelBooking(int bookingid, int customerid) {
+			Customer customer=customerRepo.findById(customerid).get();
+			customer.setPenalty(customer.getPenalty());
+			Booking booking=bookingrepo.findById(bookingid).get();
+			booking.setCancellationstatus("Cancelled by customer");
+			customerRepo.save(customer);
+			bookingrepo.save(booking);
+			ResponseStructure<Customer> rs=new ResponseStructure<Customer>();
+			rs.setStatuscode(HttpStatus.ACCEPTED.value());
+			rs.setMessage("customer is cancelled");
+			rs.setData(customer);
+			return rs;
+		}
 
 
-//		 rakshith
-//		do coustmer cancelation
+//		 rakshitha
+//		do driver cancelation
 
 
 
