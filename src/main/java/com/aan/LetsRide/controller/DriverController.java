@@ -32,7 +32,7 @@ public  ResponseStructure<Driver>findDriver(@PathVariable long mobileNo){
 }
 
 @PostMapping("/update")
-public ResponseStructure<Driver> updatemobilebylocation(@RequestParam double lattitude,@RequestParam double longitude,@RequestParam("mobileNo") Long mobileNo) {
+public ResponseStructure<Driver> updatemobilebylocation(@RequestParam double lattitude,@RequestParam double longitude,@RequestParam Long mobileNo) {
 	
 	return driverservice.updateDriver(lattitude,longitude,mobileNo);
 	
@@ -45,20 +45,18 @@ public ResponseStructure<Driver> delete(@RequestParam long mobileNo)
 }
 
 
-//adarsh
+
 @PostMapping("/driver/seeAllbooking")
 public ResponseStructure<BookingHistoryDto> seeBookingHistory(@RequestParam long mobileNo)
 {
 	return driverservice.seeBookingHistory(mobileNo);
 }
 
-//rakshitha
 
 
 
-//vamshi
 
-//do custmer cancellation
+
 
 @GetMapping("/driver/cancelbooking")
 public ResponseStructure<Booking> cancelBooking(@RequestParam int DriverId,@RequestParam int bookingId){
