@@ -603,7 +603,7 @@ public ResponseStructure<Booking> cancellationBookingByDriver(int driverId, int 
 		 
 	 }
 
-
+//OTP Generated
          public ResponseStructure<Customer> SendotpToTheCustomer(int bookingid) {
 	       Booking booking=bookingrepo.findById(bookingid).orElseThrow();
 	      int otp=generateOtp();
