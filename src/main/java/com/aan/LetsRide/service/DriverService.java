@@ -44,6 +44,7 @@ import com.aan.LetsRide.exception.DriverNOtFoundWiththismobileNO;
 import com.aan.LetsRide.repository.BookingRepo;
 
 import com.aan.LetsRide.exception.DriveralreayExists;
+import com.aan.LetsRide.exception.InvalidDestinationLocationException;
 import com.aan.LetsRide.exception.VehiclesareNotavilabletoDestinationLocation;
 import com.aan.LetsRide.repository.BookingRepo;
 import com.aan.LetsRide.repository.CustomerRepo;
@@ -182,70 +183,77 @@ public class DriverService {
 		
 		
 		
-		
-		
-		public ResponseStructure<AvailableVehicleDTO> getAvailableVehiclesByCity(Long mobileno, String distinationLocation) {
-			
-			Customer c=customerRepo.findByMobileno(mobileno);
-			if(c==null) {
-				 throw new  CustomerNotFoundWithMobile("CustomerNotFoundWithMobile"+mobileno);
 
-			}
-			String Source=c.getCurrentLoc();
-			String DistinationLocation=distinationLocation;
-			boolean check=locationService.validatingCity(DistinationLocation);
-			if(!check)
-			{
-				System.out.println("false location");
-				return null;
-			}
-			
-			
-			LocationRangeDTO locationRangeDTO=locationService.getFromAndToCoordinates(Source, DistinationLocation);
-			
-			System.err.println(locationRangeDTO);
-			
-			
-			int distance=200;
-			AvailableVehicleDTO AVD=new AvailableVehicleDTO();
-			
-			AVD.setC(c);
-			AVD.setSourceLocation(Source);
-			AVD.setDistance(distance);
-			AVD.setDestinationLocation(DistinationLocation);
-			List<Vehicledetails> l= new ArrayList<Vehicledetails>();
-					
-			List<Vehicle> list=vehiclerepo.findAvailableVehiclesBycity(Source);
-			if(list==null) {
-				throw new VehiclesareNotavilabletoDestinationLocation("No vehicles available in city"+Source);
-			}
-			
-			for (Vehicle vehicle : list) {
-				Vehicledetails vd= new Vehicledetails();
-				int A=vehicle.getAveragespeed();
-				double B=vehicle.getPriceperKM();
-				double fare=B*distance;
-				double time=distance/A;
-				vd.setV(vehicle);
-				vd.setFare(fare);
-				vd.setEstimationtime(time);
-			
-				l.add(vd);
-				
-				
-			}
-			AVD.setAvailablevehicles(l);
-			ResponseStructure <AvailableVehicleDTO>  rs=new ResponseStructure<AvailableVehicleDTO>();
-			rs.setStatuscode(HttpStatus.ACCEPTED.value());
-			rs.setMessage("Available vehicles");
-			rs.setData(AVD);
-			return rs;
+		public ResponseStructure<AvailableVehicleDTO> getAvailableVehiclesByCity(
+		        Long mobileno, String destinationLocation) {
 
+		    // 1. Validate Customer
+		    Customer customer = customerRepo.findByMobileno(mobileno);
+		    if (customer == null) {
+		        throw new CustomerNotFoundWithMobile(
+		                "Customer not found with mobile number: " + mobileno);
+		    }
+
+		    String sourceLocation = customer.getCurrentLoc();
+
+		    // 2. Validate Destination City
+		    boolean isValidCity = locationService.validatingCity(destinationLocation);
+		    if (!isValidCity) {
+		        throw new InvalidDestinationLocationException(
+		                "Invalid destination city: " + destinationLocation);
+		    }
+
+		    // 3. Fetch REAL distance from LocationIQ API
+		    double distance = locationService.getDistanceInKM(
+		            sourceLocation, destinationLocation);
+
+		    // 4. Fetch available vehicles in source city
+		    List<Vehicle> vehicles =
+		            vehiclerepo.findAvailableVehiclesBycity(sourceLocation);
+
+		    if (vehicles.isEmpty()) {
+		        throw new VehiclesareNotavilabletoDestinationLocation(
+		                "No vehicles available in city: " + sourceLocation);
+		    }
+
+		    // 5. Calculate fare & estimated time
+		    List<Vehicledetails> vehicleDetailsList = new ArrayList<>();
+
+		    for (Vehicle vehicle : vehicles) {
+
+		        double fare = vehicle.getPriceperKM() * distance;
+		        double estimatedTime = distance / vehicle.getAveragespeed();
+
+		        Vehicledetails details = new Vehicledetails();
+		        details.setV(vehicle);
+		        details.setFare(fare);
+		        details.setEstimationtime(estimatedTime);
+
+		        vehicleDetailsList.add(details);
+		    }
+
+		    // 6. Prepare DTO
+		    AvailableVehicleDTO dto = new AvailableVehicleDTO();
+		    dto.setC(customer);
+		    dto.setSourceLocation(sourceLocation);
+		    dto.setDestinationLocation(destinationLocation);
+		    dto.setDistance(distance);
+		    dto.setAvailablevehicles(vehicleDetailsList);
+
+		    // 7. Wrap response
+		    ResponseStructure<AvailableVehicleDTO> response =
+		            new ResponseStructure<>();
+
+		    response.setStatuscode(HttpStatus.ACCEPTED.value());
+		    response.setMessage("Available vehicles fetched successfully");
+		    response.setData(dto);
+
+		    return response;
 		}
+
 		
 		
-		
-//		vishnu
+
 		
 		
 		
