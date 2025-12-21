@@ -6,7 +6,7 @@ import com.aan.LetsRide.entity.Customer;
 
 public class AvailableVehicleDTO {
 private Customer c;
-private int distance;
+private double distance;
 private String sourceLocation;
 private String destinationLocation;
 private List<Vehicledetails> availablevehicles;
@@ -16,12 +16,10 @@ public Customer getC() {
 public void setC(Customer c) {
 	this.c = c;
 }
-public int getDistance() {
+public double getDistance() {
 	return distance;
 }
-public void setDistance(int distance) {
-	this.distance = distance;
-}
+
 public String getSourceLocation() {
 	return sourceLocation;
 }
@@ -40,6 +38,10 @@ public List<Vehicledetails> getAvailablevehicles() {
 public void setAvailablevehicles(List<Vehicledetails> availablevehicles) {
 	this.availablevehicles = availablevehicles;
 }
+
+public void setDistance(double distance) {
+	this.distance = distance;
+}
 public AvailableVehicleDTO() {
 	super();
 
@@ -51,7 +53,7 @@ public AvailableVehicleDTO() {
 
 
 
-public AvailableVehicleDTO(Customer c, int distance, String sourceLocation, String destinationLocation,
+public AvailableVehicleDTO(Customer c, double distance, String sourceLocation, String destinationLocation,
 		List<Vehicledetails> availablevehicles) {
 	super();
 	this.c = c;
