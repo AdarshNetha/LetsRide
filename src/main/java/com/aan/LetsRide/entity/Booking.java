@@ -31,12 +31,25 @@ public class Booking {
 	private LocalDateTime bookingDate;
 	private String cancellationstatus;
 	private String paymentStatus="Not paid";
-	
+	private int otp;
+	private boolean otpverified=false;
 	@OneToOne
 	private  Payment  payment;
 	private  String bookingStatus="pending";
 	  
 
+	public int getOtp() {
+		return otp;
+	}
+	public void setOtp(int otp) {
+		this.otp = otp;
+	}
+	public boolean isOtpverified() {
+		return otpverified;
+	}
+	public void setOtpverified(boolean otpverified) {
+		this.otpverified = otpverified;
+	}
 	public int getId() {
 		return id;
 	}
@@ -122,7 +135,8 @@ public class Booking {
 	}
 	public Booking(int id, Customer cust, Driver driver, String sourceLocation, String destinationLocation,
 			double distanceTravelled, double fare, String estimationTravelTime, LocalDateTime bookingDate,
-			String cancellationstatus, String paymentStatus, Payment payment, String bookingStatus) {
+			String cancellationstatus, String paymentStatus, int otp, boolean otpverified, Payment payment,
+			String bookingStatus) {
 		super();
 		this.id = id;
 		this.cust = cust;
@@ -135,6 +149,8 @@ public class Booking {
 		this.bookingDate = bookingDate;
 		this.cancellationstatus = cancellationstatus;
 		this.paymentStatus = paymentStatus;
+		this.otp = otp;
+		this.otpverified = otpverified;
 		this.payment = payment;
 		this.bookingStatus = bookingStatus;
 	}
@@ -143,8 +159,8 @@ public class Booking {
 		return "Booking [id=" + id + ", cust=" + cust + ", driver=" + driver + ", sourceLocation=" + sourceLocation
 				+ ", destinationLocation=" + destinationLocation + ", distanceTravelled=" + distanceTravelled
 				+ ", fare=" + fare + ", estimationTravelTime=" + estimationTravelTime + ", bookingDate=" + bookingDate
-				+ ", cancellationstatus=" + cancellationstatus + ", paymentStatus=" + paymentStatus + ", payment="
-				+ payment + ", bookingStatus=" + bookingStatus + "]";
+				+ ", cancellationstatus=" + cancellationstatus + ", paymentStatus=" + paymentStatus + ", otp=" + otp
+				+ ", otpverified=" + otpverified + ", payment=" + payment + ", bookingStatus=" + bookingStatus + "]";
 	}
 	
 	

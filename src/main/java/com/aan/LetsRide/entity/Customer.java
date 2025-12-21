@@ -21,7 +21,7 @@ public class Customer {
 	private long mobileno;
 	private String mail;
 	private String currentLoc;
-	private int penalty=0;
+	private double penalty=0.0;
 	@OneToMany(cascade = CascadeType.ALL)
 	List<Booking> bookinglist;
 	private boolean activeBookingFlag;
@@ -82,10 +82,10 @@ public class Customer {
 		this.currentLoc = currentLoc;
 	}
 	
-	public int getPenalty() {
+	public double getPenalty() {
 		return penalty;
 	}
-	public void setPenalty(int penalty) {
+	public void setPenalty(double penalty) {
 		this.penalty = penalty;
 	}
 	public List<Booking> getBookinglist() {
@@ -99,7 +99,7 @@ public class Customer {
 		// TODO Auto-generated constructor stub
 	}
 	public Customer(int id, String name, int age, String gender, long mobileno, String mail, String currentLoc,
-			int penalty, List<Booking> bookinglist, boolean activeBookingFlag) {
+			double penalty, List<Booking> bookinglist, boolean activeBookingFlag) {
 		super();
 		this.id = id;
 		this.name = name;

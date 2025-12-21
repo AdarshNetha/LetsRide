@@ -38,7 +38,9 @@ import com.aan.LetsRide.entity.Customer;
 import com.aan.LetsRide.entity.Driver;
 import com.aan.LetsRide.entity.Payment;
 import com.aan.LetsRide.entity.Vehicle;
+import com.aan.LetsRide.exception.BookingNotFoungWithThisID;
 import com.aan.LetsRide.exception.CustomerNotFoundWithMobile;
+import com.aan.LetsRide.exception.CustomerNotFoundWithThisID;
 import com.aan.LetsRide.exception.CustomeralreayExists;
 import com.aan.LetsRide.exception.DriverNOtFoundWiththismobileNO;
 import com.aan.LetsRide.repository.BookingRepo;
@@ -71,6 +73,8 @@ public class DriverService {
 	     private BookingRepo bookingrepo;
 	    @Autowired
 	    private Paymentrepo paymentre;
+	    @Autowired
+	    private MailService mailService;
 
 	    public ResponseStructure<Driver> saveRegDriver(RegDriverVehicleDTO dto) {
 	    	Driver driver1= driverrepo.findByMobileNo(dto.getMobileNo());
@@ -78,7 +82,7 @@ public class DriverService {
 	    	throw new DriveralreayExists("DriveralreayExists "+dto.getMobileNo());
 	    }
 	    	
-	        // Fetch city using LocationService
+	        
 	        String city = locationService.getCityFromCoordinates(
 	                dto.getLattitude(),
 	                dto.getLongitude()
@@ -114,7 +118,7 @@ public class DriverService {
 	        resp.setStatuscode(HttpStatus.CREATED.value());
 	        resp.setMessage("Driver & Vehicle saved successfully");
 	        resp.setData(driver);
-
+	        mailService.sendMail(driver.getMail(),"Driver","Driver Registration is Successfull");
 	        return resp;
 	    }
 
@@ -253,13 +257,8 @@ public class DriverService {
 
 		
 		
+		
 
-		
-		
-		
-		
-		
-//		rakshitha
 		public ResponseStructure<Customer> findCustomer(long mobileno) {
 			Customer cust =customerRepo.findByMobileno(mobileno);
 			 if(cust==null) {
@@ -282,7 +281,7 @@ public class DriverService {
 		
 		
 		
-//	adarsh	
+
 		
 		public ResponseStructure<Customer> registerCustomer(CustomerDTO cdto) {
 
@@ -370,7 +369,7 @@ public class DriverService {
 			 rs.setMessage("booking succesfullay");
 			 rs.setStatuscode(HttpStatus.ACCEPTED.value());
 			 rs.setData(confBooking);
-			 
+			 mailService.sendMail(customer.getMail(),"subject","content");
 			 return rs;
 			 		
 			
@@ -445,8 +444,8 @@ public class DriverService {
 
     
 
-//    adarsh
-//		custmer booking histry
+
+
 		public ResponseStructure<BookingHistoryDto> seeBookingHistoryOfCustmer(long mobileNO) {
 			Customer customer=customerRepo.findByMobileno(mobileNO);
 			 List<Booking> bList=customer.getBookinglist();
@@ -473,7 +472,7 @@ public class DriverService {
 		
 		
 		
-//		vamshi
+
 		
 		public ResponseStructure<byte[]> Saveupi(int bookingid) {
 			Booking b=bookingrepo.findById(bookingid).get();
@@ -504,7 +503,7 @@ public class DriverService {
 		
 		
 		
-//		rakshitha
+
 
 		public ResponseStructure<Payment> confirmPayment(int bookingId, String paymentType) {
 
@@ -524,7 +523,7 @@ public class DriverService {
 		    payment.setBooking(booking);
 		    payment.setAmount(booking.getFare());
 		    payment.setPaymentType(paymentType);
-		 Payment paymentsave  = paymentre.save(payment);
+		    Payment paymentsave  = paymentre.save(payment);
 		    bookingrepo.save(booking);
 		    customerRepo.save(customer);
 		    vehiclerepo.save(vehicle);
@@ -547,13 +546,15 @@ public class DriverService {
 
 		
 
-		//vamshi
-// do customer cancelatio
+		
 
 		public ResponseStructure<Customer> CustomerCancelBooking(int bookingid, int customerid) {
-			Customer customer=customerRepo.findById(customerid).get();
-			customer.setPenalty(customer.getPenalty());
-			Booking booking=bookingrepo.findById(bookingid).get();
+			Customer customer=customerRepo.findById(customerid).orElseThrow(() -> new CustomerNotFoundWithThisID("customer not found by this"+customerid));
+			Booking booking=bookingrepo.findById(bookingid).orElseThrow(() -> new BookingNotFoungWithThisID("booking not found by this"+bookingid));
+		    double bookingFare = booking.getFare();
+		    double penaltyAmount = bookingFare * 0.10;
+			customer.setPenalty(customer.getPenalty()+penaltyAmount);
+			
 			booking.setCancellationstatus("Cancelled by customer");
 			customerRepo.save(customer);
 			bookingrepo.save(booking);
@@ -565,8 +566,7 @@ public class DriverService {
 		}
 
 
-//		 rakshitha
-//		do driver cancelation
+
 
 
 
@@ -602,8 +602,47 @@ public ResponseStructure<Booking> cancellationBookingByDriver(int driverId, int 
 		 
 		 
 	 }
+
+//OTP Generated
+         public ResponseStructure<Customer> SendotpToTheCustomer(int bookingid) {
+	       Booking booking=bookingrepo.findById(bookingid).orElseThrow();
+	      int otp=generateOtp();
+	      booking.setOtp(otp);
+	      bookingrepo.save(booking);
+	      Customer customer=booking.getCust();
+	      mailService.sendMail(customer.getMail(),"subject","content"+otp);
+	      ResponseStructure<Customer> rs=new ResponseStructure<Customer>();
+	      rs.setStatuscode(HttpStatus.ACCEPTED.value());
+	      rs.setMessage("otp is send succfully");
+	      rs.setData(customer);
+	      return rs;
+         } 
 	 
-	 
+         
+
+         public static int generateOtp() {
+         return (int)(Math.random() * 9000) + 1000; 
+        
+         }
+
+
+		 public ResponseStructure<Booking> VerifyotpAndStartRide(int bookingid, int otp) {
+			Booking booking=bookingrepo.findById(bookingid).orElseThrow();
+			
+		    if (booking.getOtp() != otp) {
+		        throw new RuntimeException("Invalid OTP");
+		    }
+		    
+		    booking.setOtpverified(true);
+		    booking.setBookingStatus("on Going");
+		    bookingrepo.save(booking);
+		    ResponseStructure<Booking> rs=new ResponseStructure<Booking>();
+		    rs.setStatuscode(HttpStatus.OK.value());
+		    rs.setData(booking);
+			return rs;
+		 }
+        	
+
 	 
 
 	 

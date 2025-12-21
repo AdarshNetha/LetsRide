@@ -85,9 +85,23 @@ public class GlobalException {
             return rs;
        }
         
-
+       @ExceptionHandler(CustomerNotFoundWithThisID.class)
+       public ResponseStructure<String> CustomerNotFoundException(CustomerNotFoundWithThisID custid) {
+    	   ResponseStructure<String> rs=new ResponseStructure<String>();
+    	   rs.setStatuscode(HttpStatus.NOT_FOUND.value());
+    	   rs.setMessage(custid.getMessage());
+    	   rs.setData(null);
+    	   return rs;
+       }
 	
-
+       @ExceptionHandler(BookingNotFoungWithThisID.class)
+       public ResponseStructure<String> BookingNotFoungException(BookingNotFoungWithThisID bookingid) {
+    	   ResponseStructure<String> rs= new ResponseStructure<String>();
+    	   rs.setStatuscode(HttpStatus.NOT_FOUND.value());
+    	   rs.setMessage(bookingid.getMessage());
+    	   rs.setData(null);
+    	   return rs;
+       }
 	
 	
 	}
