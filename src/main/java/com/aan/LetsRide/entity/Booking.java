@@ -30,12 +30,12 @@ public class Booking {
 	private String estimationTravelTime;
 	private LocalDateTime bookingDate;
 	private String cancellationstatus;
-	private String paymentStatus="Not paid";
+	private String paymentStatus="NOT PAID";
 	private int otp;
 	private boolean otpverified=false;
 	@OneToOne
 	private  Payment  payment;
-	private  String bookingStatus="pending";
+	private  String bookingStatus="PENDING";
 	  
 
 	public int getOtp() {

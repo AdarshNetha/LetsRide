@@ -9,6 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 
 @Entity
 public class Customer {
@@ -25,26 +26,8 @@ public class Customer {
 	@OneToMany(cascade = CascadeType.ALL)
 	List<Booking> bookinglist;
 	private boolean activeBookingFlag;
-	
-	
-	public boolean isActiveBookingFlag() {
-		return activeBookingFlag;
-	}
-	public void setActiveBookingFlag(boolean activeBookingFlag) {
-		this.activeBookingFlag = activeBookingFlag;
-	}
-	public long getMobileno() {
-		return mobileno;
-	}
-	public void setMobileno(long mobileno) {
-		this.mobileno = mobileno;
-	}
-	public String getMail() {
-		return mail;
-	}
-	public void setMail(String mail) {
-		this.mail = mail;
-	}
+	@OneToOne
+	private Userr userr;
 	public int getId() {
 		return id;
 	}
@@ -69,11 +52,17 @@ public class Customer {
 	public void setGender(String gender) {
 		this.gender = gender;
 	}
-	public long getMobno() {
+	public long getMobileno() {
 		return mobileno;
 	}
-	public void setMobno(long mobileno) {
+	public void setMobileno(long mobileno) {
 		this.mobileno = mobileno;
+	}
+	public String getMail() {
+		return mail;
+	}
+	public void setMail(String mail) {
+		this.mail = mail;
 	}
 	public String getCurrentLoc() {
 		return currentLoc;
@@ -81,7 +70,6 @@ public class Customer {
 	public void setCurrentLoc(String currentLoc) {
 		this.currentLoc = currentLoc;
 	}
-	
 	public double getPenalty() {
 		return penalty;
 	}
@@ -94,12 +82,20 @@ public class Customer {
 	public void setBookinglist(List<Booking> bookinglist) {
 		this.bookinglist = bookinglist;
 	}
-	public Customer() {
-		super();
-		// TODO Auto-generated constructor stub
+	public boolean isActiveBookingFlag() {
+		return activeBookingFlag;
+	}
+	public void setActiveBookingFlag(boolean activeBookingFlag) {
+		this.activeBookingFlag = activeBookingFlag;
+	}
+	public Userr getUserr() {
+		return userr;
+	}
+	public void setUserr(Userr userr) {
+		this.userr = userr;
 	}
 	public Customer(int id, String name, int age, String gender, long mobileno, String mail, String currentLoc,
-			double penalty, List<Booking> bookinglist, boolean activeBookingFlag) {
+			double penalty, List<Booking> bookinglist, boolean activeBookingFlag, Userr userr) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -111,13 +107,19 @@ public class Customer {
 		this.penalty = penalty;
 		this.bookinglist = bookinglist;
 		this.activeBookingFlag = activeBookingFlag;
+		this.userr = userr;
+	}
+	public Customer() {
+		super();
+		// TODO Auto-generated constructor stub
 	}
 	@Override
 	public String toString() {
 		return "Customer [id=" + id + ", name=" + name + ", age=" + age + ", gender=" + gender + ", mobileno="
 				+ mobileno + ", mail=" + mail + ", currentLoc=" + currentLoc + ", penalty=" + penalty + ", bookinglist="
-				+ bookinglist + ", activeBookingFlag=" + activeBookingFlag + "]";
+				+ bookinglist + ", activeBookingFlag=" + activeBookingFlag + ", userr=" + userr + "]";
 	}
+	
 	
 
 }

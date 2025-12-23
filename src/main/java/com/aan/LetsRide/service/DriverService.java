@@ -37,6 +37,7 @@ import com.aan.LetsRide.entity.Booking;
 import com.aan.LetsRide.entity.Customer;
 import com.aan.LetsRide.entity.Driver;
 import com.aan.LetsRide.entity.Payment;
+import com.aan.LetsRide.entity.Userr;
 import com.aan.LetsRide.entity.Vehicle;
 import com.aan.LetsRide.exception.BookingNotFoungWithThisID;
 import com.aan.LetsRide.exception.CustomerNotFoundWithMobile;
@@ -52,6 +53,7 @@ import com.aan.LetsRide.repository.BookingRepo;
 import com.aan.LetsRide.repository.CustomerRepo;
 import com.aan.LetsRide.repository.DriverRepository;
 import com.aan.LetsRide.repository.Paymentrepo;
+import com.aan.LetsRide.repository.Userrepo;
 import com.aan.LetsRide.repository.Vechilerepo;
 
 
@@ -75,13 +77,20 @@ public class DriverService {
 	    private Paymentrepo paymentre;
 	    @Autowired
 	    private MailService mailService;
+	    @Autowired 
+	    private Userrepo userrepo;
 
 	    public ResponseStructure<Driver> saveRegDriver(RegDriverVehicleDTO dto) {
 	    	Driver driver1= driverrepo.findByMobileNo(dto.getMobileNo());
 	    if(driver1!=null) {
 	    	throw new DriveralreayExists("DriveralreayExists "+dto.getMobileNo());
 	    }
-	    	
+	    Userr existingUser = userrepo.findByMobileno(dto.getMobileNo());
+	    if (existingUser != null) {
+	        throw new RuntimeException(
+	            "User already exists with mobile no: " + dto.getMobileNo()
+	        );
+	    }
 	        
 	        String city = locationService.getCityFromCoordinates(
 	                dto.getLattitude(),
@@ -110,16 +119,21 @@ public class DriverService {
 	        vehicle.setAveragespeed(dto.getAveragespeed());
 	        vehicle.setPriceperKM(dto.getPriceperKM());
 
+	        Userr userr=new Userr();
+	        userr.setRole(dto.getRole());
+	        userr.setMobileno(dto.getMobileNo());
+	        userr.setPassword(dto.getPassword());
+	        driver.setUserr(userr);
 	        driver.setVehicle(vehicle);
 
 	        driverrepo.save(driver);
 
-	        ResponseStructure<Driver> resp = new ResponseStructure<>();
-	        resp.setStatuscode(HttpStatus.CREATED.value());
-	        resp.setMessage("Driver & Vehicle saved successfully");
-	        resp.setData(driver);
+	        ResponseStructure<Driver> response = new ResponseStructure<>();
+	        response.setStatuscode(HttpStatus.CREATED.value());
+	        response.setMessage("Driver & user & Vehicle saved successfully");
+	        response.setData(driver);
 	        mailService.sendMail(driver.getMail(),"Driver","Driver Registration is Successfull");
-	        return resp;
+	        return response;
 	    }
 
 
@@ -133,7 +147,7 @@ public class DriverService {
 			 ResponseStructure<Driver> rs =new ResponseStructure<Driver>();
 				
 				rs.setStatuscode(HttpStatus.FOUND.value());
-				rs.setMessage("Driver with monileNo " +mobileNo + "foundr succesfully");
+				rs.setMessage("Driver with mobileNo " +mobileNo + "found succesfully");
 				rs.setData(driver);
 				return rs;
 				
@@ -150,7 +164,7 @@ public class DriverService {
 		      v.setCurrentcity(city);
 		      d.setVehicle(v);
 		       driverrepo.save(d);
-		      ResponseStructure<Driver> Rs = new ResponseStructure();
+		      ResponseStructure<Driver> Rs = new ResponseStructure<>();
 		      Rs.setStatuscode(HttpStatus.ACCEPTED.value());
 		      Rs.setMessage("Location updated");
 		      Rs.setData(d);
@@ -613,7 +627,7 @@ public ResponseStructure<Booking> cancellationBookingByDriver(int driverId, int 
 	      mailService.sendMail(customer.getMail(),"subject","content"+otp);
 	      ResponseStructure<Customer> rs=new ResponseStructure<Customer>();
 	      rs.setStatuscode(HttpStatus.ACCEPTED.value());
-	      rs.setMessage("otp is send succfully");
+	      rs.setMessage("otp is send success fully");
 	      rs.setData(customer);
 	      return rs;
          } 

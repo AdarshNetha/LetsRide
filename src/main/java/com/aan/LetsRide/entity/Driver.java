@@ -21,7 +21,7 @@ private int id;
 private long licenceNo;
 private String upiid;
 private String name;
-private String status="Available";
+private String status="AVAILABLE";
 private int age;
 private long mobileNo;
 private String gender;
@@ -30,24 +30,16 @@ private String mail;
 @OneToOne(mappedBy = "driver", cascade = CascadeType.ALL)
 private Vehicle vehicle;
 @OneToMany(cascade = CascadeType.ALL)
-List<Booking> bookinglist;
-
-
-
-
-public List<Booking> getBookinglist() {
-	return bookinglist;
-}
-public void setBookinglist(List<Booking> bookinglist) {
-	this.bookinglist = bookinglist;
-}
+private List<Booking> bookinglist;
+@OneToOne
+private Userr userr;
 public int getId() {
 	return id;
 }
 public void setId(int id) {
 	this.id = id;
 }
-public Long getLicenceNo() {
+public long getLicenceNo() {
 	return licenceNo;
 }
 public void setLicenceNo(long licenceNo) {
@@ -77,7 +69,7 @@ public int getAge() {
 public void setAge(int age) {
 	this.age = age;
 }
-public Long getMobileNo() {
+public long getMobileNo() {
 	return mobileNo;
 }
 public void setMobileNo(long mobileNo) {
@@ -101,14 +93,20 @@ public Vehicle getVehicle() {
 public void setVehicle(Vehicle vehicle) {
 	this.vehicle = vehicle;
 }
-
-public Driver() {
-	super();
-	// TODO Auto-generated constructor stub
+public List<Booking> getBookinglist() {
+	return bookinglist;
 }
-
-public Driver(int id, Long licenceNo, String upiid, String name, String status, int age, Long mobileNo, String gender,
-		String mail, Vehicle vehicle, List<Booking> bookinglist) {
+public void setBookinglist(List<Booking> bookinglist) {
+	this.bookinglist = bookinglist;
+}
+public Userr getUserr() {
+	return userr;
+}
+public void setUserr(Userr userr) {
+	this.userr = userr;
+}
+public Driver(int id, long licenceNo, String upiid, String name, String status, int age, long mobileNo, String gender,
+		String mail, Vehicle vehicle, List<Booking> bookinglist, Userr userr) {
 	super();
 	this.id = id;
 	this.licenceNo = licenceNo;
@@ -121,13 +119,20 @@ public Driver(int id, Long licenceNo, String upiid, String name, String status, 
 	this.mail = mail;
 	this.vehicle = vehicle;
 	this.bookinglist = bookinglist;
+	this.userr = userr;
+}
+public Driver() {
+	super();
+	// TODO Auto-generated constructor stub
 }
 @Override
 public String toString() {
 	return "Driver [id=" + id + ", licenceNo=" + licenceNo + ", upiid=" + upiid + ", name=" + name + ", status="
 			+ status + ", age=" + age + ", mobileNo=" + mobileNo + ", gender=" + gender + ", mail=" + mail
-			+ ", vehicle=" + vehicle + ", bookinglist=" + bookinglist + "]";
+			+ ", vehicle=" + vehicle + ", bookinglist=" + bookinglist + ", userr=" + userr + "]";
 }
+
+
 
 
 
