@@ -18,17 +18,9 @@ private double longitude;
 private double lattitude;
 private double priceperKM;
 private int averagespeed;
-
-public int getAveragespeed() {
-	return averagespeed;
-}
-public void setAveragespeed(int averagespeed) {
-	this.averagespeed = averagespeed;
-}
-public void setLattitude(double lattitude) {
-	this.lattitude = lattitude;
-}
-public Long getLicenceNo() {
+private String password;
+private String role="Driver";
+public long getLicenceNo() {
 	return licenceNo;
 }
 public void setLicenceNo(long licenceNo) {
@@ -52,7 +44,7 @@ public int getAge() {
 public void setAge(int age) {
 	this.age = age;
 }
-public Long getMobileNo() {
+public long getMobileNo() {
 	return mobileNo;
 }
 public void setMobileNo(long mobileNo) {
@@ -109,17 +101,36 @@ public void setLongitude(double longitude) {
 public double getLattitude() {
 	return lattitude;
 }
-
+public void setLattitude(double lattitude) {
+	this.lattitude = lattitude;
+}
 public double getPriceperKM() {
 	return priceperKM;
 }
 public void setPriceperKM(double priceperKM) {
 	this.priceperKM = priceperKM;
 }
-
+public int getAveragespeed() {
+	return averagespeed;
+}
+public void setAveragespeed(int averagespeed) {
+	this.averagespeed = averagespeed;
+}
+public String getPassword() {
+	return password;
+}
+public void setPassword(String password) {
+	this.password = password;
+}
+public String getRole() {
+	return role;
+}
+public void setRole(String role) {
+	this.role = role;
+}
 public RegDriverVehicleDTO(long licenceNo, String upiid, String name, int age, long mobileNo, String gender,
 		String mail, String vehilename, String vehileno, String type, String model, String capacity, double longitude,
-		double lattitude, double priceperKM, int averagespeed) {
+		double lattitude, double priceperKM, int averagespeed, String password, String role) {
 	super();
 	this.licenceNo = licenceNo;
 	this.upiid = upiid;
@@ -137,6 +148,8 @@ public RegDriverVehicleDTO(long licenceNo, String upiid, String name, int age, l
 	this.lattitude = lattitude;
 	this.priceperKM = priceperKM;
 	this.averagespeed = averagespeed;
+	this.password = password;
+	this.role = role;
 }
 public RegDriverVehicleDTO() {
 	super();
@@ -147,9 +160,8 @@ public String toString() {
 	return "RegDriverVehicleDTO [licenceNo=" + licenceNo + ", upiid=" + upiid + ", name=" + name + ", age=" + age
 			+ ", mobileNo=" + mobileNo + ", gender=" + gender + ", mail=" + mail + ", vehilename=" + vehilename
 			+ ", vehileno=" + vehileno + ", type=" + type + ", model=" + model + ", capacity=" + capacity
-			+ ", longitude=" + longitude + ", lattitude=" + lattitude + ", priceperKM=" + priceperKM + ", Averagespeed="
-			+ averagespeed + "]";
+			+ ", longitude=" + longitude + ", lattitude=" + lattitude + ", priceperKM=" + priceperKM + ", averagespeed="
+			+ averagespeed + ", password=" + password + ", role=" + role + "]";
 }
-
 
 }
