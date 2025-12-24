@@ -1,4 +1,4 @@
-package com.aan.LetsRide.entity;
+  package com.aan.LetsRide.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
