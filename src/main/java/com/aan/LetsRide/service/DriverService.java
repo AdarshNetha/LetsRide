@@ -246,7 +246,8 @@ public class DriverService {
 
 		    // 7. Wrap response
 		    ResponseStructure<AvailableVehicleDTO> response =
-		            new ResponseStructure<>();
+		    
+		    		new ResponseStructure<>();
 
 		    response.setStatuscode(HttpStatus.ACCEPTED.value());
 		    response.setMessage("Available vehicles fetched successfully");
