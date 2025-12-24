@@ -120,12 +120,12 @@ public class DriverService {
 	        vehicle.setPriceperKM(dto.getPriceperKM());
 
 	        Userr userr=new Userr();
-	        userr.setRole(dto.getRole());
+	        userr.setRole("Driver");
 	        userr.setMobileno(dto.getMobileNo());
 	        userr.setPassword(dto.getPassword());
 	        driver.setUserr(userr);
 	        driver.setVehicle(vehicle);
-
+	        userrepo.save(userr);
 	        driverrepo.save(driver);
 
 	        ResponseStructure<Driver> response = new ResponseStructure<>();
@@ -315,6 +315,12 @@ public class DriverService {
 			customer.setMobileno(cdto.getMobileno());
 			customer.setMail(cdto.getEmail());
 			customer.setCurrentLoc(locationService.getCityFromCoordinates(cdto.getLatitude(),cdto.getLongitude()));
+			
+			Userr userr=new Userr();
+			userr.setMobileno(cdto.getMobileno());
+			userr.setPassword(cdto.getPassword());
+			userr.setRole("Customer");
+			userrepo.save(userr);
 			customerRepo.save(customer);
 			ResponseStructure<Customer> rs= new ResponseStructure<Customer>();
 			rs.setData(customer);
