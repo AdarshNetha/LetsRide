@@ -90,7 +90,71 @@ public class DriverService {
 	    @Autowired
 	    private PasswordEncoder passwordEncoder;
 	    
-	  
+	    public ResponseStructure<Driver> saveRegDriver(RegDriverVehicleDTO dto) {
+	    	Driver driver1= driverrepo.findByMobileNo(dto.getMobileNo());
+	    if(driver1!=null) {
+	    	throw new DriveralreayExists("DriveralreayExists "+dto.getMobileNo());
+	    }
+	    Userr existingUser = userrepo.findByMobileno(dto.getMobileNo());
+	    if (existingUser != null) {
+	        throw new RuntimeException(
+	            "User already exists with mobile no: " + dto.getMobileNo()
+	        );
+	    }
+
+	        
+	        String city = locationService.getCityFromCoordinates(
+	                dto.getLattitude(),
+	                dto.getLongitude()
+	        );
+
+	       
+	    
+
+	       
+	        Driver driver = new Driver();
+	        driver.setLicenceNo(dto.getLicenceNo());
+	        driver.setName(dto.getName());
+	        driver.setAge(dto.getAge());
+	        driver.setMail(dto.getMail());
+	        driver.setGender(dto.getGender());
+	        driver.setMobileNo(dto.getMobileNo());
+	        driver.setUpiid(dto.getUpiid());
+
+	       
+
+	        
+	        Vehicle vehicle = new Vehicle();
+	        vehicle.setDriver(driver);
+	        vehicle.setVehilename(dto.getVehilename());
+	        vehicle.setVehileno(dto.getVehileno());
+	        vehicle.setType(dto.getType());
+	        vehicle.setModel(dto.getModel());
+	        vehicle.setCapacity(dto.getCapacity());
+	        vehicle.setCurrentcity(city);
+	        vehicle.setAveragespeed(dto.getAveragespeed());
+	        vehicle.setPriceperKM(dto.getPriceperKM());
+
+	
+	        Userr userr=new Userr();
+	        userr.setRole("Driver");
+	        userr.setMobileno(dto.getMobileNo());
+	        String encodedPassword = passwordEncoder.encode(dto.getPassword());
+	        userr.setPassword(encodedPassword);
+	        driver.setUserr(userr);
+	        driver.setVehicle(vehicle);
+	        userrepo.save(userr);
+	        driverrepo.save(driver);
+
+	        ResponseStructure<Driver> response = new ResponseStructure<>();
+	        response.setStatuscode(HttpStatus.CREATED.value());
+	        response.setMessage("Driver & user & Vehicle saved successfully");
+	        response.setData(driver);
+	        mailService.sendMail(driver.getMail(),"Driver","Driver Registration is Successfull");
+
+	        return response;
+	    }
+
 	    
 
 
