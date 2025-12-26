@@ -6,6 +6,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -24,17 +25,25 @@ private String upiid;
 private String name;
 private String status="AVAILABLE";
 private int age;
+@Column(unique = true, nullable = false)
 private long mobileNo;
 private String gender;
 private String mail;
+
 @JsonIgnore
 @OneToOne(mappedBy = "driver", cascade = CascadeType.ALL)
 private Vehicle vehicle;
 @OneToMany(cascade = CascadeType.ALL)
 private List<Booking> bookinglist;
+
+
+
 @OneToOne
 @JoinColumn(name="user_id",nullable=true)
 private Userr userr;
+
+
+
 public int getId() {
 	return id;
 }
@@ -119,6 +128,7 @@ public Driver(int id, long licenceNo, String upiid, String name, String status, 
 	this.mobileNo = mobileNo;
 	this.gender = gender;
 	this.mail = mail;
+
 	this.vehicle = vehicle;
 	this.bookinglist = bookinglist;
 	this.userr = userr;
@@ -133,6 +143,9 @@ public String toString() {
 			+ status + ", age=" + age + ", mobileNo=" + mobileNo + ", gender=" + gender + ", mail=" + mail
 			+ ", vehicle=" + vehicle + ", bookinglist=" + bookinglist + ", userr=" + userr + "]";
 }
+
+
+
 
 
 

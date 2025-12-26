@@ -1,4 +1,10 @@
-  package com.aan.LetsRide.entity;
+
+package com.aan.LetsRide.entity;
+
+import jakarta.persistence.Column;
+
+
+
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,6 +15,8 @@ public class Userr {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
+
+
     private long mobileno;
     private String password;
     private String role;

@@ -80,6 +80,13 @@ public class DriverService {
 	    private MailService mailService;
 	    @Autowired 
 	    private Userrepo userrepo;
+
+	    
+	    
+	   
+	    
+
+
 	    @Autowired
 	    private PasswordEncoder passwordEncoder;
 	    
@@ -94,13 +101,17 @@ public class DriverService {
 	            "User already exists with mobile no: " + dto.getMobileNo()
 	        );
 	    }
+
 	        
 	        String city = locationService.getCityFromCoordinates(
 	                dto.getLattitude(),
 	                dto.getLongitude()
 	        );
 
-	        
+	       
+	    
+
+	       
 	        Driver driver = new Driver();
 	        driver.setLicenceNo(dto.getLicenceNo());
 	        driver.setName(dto.getName());
@@ -109,8 +120,10 @@ public class DriverService {
 	        driver.setGender(dto.getGender());
 	        driver.setMobileNo(dto.getMobileNo());
 	        driver.setUpiid(dto.getUpiid());
-	        
 
+	       
+
+	        
 	        Vehicle vehicle = new Vehicle();
 	        vehicle.setDriver(driver);
 	        vehicle.setVehilename(dto.getVehilename());
@@ -122,6 +135,7 @@ public class DriverService {
 	        vehicle.setAveragespeed(dto.getAveragespeed());
 	        vehicle.setPriceperKM(dto.getPriceperKM());
 
+	
 	        Userr userr=new Userr();
 	        userr.setRole("Driver");
 	        userr.setMobileno(dto.getMobileNo());
@@ -137,8 +151,11 @@ public class DriverService {
 	        response.setMessage("Driver & user & Vehicle saved successfully");
 	        response.setData(driver);
 	        mailService.sendMail(driver.getMail(),"Driver","Driver Registration is Successfull");
+
 	        return response;
 	    }
+
+	    
 
 
 		public ResponseStructure<Driver> findDriver(long mobileNo) {
@@ -264,7 +281,8 @@ public class DriverService {
 
 		    // 7. Wrap response
 		    ResponseStructure<AvailableVehicleDTO> response =
-		            new ResponseStructure<>();
+		    
+		    		new ResponseStructure<>();
 
 		    response.setStatuscode(HttpStatus.ACCEPTED.value());
 		    response.setMessage("Available vehicles fetched successfully");

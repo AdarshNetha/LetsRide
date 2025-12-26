@@ -28,7 +28,9 @@ public class Customer {
 	List<Booking> bookinglist;
 	private boolean activeBookingFlag;
 	@OneToOne
+
 	@JoinColumn(name="user_id",nullable=true)
+
 	private Userr userr;
 	public int getId() {
 		return id;
