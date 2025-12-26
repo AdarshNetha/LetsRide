@@ -124,6 +124,7 @@ public void setPassword(String password) {
 }
 
 
+
 public RegDriverVehicleDTO(long licenceNo, String upiid, String name, int age, long mobileNo, String gender,
 		String mail, String vehilename, String vehileno, String type, String model, String capacity, double longitude,
 		double lattitude, double priceperKM, int averagespeed, String password) {
@@ -157,7 +158,9 @@ public String toString() {
 			+ ", mobileNo=" + mobileNo + ", gender=" + gender + ", mail=" + mail + ", vehilename=" + vehilename
 			+ ", vehileno=" + vehileno + ", type=" + type + ", model=" + model + ", capacity=" + capacity
 			+ ", longitude=" + longitude + ", lattitude=" + lattitude + ", priceperKM=" + priceperKM + ", averagespeed="
-			+ averagespeed + ", password=" + password + " ]";
+			+ averagespeed + ", password=" + password + "]";
 }
+
+
 
 }

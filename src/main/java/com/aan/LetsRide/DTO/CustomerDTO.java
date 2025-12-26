@@ -8,7 +8,10 @@ public class CustomerDTO {
 	private String email;
 	private double latitude;
 	private double longitude;
-	private String role="Customer";
+
+
+
+
 	private String password;
 	public String getName() {
 		return name;
@@ -52,12 +55,9 @@ public class CustomerDTO {
 	public void setLongitude(double longitude) {
 		this.longitude = longitude;
 	}
-	public String getRole() {
-		return role;
-	}
-	public void setRole(String role) {
-		this.role = role;
-	}
+
+	
+
 	public String getPassword() {
 		return password;
 	}
@@ -65,7 +65,7 @@ public class CustomerDTO {
 		this.password = password;
 	}
 	public CustomerDTO(String name, int age, String gender, long mobileno, String email, double latitude,
-			double longitude, String role, String password) {
+			double longitude,  String password) {
 		super();
 		this.name = name;
 		this.age = age;
@@ -74,7 +74,8 @@ public class CustomerDTO {
 		this.email = email;
 		this.latitude = latitude;
 		this.longitude = longitude;
-		this.role = role;
+		
+		
 		this.password = password;
 	}
 	public CustomerDTO() {
@@ -84,8 +85,12 @@ public class CustomerDTO {
 	@Override
 	public String toString() {
 		return "CustomerDTO [name=" + name + ", age=" + age + ", gender=" + gender + ", mobileno=" + mobileno
-				+ ", email=" + email + ", latitude=" + latitude + ", longitude=" + longitude + ", role=" + role
-				+ ", password=" + password + "]";
+
+				+ ", email=" + email + ", latitude=" + latitude + ", longitude=" + longitude 
+				+ ", password=" + password + "]"
+				+ ", email=" + email + ", latitude=" + latitude + ", longitude=" + longitude + ", password=" + password
+				+ "]";
+
 	}
 	
 	

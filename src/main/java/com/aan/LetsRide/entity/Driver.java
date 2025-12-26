@@ -35,10 +35,13 @@ private String mail;
 private Vehicle vehicle;
 @OneToMany(cascade = CascadeType.ALL)
 private List<Booking> bookinglist;
-@OneToOne(cascade = CascadeType.ALL)
 
-@JoinColumn(name = "userr_id", unique = true)
+
+
+@OneToOne
+@JoinColumn(name="user_id",nullable=true)
 private Userr userr;
+
 
 
 public int getId() {
@@ -113,7 +116,6 @@ public Userr getUserr() {
 public void setUserr(Userr userr) {
 	this.userr = userr;
 }
-
 public Driver(int id, long licenceNo, String upiid, String name, String status, int age, long mobileNo, String gender,
 		String mail, Vehicle vehicle, List<Booking> bookinglist, Userr userr) {
 	super();
@@ -138,8 +140,11 @@ public Driver() {
 @Override
 public String toString() {
 	return "Driver [id=" + id + ", licenceNo=" + licenceNo + ", upiid=" + upiid + ", name=" + name + ", status="
-			+ status + ", age=" + age + ", mobileNo=" + mobileNo + ", gender=" + gender + ", mail=" + mail + ", vehicle=" + vehicle + ", bookinglist=" + bookinglist + ", userr=" + userr + "]";
+			+ status + ", age=" + age + ", mobileNo=" + mobileNo + ", gender=" + gender + ", mail=" + mail
+			+ ", vehicle=" + vehicle + ", bookinglist=" + bookinglist + ", userr=" + userr + "]";
 }
+
+
 
 
 
