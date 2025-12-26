@@ -19,7 +19,7 @@ private String type;
 private String model;
 private String capacity;
 private String currentcity;
-private String availabilityStatus="Available";
+private String availabilityStatus="AVAILABLE";
 private double priceperKM;
 private int averagespeed;
 @JsonIgnore
