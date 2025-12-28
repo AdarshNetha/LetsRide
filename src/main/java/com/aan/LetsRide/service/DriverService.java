@@ -15,6 +15,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
@@ -80,6 +81,15 @@ public class DriverService {
 	    @Autowired 
 	    private Userrepo userrepo;
 
+	    
+	    
+	   
+	    
+
+
+	    @Autowired
+	    private PasswordEncoder passwordEncoder;
+	    
 	    public ResponseStructure<Driver> saveRegDriver(RegDriverVehicleDTO dto) {
 	    	Driver driver1= driverrepo.findByMobileNo(dto.getMobileNo());
 	    if(driver1!=null) {
@@ -91,13 +101,17 @@ public class DriverService {
 	            "User already exists with mobile no: " + dto.getMobileNo()
 	        );
 	    }
+
 	        
 	        String city = locationService.getCityFromCoordinates(
 	                dto.getLattitude(),
 	                dto.getLongitude()
 	        );
 
-	        
+	       
+	    
+
+	       
 	        Driver driver = new Driver();
 	        driver.setLicenceNo(dto.getLicenceNo());
 	        driver.setName(dto.getName());
@@ -106,8 +120,10 @@ public class DriverService {
 	        driver.setGender(dto.getGender());
 	        driver.setMobileNo(dto.getMobileNo());
 	        driver.setUpiid(dto.getUpiid());
-	        
 
+	       
+
+	        
 	        Vehicle vehicle = new Vehicle();
 	        vehicle.setDriver(driver);
 	        vehicle.setVehilename(dto.getVehilename());
@@ -119,10 +135,12 @@ public class DriverService {
 	        vehicle.setAveragespeed(dto.getAveragespeed());
 	        vehicle.setPriceperKM(dto.getPriceperKM());
 
+	
 	        Userr userr=new Userr();
 	        userr.setRole("Driver");
 	        userr.setMobileno(dto.getMobileNo());
-	        userr.setPassword(dto.getPassword());
+	        String encodedPassword = passwordEncoder.encode(dto.getPassword());
+	        userr.setPassword(encodedPassword);
 	        driver.setUserr(userr);
 	        driver.setVehicle(vehicle);
 	        userrepo.save(userr);
@@ -133,8 +151,11 @@ public class DriverService {
 	        response.setMessage("Driver & user & Vehicle saved successfully");
 	        response.setData(driver);
 	        mailService.sendMail(driver.getMail(),"Driver","Driver Registration is Successfull");
+
 	        return response;
 	    }
+
+	    
 
 
 		public ResponseStructure<Driver> findDriver(long mobileNo) {
@@ -260,7 +281,8 @@ public class DriverService {
 
 		    // 7. Wrap response
 		    ResponseStructure<AvailableVehicleDTO> response =
-		            new ResponseStructure<>();
+		    
+		    		new ResponseStructure<>();
 
 		    response.setStatuscode(HttpStatus.ACCEPTED.value());
 		    response.setMessage("Available vehicles fetched successfully");
@@ -318,7 +340,8 @@ public class DriverService {
 			
 			Userr userr=new Userr();
 			userr.setMobileno(cdto.getMobileno());
-			userr.setPassword(cdto.getPassword());
+			String encodedPassword = passwordEncoder.encode(cdto.getPassword());
+			userr.setPassword(encodedPassword);
 			userr.setRole("Customer");
 			userrepo.save(userr);
 			customerRepo.save(customer);
@@ -367,6 +390,8 @@ public class DriverService {
 			 booking.setDistanceTravelled(bookingdto.getDistanceTravelled());
 			 booking.setBookingDate(LocalDateTime.now());
 			 vehicle.setAvailabilityStatus("booked");
+			 int otp=generateOtp();
+		      booking.setOtp(otp);
 
 			Booking confBooking= bookingrepo.save(booking);
 
@@ -389,7 +414,8 @@ public class DriverService {
 			 rs.setMessage("booking succesfullay");
 			 rs.setStatuscode(HttpStatus.ACCEPTED.value());
 			 rs.setData(confBooking);
-			 mailService.sendMail(customer.getMail(),"subject","content");
+			 mailService.sendMail(customer.getMail(),"Booking Detials","Dear "+confBooking.getCust().getName()+", /n Thankyou for choosing LetsRideyou. /n  You have booked a vechile /n from"+confBooking.getSourceLocation()+"/n to"+confBooking.getDestinationLocation()+"/n on date:"+confBooking.getBookingDate()+"/n Booking id:" +confBooking.getId()+"/n Diver Name"+confBooking.getDriver().getName()+"/n Driver phoneNo :"+confBooking.getDriver().getMobileNo()+"/n Vehicle No :"+confBooking.getDriver().getVehicle().getVehileno()+"/n Fair :"+confBooking.getFare()+"/n Distance  :"+confBooking.getDistanceTravelled());
+			 mailService.sendMail(driver.getMail(), "Booking Detials", "Dear"+confBooking.getDriver().getName()+"/n You have a booking on  "+confBooking.getBookingDate()+"/n You have booked a vehicle /n from"+confBooking.getSourceLocation()+"/n to"+confBooking.getDestinationLocation()+"/n Booking id "+confBooking.getId()+"/n Customer name :"+confBooking.getCust().getName()+"/n Custmoer MobileNo :"+confBooking.getCust().getMobileno()+"/n Distance"+confBooking.getDistanceTravelled()+"/n Fair :"+confBooking.getFare());
 			 return rs;
 			 		
 			
