@@ -14,6 +14,7 @@ import com.aan.LetsRide.DTO.LoginDTO;
 import com.aan.LetsRide.DTO.RegDriverVehicleDTO;
 import com.aan.LetsRide.entity.Customer;
 import com.aan.LetsRide.entity.Driver;
+import com.aan.LetsRide.service.CustomerService;
 import com.aan.LetsRide.service.DriverService;
 import com.aan.LetsRide.service.LoginService;
 
@@ -26,11 +27,14 @@ public class AuthController {
 
     @Autowired
     private LoginService loginService;
+    
+    @Autowired
+    private CustomerService customerService;
 
     @PostMapping("/register/customer")
     public ResponseStructure<Customer> registerCustomer(
             @RequestBody CustomerDTO cdto) {
-        return driverService.registerCustomer(cdto);
+        return customerService.registerCustomer(cdto);
     }
 
     @PostMapping("/register/driver")

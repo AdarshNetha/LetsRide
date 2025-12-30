@@ -21,7 +21,7 @@ import com.aan.LetsRide.DTO.CustomerDTO;
 import com.aan.LetsRide.entity.Booking;
 import com.aan.LetsRide.entity.Customer;
 import com.aan.LetsRide.entity.Payment;
-
+import com.aan.LetsRide.service.CustomerService;
 import com.aan.LetsRide.service.DriverService;
 
 @RestController
@@ -29,53 +29,55 @@ import com.aan.LetsRide.service.DriverService;
 public class CustomerController {
 
     @Autowired
-    private DriverService ds;
+    private DriverService driverService;
+    @Autowired
+    private CustomerService customerService;
 
     @GetMapping("/find")
     public ResponseStructure<Customer> findCustomer(@RequestParam long mobileno) {
-        return ds.findCustomer(mobileno);
+        return customerService.findCustomer(mobileno);
     }
 
     @GetMapping("/available")
     public ResponseStructure<AvailableVehicleDTO> getAvailableVehicles(
             @RequestParam long mobileno,
             @RequestParam String destinationLocation) {
-        return ds.getAvailableVehiclesByCity(mobileno, destinationLocation);
+        return customerService.getAvailableVehiclesByCity(mobileno, destinationLocation);
     }
 
     @DeleteMapping("/delete")
     public ResponseStructure<Customer> deleteCustomer(@RequestParam long mobileno) {
-        return ds.deleteBymbno(mobileno);
+        return customerService.deleteBymbno(mobileno);
     }
 
     @PostMapping("/book/{mobileno}")
     public ResponseStructure<Booking> bookVehicle(
             @PathVariable long mobileno,
             @RequestBody BookingDto bookingdto) {
-        return ds.bookVehicle(mobileno, bookingdto);
+        return customerService.bookVehicle(mobileno, bookingdto);
     }
 
     @GetMapping("/active-booking/{mobileno}")
     public ResponseStructure<ActiveBookingDTO> seeActiveBooking(
             @PathVariable long mobileno) {
-        return ds.Seeactivebooking(mobileno);
+        return customerService.Seeactivebooking(mobileno);
     }
 
     @GetMapping("/booking-history")
     public ResponseStructure<BookingHistoryDto> seeBookingHistory(
             @RequestParam long mobileno) {
-        return ds.seeBookingHistoryOfCustmer(mobileno);
+        return customerService.seeBookingHistoryOfCustmer(mobileno);
     }
 
     @PutMapping("/booking/{bookingId}/cancel")
     public ResponseStructure<Customer> cancelBooking(
             @PathVariable int bookingId,
             @RequestParam int customerId) {
-        return ds.CustomerCancelBooking(bookingId, customerId);
+        return customerService.CustomerCancelBooking(bookingId, customerId);
     }
 
     @GetMapping("/pickup")
     public ResponseStructure<Customer> pickup(@RequestParam int bookingid) {
-        return ds.SendotpToTheCustomer(bookingid);
+        return customerService.SendotpToTheCustomer(bookingid);
     }
 }
