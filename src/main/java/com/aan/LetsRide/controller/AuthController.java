@@ -19,32 +19,32 @@ import com.aan.LetsRide.service.LoginService;
 
 @RestController
 @RequestMapping("/auth")
-public class RegisterController {
+public class AuthController {
 
     @Autowired
     private DriverService driverService;
+
     @Autowired
     private LoginService loginService;
 
     @PostMapping("/register/customer")
     public ResponseStructure<Customer> registerCustomer(
             @RequestBody CustomerDTO cdto) {
-
         return driverService.registerCustomer(cdto);
     }
 
     @PostMapping("/register/driver")
     public ResponseStructure<Driver> registerDriver(
             @RequestBody RegDriverVehicleDTO dto) {
-
         return driverService.saveRegDriver(dto);
     }
-    
-    public ResponseEntity<ResponseStructure<String>> login(LoginDTO dto) {
-    	
-    	return loginService.login(dto);
+
+    @PostMapping("/login")
+    public ResponseEntity<ResponseStructure<String>> login(
+            @RequestBody LoginDTO dto) {
+        return loginService.login(dto);
     }
- }
+}
 
 
 
