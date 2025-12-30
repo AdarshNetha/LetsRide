@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,26 +25,23 @@ import com.aan.LetsRide.entity.Payment;
 import com.aan.LetsRide.service.DriverService;
 
 @RestController
-public class CoustmerController {
+@RequestMapping("/coustmer")
+public class CoustomerController {
 	
 	@Autowired
 	private DriverService ds;
 	
 	
-	@PostMapping("/coustmer/register")
-	public ResponseStructure<Customer> registerCoustmer(@RequestBody CustomerDTO cdto)
-	{
-		return ds.registerCustomer(cdto);
-	}
 	
-	@GetMapping("/coustmer/Find")
+	
+	@GetMapping("/coustomer/Find")
     public ResponseStructure<Customer> findcustomer(@RequestParam long mobileno){
 		return ds.findCustomer(mobileno);
 		
 	}
 	
 	
-	@GetMapping("/available")
+	@GetMapping("/coustomer/available")
 	public ResponseStructure<AvailableVehicleDTO> getAvailableVehicles(@RequestParam long mobileno ,@RequestParam String distinationLocation) {
 		return ds.getAvailableVehiclesByCity(mobileno,distinationLocation);
 		
@@ -52,13 +51,13 @@ public class CoustmerController {
 	
 	
 
-	@DeleteMapping("/deletebymobileNo")
+	@DeleteMapping("/coustomer/deletebymobileNo")
 	public ResponseStructure<Customer> deleteCoustmer(@RequestParam long mobileno){
 		return ds.deleteBymbno(mobileno);
 		
 	}
 
-	@PutMapping("/bookVehicle/{mobno}")
+	@PutMapping("/coustomer/bookVehicle/{mobno}")
 	public ResponseStructure<Booking> bookVehicle(@PathVariable long mobno,@RequestBody BookingDto bookingdto) {
 		 return ds.bookVehicle(mobno,bookingdto);
 	}
@@ -72,27 +71,9 @@ public class CoustmerController {
 
 	
 
-	
-	@PostMapping("/paybyupi")
-	public ResponseStructure<byte[]> PaybyUPI(@RequestParam int bookingid) {
-		return ds.Saveupi(bookingid);
-	}
-	
-	@PostMapping("/paybyQR")
-	public void PaymentCompleted(@RequestParam int id, @RequestParam String paymentType) {
-		  ds.ConfirmPaymentbyQR(id,paymentType);
-	}
-	
-	
+		
 
-	@PostMapping("/driver/completedride/paybycash")
-	public ResponseStructure<Payment> bookingCompleted(@RequestParam int id, @RequestParam String paymentType) {
-		 return ds.confirmPaymentbycash(id,paymentType);
-	}
-
-	
-
-	@GetMapping("/coustmer/seeBookingHistory")
+	@GetMapping("/coustomer/seeBookingHistory")
 	public ResponseStructure<BookingHistoryDto> seeBookingHistory(@RequestParam long mobileNO)
 	{
 		return ds.seeBookingHistoryOfCustmer(mobileNO);
@@ -116,10 +97,7 @@ public class CoustmerController {
 		return ds.SendotpToTheCustomer(bookingid);
 	}
 	
-	@GetMapping("/driver/verifyotp")
-	public ResponseStructure<Booking> Verifyotp(@RequestParam int bookingid,@RequestParam int otp) {
-		return ds.VerifyotpAndStartRide(bookingid,otp);
-	}
+	
 
 }
 

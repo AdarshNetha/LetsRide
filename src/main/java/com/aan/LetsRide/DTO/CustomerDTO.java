@@ -8,10 +8,6 @@ public class CustomerDTO {
 	private String email;
 	private double latitude;
 	private double longitude;
-
-
-
-
 	private String password;
 	public String getName() {
 		return name;
