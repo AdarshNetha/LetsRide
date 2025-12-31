@@ -77,8 +77,9 @@ public class CustomerService {
 		userr.setMobileno(cdto.getMobileno());
 		String encodedPassword = passwordEncoder.encode(cdto.getPassword());
 		userr.setPassword(encodedPassword);
-		userr.setRole("Customer");
-		userrepo.save(userr);
+		userr.setRole("CUSTOMER");
+		customer.setUserr(userrepo.save(userr));
+		
 		customerRepo.save(customer);
 		ResponseStructure<Customer> rs= new ResponseStructure<Customer>();
 		rs.setData(customer);

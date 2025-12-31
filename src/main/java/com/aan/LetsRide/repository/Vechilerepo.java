@@ -10,6 +10,6 @@ import org.springframework.stereotype.Repository;
 import com.aan.LetsRide.entity.Vehicle;
 @Repository
 public interface Vechilerepo extends JpaRepository<Vehicle, Integer> {
-	@Query("select v from Vehicle v where v.currentcity=:city AND v.availabilityStatus='Available'")
+	@Query("select v from Vehicle v where v.currentcity=:city AND v.availabilityStatus='AVAILABLE'")
 	 List<Vehicle> findAvailableVehiclesBycity(@Param("city")String city);
 }
