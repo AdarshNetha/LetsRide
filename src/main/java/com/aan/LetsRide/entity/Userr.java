@@ -15,8 +15,6 @@ public class Userr {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-
-
     private long mobileno;
     private String password;
     private String role;
