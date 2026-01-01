@@ -2,6 +2,9 @@
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -11,32 +14,44 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 
+
 @Entity
 public class Booking {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
-	  @ManyToOne
-	   @JoinColumn(name = "customer_id")
-	private Customer cust;
-	  @ManyToOne
-	    @JoinColumn(name = "driver_id")
-	private Driver driver;
-	private String sourceLocation;
-	private String destinationLocation;
-	private double distanceTravelled;
-	private double fare;
-	private String estimationTravelTime;
-	private LocalDateTime bookingDate;
-	private String cancellationstatus;
-	private String paymentStatus="NOT PAID";
-	private int otp;
-	private boolean otpverified=false;
-	@OneToOne
-	private  Payment  payment;
-	private  String bookingStatus="PENDING";
-	  
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    @JsonBackReference
+    private Customer cust;
+
+    @ManyToOne
+    @JoinColumn(name = "driver_id")
+    @JsonBackReference
+    private Driver driver;
+
+    private String sourceLocation;
+    private String destinationLocation;
+    private double distanceTravelled;
+    private double fare;
+    private String estimationTravelTime;
+    private LocalDateTime bookingDate;
+    private String cancellationstatus;
+    private String paymentStatus = "NOT PAID";
+    private int otp;
+    private boolean otpverified = false;
+
+    @OneToOne(mappedBy = "booking", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private Payment payment;
+
+    private String bookingStatus = "BOOKED";
+
+    // getters & setters only (NO toString)
+
+
 
 	public int getOtp() {
 		return otp;
@@ -154,14 +169,7 @@ public class Booking {
 		this.payment = payment;
 		this.bookingStatus = bookingStatus;
 	}
-	@Override
-	public String toString() {
-		return "Booking [id=" + id + ", cust=" + cust + ", driver=" + driver + ", sourceLocation=" + sourceLocation
-				+ ", destinationLocation=" + destinationLocation + ", distanceTravelled=" + distanceTravelled
-				+ ", fare=" + fare + ", estimationTravelTime=" + estimationTravelTime + ", bookingDate=" + bookingDate
-				+ ", cancellationstatus=" + cancellationstatus + ", paymentStatus=" + paymentStatus + ", otp=" + otp
-				+ ", otpverified=" + otpverified + ", payment=" + payment + ", bookingStatus=" + bookingStatus + "]";
-	}
+
 	
 	
 	
