@@ -256,7 +256,7 @@ public class CustomerService {
 			
 			ResponseStructure<ActiveBookingDTO> activebooking1=new ResponseStructure<ActiveBookingDTO>();
 			for (Booking booking : bookinglist) {
-				if(booking.getBookingDate().equals("pending"))
+				if(booking.getBookingStatus().equals("BOOKED"))
 				{
 					
 					activebooking.setBooking(booking);
@@ -308,6 +308,7 @@ public class CustomerService {
 			customer.setPenalty(customer.getPenalty()+penaltyAmount);
 			
 			booking.setCancellationstatus("Cancelled by customer");
+			booking.setBookingStatus("CANCLED BY CUSTOMER");
 			customerRepo.save(customer);
 			bookingrepo.save(booking);
 			ResponseStructure<Customer> rs=new ResponseStructure<Customer>();
