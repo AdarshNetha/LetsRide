@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.aan.LetsRide.ResponseStructure;
+import com.aan.LetsRide.DTO.ActiveDriverBookingDto;
+import com.aan.LetsRide.DTO.AvailableVehicleDTO;
 import com.aan.LetsRide.DTO.BookingHistoryDto;
 import com.aan.LetsRide.entity.Booking;
 import com.aan.LetsRide.entity.Driver;
@@ -24,13 +26,13 @@ public class DriverController {
     @Autowired
     private DriverService driverService;
 
-    // 1️⃣ Find driver profile
+    //  Find driver profile
     @GetMapping("/{mobileNo}")
     public ResponseStructure<Driver> findDriver(@PathVariable long mobileNo) {
         return driverService.findDriver(mobileNo);
     }
 
-    // 2️⃣ Update driver location
+    //  Update driver location
     @PutMapping("/location")
     public ResponseStructure<Driver> updateLocation(
             @RequestParam double latitude,
@@ -40,20 +42,20 @@ public class DriverController {
         return driverService.updateDriver(latitude, longitude, mobileNo);
     }
 
-    // 3️⃣ Delete driver
+    //  Delete driver
     @DeleteMapping("/delete")
     public ResponseStructure<Driver> delete(@RequestParam long mobileNo) {
         return driverService.deleteById(mobileNo);
     }
 
-    // 4️⃣ Booking history
+    //  Booking history
     @GetMapping("/booking-history")
     public ResponseStructure<BookingHistoryDto> seeBookingHistory(
-            @RequestParam long mobileNo) {
-        return driverService.seeBookingHistory(mobileNo);
+            @RequestParam long mobileno) {
+        return driverService.seeBookingHistory(mobileno);
     }
 
-    // 5️⃣ Cancel booking
+    //  Cancel booking
     @PutMapping("/booking/{bookingId}/cancel")
     public ResponseStructure<Booking> cancelBooking(
             @RequestParam int driverId,
@@ -61,13 +63,13 @@ public class DriverController {
         return driverService.cancellationBookingByDriver(driverId, bookingId);
     }
 
-    // 6️⃣ Pay by UPI
+    //  Pay by UPI
     @PostMapping("/payment/upi")
     public ResponseStructure<byte[]> payByUpi(@RequestParam int bookingId) {
         return driverService.Saveupi(bookingId);
     }
 
-    // 7️⃣ Pay by QR
+    //  Pay by QR
     @PostMapping("/payment/qr")
     public void paymentByQr(
             @RequestParam int bookingId,
@@ -75,7 +77,7 @@ public class DriverController {
         driverService.ConfirmPaymentbyQR(bookingId, paymentType);
     }
 
-    // 8️⃣ Pay by cash
+    //  Pay by cash
     @PostMapping("/payment/cash")
     public ResponseStructure<Payment> paymentByCash(
             @RequestParam int bookingId,
@@ -83,11 +85,17 @@ public class DriverController {
         return driverService.confirmPaymentbycash(bookingId, paymentType);
     }
 
-    // 9️⃣ Verify OTP and start ride
+    //  Verify OTP and start ride
     @PostMapping("/booking/{bookingId}/verify-otp")
     public ResponseStructure<Booking> verifyOtp(
             @PathVariable int bookingId,
             @RequestParam int otp) {
         return driverService.VerifyotpAndStartRide(bookingId, otp);
+    }
+    // See Available Ride
+    @GetMapping("/availableBooking")
+    public ResponseStructure<ActiveDriverBookingDto> getCurrentBooking(
+            @RequestParam long mobileno) {
+        return driverService.getCurrentBooking(mobileno);
     }
 }

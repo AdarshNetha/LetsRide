@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.aan.LetsRide.ResponseStructure;
 import com.aan.LetsRide.DTO.LoginDTO;
+import com.aan.LetsRide.DTO.LoginResponceDTO;
 import com.aan.LetsRide.Security.JwtUtils;
 import com.aan.LetsRide.entity.Userr;
 import com.aan.LetsRide.repository.Userrepo;
@@ -21,7 +22,7 @@ public class LoginService {
 	 @Autowired
 	private Userrepo userrRepository;
 	
-	 public ResponseEntity<ResponseStructure<String>> login(LoginDTO dto) {
+	 public ResponseEntity<ResponseStructure<LoginResponceDTO>> login(LoginDTO dto) {
 
 	        // Authenticate using Spring Security
 	        authenticationManager.authenticate(
@@ -39,11 +40,13 @@ public class LoginService {
 	                String.valueOf(dto.getMobileNo()),
 	                user.getRole()
 	        );
+	        
+	        LoginResponceDTO loginResponceDTO= new LoginResponceDTO(token, user.getRole());
 
-	        ResponseStructure<String> rs = new ResponseStructure<>();
+	        ResponseStructure<LoginResponceDTO> rs = new ResponseStructure<>();
 	        rs.setStatuscode(200);
 	        rs.setMessage("Login successful");
-	        rs.setData("Bearer " + token);
+	        rs.setData(loginResponceDTO);
 
 	        return ResponseEntity.ok(rs);
 	    }

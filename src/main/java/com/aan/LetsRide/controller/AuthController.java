@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.aan.LetsRide.ResponseStructure;
 import com.aan.LetsRide.DTO.CustomerDTO;
 import com.aan.LetsRide.DTO.LoginDTO;
+import com.aan.LetsRide.DTO.LoginResponceDTO;
 import com.aan.LetsRide.DTO.RegDriverVehicleDTO;
 import com.aan.LetsRide.entity.Customer;
 import com.aan.LetsRide.entity.Driver;
@@ -44,7 +45,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ResponseStructure<String>> login(
+    public ResponseEntity<ResponseStructure<LoginResponceDTO>> login(
             @RequestBody LoginDTO dto) {
         return loginService.login(dto);
     }

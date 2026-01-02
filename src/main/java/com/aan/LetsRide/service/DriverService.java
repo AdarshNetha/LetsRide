@@ -13,6 +13,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.aan.LetsRide.ResponseStructure;
 import com.aan.LetsRide.DTO.ActiveBookingDTO;
+import com.aan.LetsRide.DTO.ActiveDriverBookingDto;
 import com.aan.LetsRide.DTO.AvailableVehicleDTO;
 import com.aan.LetsRide.DTO.BookingDto;
 import com.aan.LetsRide.DTO.BookingHistoryDto;
@@ -225,7 +226,7 @@ public class DriverService {
 		 List<RideDTO> rideDTOs=new ArrayList<RideDTO>();
 		 double total=0;
 		 for(Booking b : bList) {
-			RideDTO rideDTO=new RideDTO(b.getSourceLocation(), b.getDestinationLocation(), b.getDistanceTravelled(), b.getFare());
+			RideDTO rideDTO=new RideDTO(b.getId(), b.getSourceLocation(), b.getDestinationLocation(), b.getDistanceTravelled(), b.getFare());
 			total+=b.getFare();
 			rideDTOs.add(rideDTO);			
 		}
@@ -394,6 +395,56 @@ public ResponseStructure<Booking> cancellationBookingByDriver(int driverId, int 
 		    rs.setStatuscode(HttpStatus.OK.value());
 		    rs.setData(booking);
 			return rs;
+		 }
+
+
+
+
+
+
+
+
+		 public ResponseStructure<ActiveDriverBookingDto> getCurrentBooking(long mobileno) {
+			 Driver driver=driverrepo.findByMobileNo(mobileno);
+				if(driver==null) {
+					throw new CustomerNotFoundWithMobile("Customer Not Found Mobileno:"+mobileno);
+				}
+				
+//				ActiveBookingDTO activebooking=new ActiveBookingDTO();
+//				activebooking.setCustname(customer.getName());
+//				activebooking.setCustmobileno(customer.getMobileno());
+//				activebooking.setCurrentlocation(customer.getCurrentLoc());
+
+				
+				List<Booking> bookinglist=new ArrayList<Booking>();
+				bookinglist=driver.getBookinglist();
+				
+				ResponseStructure<ActiveDriverBookingDto> activebooking1=new ResponseStructure<ActiveDriverBookingDto>();
+				for (Booking booking : bookinglist) {
+					if(booking.getBookingStatus().equals("BOOKED"))
+					{
+						
+						ActiveDriverBookingDto activeDriverBookingDto=new ActiveDriverBookingDto(booking.getId(), booking.getCust().getName(), booking.getCust().getMobileno(), booking.getSourceLocation(), booking.getDestinationLocation(), booking.getDistanceTravelled(), booking.getFare());
+						
+//						activebooking.setBooking(booking);
+						activebooking1.setStatuscode(HttpStatus.ACCEPTED.value());
+						activebooking1.setMessage("Active Booking");
+						activebooking1.setData(activeDriverBookingDto);
+					}
+					else {
+						
+						activebooking1.setStatuscode(HttpStatus.ACCEPTED.value());
+						activebooking1.setMessage("Active Booking");
+						activebooking1.setData(null);
+						
+						
+						
+					}
+				}
+				
+				
+				return activebooking1;
+		
 		 }
         	
 

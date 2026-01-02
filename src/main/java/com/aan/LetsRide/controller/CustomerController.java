@@ -76,8 +76,8 @@ public class CustomerController {
         return customerService.CustomerCancelBooking(bookingId, customerId);
     }
 
-    @GetMapping("/pickup")
-    public ResponseStructure<Customer> pickup(@RequestParam int bookingid) {
-        return customerService.SendotpToTheCustomer(bookingid);
-    }
+//    @GetMapping("/pickup")
+//    public ResponseStructure<Customer> pickup(@RequestParam int bookingid) {
+//        return customerService.SendotpToTheCustomer(bookingid);
+//    }
 }
