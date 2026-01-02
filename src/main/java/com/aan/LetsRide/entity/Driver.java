@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -17,30 +18,34 @@ import jakarta.persistence.OneToOne;
 
 @Entity
 public class Driver {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-private int id;
-private long licenceNo;
-private String upiid;
-private String name;
-private String status="AVAILABLE";
-private int age;
-@Column(unique = true, nullable = false)
-private long mobileNo;
-private String gender;
-private String mail;
 
-@JsonIgnore
-@OneToOne(mappedBy = "driver", cascade = CascadeType.ALL)
-private Vehicle vehicle;
-@OneToMany(cascade = CascadeType.ALL)
-private List<Booking> bookinglist;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
 
+    private long licenceNo;
+    private String upiid;
+    private String name;
+    private String status = "AVAILABLE";
+    private int age;
 
+    @Column(unique = true, nullable = false)
+    private long mobileNo;
 
-@OneToOne
-@JoinColumn(name="user_id",nullable=true)
-private Userr userr;
+    private String gender;
+    private String mail;
+
+    @OneToOne(mappedBy = "driver", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Vehicle vehicle;
+
+    @OneToMany(mappedBy = "driver", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<Booking> bookinglist = new ArrayList<>();
+
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private Userr userr;
 
 
 
@@ -137,12 +142,7 @@ public Driver() {
 	super();
 	// TODO Auto-generated constructor stub
 }
-@Override
-public String toString() {
-	return "Driver [id=" + id + ", licenceNo=" + licenceNo + ", upiid=" + upiid + ", name=" + name + ", status="
-			+ status + ", age=" + age + ", mobileNo=" + mobileNo + ", gender=" + gender + ", mail=" + mail
-			+ ", vehicle=" + vehicle + ", bookinglist=" + bookinglist + ", userr=" + userr + "]";
-}
+
 
 
 

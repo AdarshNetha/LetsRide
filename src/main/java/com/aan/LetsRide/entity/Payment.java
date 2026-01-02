@@ -3,25 +3,40 @@ package com.aan.LetsRide.entity;
 
 import org.hibernate.annotations.ManyToAny;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 
 @Entity
 public class Payment {
-	@Id
-	private int paymentid;
-	@ManyToOne(cascade = CascadeType.ALL)
-	private Customer customer;
-	@ManyToOne(cascade = CascadeType.ALL)
-	private Vehicle vehicle;
-	@OneToOne
-	private Booking booking;
-	private double amount;
-	private String paymentType;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int paymentid;
+
+    @ManyToOne
+    @JsonIgnore
+    private Customer customer;
+
+    @ManyToOne
+    @JsonIgnore
+    private Vehicle vehicle;
+
+    @OneToOne
+    @JoinColumn(name = "booking_id")
+    @JsonBackReference
+    private Booking booking;
+
+    private double amount;
+    private String paymentType;
 	
 	
 	public int getPaymentid() {
@@ -64,11 +79,7 @@ public class Payment {
 	public Payment() {
 		super();
 	}
-	@Override
-	public String toString() {
-		return "Payment [paymentid=" + paymentid + ", customer=" + customer + ", vehicle=" + vehicle + ", booking="
-				+ booking + ", amount=" + amount + ", paymentType=" + paymentType + "]";
-	}
+
 	public Payment(int paymentid, Customer customer, Vehicle vehicle, Booking booking, double amount,
 			String paymentType) {
 		super();

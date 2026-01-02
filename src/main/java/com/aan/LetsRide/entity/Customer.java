@@ -3,6 +3,8 @@ package com.aan.LetsRide.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,24 +16,27 @@ import jakarta.persistence.OneToOne;
 
 @Entity
 public class Customer {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
-	private String name;
-	private int age;
-	private String gender;
-	private long mobileno;
-	private String mail;
-	private String currentLoc;
-	private double penalty=0.0;
-	@OneToMany(cascade = CascadeType.ALL)
-	List<Booking> bookinglist;
-	private boolean activeBookingFlag;
-	@OneToOne
 
-	@JoinColumn(name="user_id",nullable=true)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
 
-	private Userr userr;
+    private String name;
+    private int age;
+    private String gender;
+    private long mobileno;
+    private String mail;
+    private String currentLoc;
+    private double penalty = 0.0;
+    private boolean activeBookingFlag;
+
+    @OneToMany(mappedBy = "cust", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<Booking> bookinglist = new ArrayList<>();
+
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private Userr userr;
 	public int getId() {
 		return id;
 	}
@@ -116,12 +121,6 @@ public class Customer {
 	public Customer() {
 		super();
 		// TODO Auto-generated constructor stub
-	}
-	@Override
-	public String toString() {
-		return "Customer [id=" + id + ", name=" + name + ", age=" + age + ", gender=" + gender + ", mobileno="
-				+ mobileno + ", mail=" + mail + ", currentLoc=" + currentLoc + ", penalty=" + penalty + ", bookinglist="
-				+ bookinglist + ", activeBookingFlag=" + activeBookingFlag + ", userr=" + userr + "]";
 	}
 	
 	

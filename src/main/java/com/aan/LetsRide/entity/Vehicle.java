@@ -11,24 +11,25 @@ import jakarta.persistence.OneToOne;
 
 @Entity
 public class Vehicle {
-@Id
-private int id;
-private String vehilename;
-private String vehileno;
-private String type;
-private String model;
-private String capacity;
-private String currentcity;
-private String availabilityStatus="AVAILABLE";
-private double priceperKM;
-private int averagespeed;
-@JsonIgnore
-@OneToOne(cascade = CascadeType.ALL)
-@MapsId  
-@JoinColumn(name = "id")
-private Driver driver;
 
+    @Id
+    private int id;
 
+    private String vehilename;
+    private String vehileno;
+    private String type;
+    private String model;
+    private String capacity;
+    private String currentcity;
+    private String availabilityStatus = "AVAILABLE";
+    private double priceperKM;
+    private int averagespeed;
+
+    @OneToOne
+    @MapsId
+    @JoinColumn(name = "id")
+    @JsonIgnore
+    private Driver driver;
 public int getAveragespeed() {
 	return averagespeed;
 }
