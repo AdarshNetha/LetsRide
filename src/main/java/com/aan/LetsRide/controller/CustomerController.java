@@ -56,6 +56,7 @@ public class CustomerController {
             @RequestBody BookingDto bookingdto) {
         return customerService.bookVehicle(mobileno, bookingdto);
     }
+    
 
     @GetMapping("/active-booking/{mobileno}")
     public ResponseStructure<ActiveBookingDTO> seeActiveBooking(
