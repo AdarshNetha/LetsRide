@@ -18,5 +18,5 @@ public class MailService {
 		
 		javaMailSender.send(mailMessage);
 	}
-        
+                
 }
