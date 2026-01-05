@@ -128,6 +128,14 @@ public class GlobalException {
     	   return rs; 
        }
        
+       @ExceptionHandler(InvalidUser.class)
+       public ResponseStructure<String> invalidUser(InvalidUser invalidUser) {
+    	   ResponseStructure<String> rs= new ResponseStructure<String>();
+    	   rs.setStatuscode(HttpStatus.NOT_FOUND.value());
+    	   rs.setMessage(invalidUser.getMessage());
+    	   rs.setData(null);
+    	   return rs; 
+       }
        
 	
 	}

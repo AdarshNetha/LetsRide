@@ -45,7 +45,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ResponseStructure<LoginResponceDTO>> login(
+    public ResponseStructure<LoginResponceDTO> login(
             @RequestBody LoginDTO dto) {
         return loginService.login(dto);
     }
