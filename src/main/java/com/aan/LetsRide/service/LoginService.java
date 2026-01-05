@@ -40,7 +40,7 @@ public class LoginService {
 	                String.valueOf(dto.getMobileNo()),
 	                user.getRole()
 	        );
-	        
+	        token="Bearer "+token;
 	        LoginResponceDTO loginResponceDTO= new LoginResponceDTO(token, user.getRole());
 
 	        ResponseStructure<LoginResponceDTO> rs = new ResponseStructure<>();
