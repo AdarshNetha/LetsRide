@@ -14,6 +14,13 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id"
+)
 
 @Entity
 public class Booking {
@@ -24,12 +31,12 @@ public class Booking {
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
-    @JsonBackReference
+    
     private Customer cust;
 
     @ManyToOne
     @JoinColumn(name = "driver_id")
-    @JsonBackReference
+    
     private Driver driver;
 
     private String sourceLocation;
@@ -44,7 +51,7 @@ public class Booking {
     private boolean otpverified = false;
 
     @OneToOne(mappedBy = "booking", cascade = CascadeType.ALL)
-    @JsonManagedReference
+
     private Payment payment;
 
     private String bookingStatus = "BOOKED";

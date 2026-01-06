@@ -159,7 +159,7 @@ public class CustomerService {
 	    dto.setDestinationLocation(destinationLocation);
 	    dto.setDistance(distance);
 	    dto.setAvailablevehicles(vehicleDetailsList);
-
+	    System.out.println(dto);
 	    // 7. Wrap response
 	    ResponseStructure<AvailableVehicleDTO> response =
 	    

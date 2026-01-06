@@ -15,7 +15,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id"
+)
 @Entity
 public class Driver {
 
@@ -36,11 +42,11 @@ public class Driver {
     private String mail;
 
     @OneToOne(mappedBy = "driver", cascade = CascadeType.ALL)
-    @JsonIgnore
+   
     private Vehicle vehicle;
 
     @OneToMany(mappedBy = "driver", cascade = CascadeType.ALL)
-    @JsonManagedReference
+   
     private List<Booking> bookinglist = new ArrayList<>();
 
     @OneToOne
