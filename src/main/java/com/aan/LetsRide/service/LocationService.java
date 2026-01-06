@@ -1,5 +1,7 @@
 package com.aan.LetsRide.service;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,141 +17,145 @@ import tools.jackson.databind.ObjectMapper;
 
 @Service
 public class LocationService {
-	  @Autowired
-	    private ObjectMapper objectMapper;
 
-	
-		 @Autowired
-		    private RestTemplate restTemplate;
+    @Autowired
+    private ObjectMapper objectMapper;
 
-		    private final String API_KEY = "pk.80284aba0cfb865f9e909292ea859f9f";
+    @Autowired
+    private RestTemplate restTemplate;
 
-		    public String getCityFromCoordinates(double lattitude, double longitude) {
+    private final String API_KEY = "pk.80284aba0cfb865f9e909292ea859f9f";
 
-		        String url = 
-		        		"https://us1.locationiq.com/v1/reverse.php?key=" + API_KEY +
+    // --------------------------------------------------
+    // Get city from latitude & longitude
+    // --------------------------------------------------
+    public String getCityFromCoordinates(double lattitude, double longitude) {
 
-	                     "&lat=" + lattitude +
+        String url = "https://us1.locationiq.com/v1/reverse.php?key=" + API_KEY
+                + "&lat=" + lattitude
+                + "&lon=" + longitude
+                + "&format=json";
 
-	                     "&lon=" + longitude +
+        Map<String, Object> response = restTemplate.getForObject(url, Map.class);
+        Map<String, Object> address = (Map<String, Object>) response.get("address");
 
-	                     "&format=json"; 
-		        
+        return (String) address.get("city");
+    }
 
+    // --------------------------------------------------
+    // Validate city exists
+    // --------------------------------------------------
+    public boolean validatingCity(String city) {
 
-		        Map<String, Object> response = restTemplate.getForObject(url, Map.class);
-		      
-		        Map<String, Object> address = (Map<String, Object>) response.get("address");
-                   
-		        return (String) address.get("city");
-		        
-		    }
+        String url = "https://us1.locationiq.com/v1/search?key=" + API_KEY
+                + "&q=" + city + ",%20India&format=json";
 
-		    public boolean validatingCity(String city)
-		    {
-		    	
-		    	String url="https://us1.locationiq.com/v1/search?key="+API_KEY+"&q="+city+",%20India&format=json";
-		    	
-		    	ValidatingDestination[] validatingCity=restTemplate.getForObject(url, ValidatingDestination[].class);
-		    	
-		    	String apiCity=validatingCity[0].getDisplay_name();
-		    	apiCity=apiCity.substring(0, city.length());		    	
-		    	if(city.toUpperCase().equals(apiCity.toUpperCase())){
-		    		return true;
-		    	}
-		    	else
-		    	{
-		    		return false;
-		    	}
-		    }
-		    
-		    public LocationRangeDTO getFromAndToCoordinates(String source,String destinatio )
-		    {
+        ValidatingDestination[] validatingCity =
+                restTemplate.getForObject(url, ValidatingDestination[].class);
 
-		    	String sourceurl="https://us1.locationiq.com/v1/search?key="+API_KEY+"&q="+source+",%20India&format=json";
-		    	
-		    	ValidatingDestination[] sourcevalidatingCity=restTemplate.getForObject(sourceurl, ValidatingDestination[].class);
-		    	
-		    	double sourceLongutude=Double.parseDouble(sourcevalidatingCity[0].getLon());
-		    	double sourceLatudue=Double.parseDouble(sourcevalidatingCity[0].getLat());
-		    	
-		    	String url="https://us1.locationiq.com/v1/search?key="+API_KEY+"&q="+destinatio+",%20India&format=json";
-		    	
-		    	ValidatingDestination[] validatingCity=restTemplate.getForObject(url, ValidatingDestination[].class);
-		    	
-		    	double destlongute=Double.parseDouble(validatingCity[0].getLon());
-		    	double destLatudue=Double.parseDouble(validatingCity[0].getLat());
-		    	
-		    	LocationRangeDTO locationRangeDTO=new LocationRangeDTO();
-		    	
-		    	locationRangeDTO.setFromLatitude(sourceLatudue);	
-		    	locationRangeDTO.setFromLongitude(sourceLongutude);
-		    	locationRangeDTO.setToLatitude(destLatudue);
-		    	locationRangeDTO.setToLongitude(destlongute);
-		    	return locationRangeDTO;
-		    	
-		    	
-		    }
+        if (validatingCity == null || validatingCity.length == 0) {
+            return false;
+        }
 
-		    public double getDistanceInKM(String source, String destination) {
-		        try {
-		            // Get source coordinates
-		            String srcUrl = String.format(
-		                    "https://us1.locationiq.com/v1/search?key=%s&q=%s&format=json",
-		                    API_KEY, source
-		            );
-		            JsonNode srcJson = objectMapper.readTree(restTemplate.getForObject(srcUrl, String.class));
+        String apiCity = validatingCity[0].getDisplay_name()
+                .substring(0, city.length());
 
-		            if (srcJson == null || srcJson.isEmpty()) {
-		                throw new InvaildLocationException("Source location not found: " + source);
-		            }
+        return city.equalsIgnoreCase(apiCity);
+    }
 
-		            double srcLat = srcJson.get(0).get("lat").asDouble();
-		            double srcLon = srcJson.get(0).get("lon").asDouble();
+    // --------------------------------------------------
+    // Get coordinates for source & destination
+    // --------------------------------------------------
+    public LocationRangeDTO getFromAndToCoordinates(String source, String destination) {
 
-		            // Get destination coordinates
-		            String destUrl = String.format(
-		                    "https://us1.locationiq.com/v1/search?key=%s&q=%s&format=json",
-		                    API_KEY, destination
-		            );
-		            JsonNode destJson = objectMapper.readTree(restTemplate.getForObject(destUrl, String.class));
+        String sourceUrl = "https://us1.locationiq.com/v1/search?key=" + API_KEY
+                + "&q=" + source + ",%20India&format=json";
 
-		            if (destJson == null || destJson.isEmpty()) {
-		                throw new InvaildLocationException("Destination location not found: " + destination);
-		            }
+        ValidatingDestination[] sourceData =
+                restTemplate.getForObject(sourceUrl, ValidatingDestination[].class);
 
-		            double destLat = destJson.get(0).get("lat").asDouble();
-		            double destLon = destJson.get(0).get("lon").asDouble();
+        String destUrl = "https://us1.locationiq.com/v1/search?key=" + API_KEY
+                + "&q=" + destination + ",%20India&format=json";
 
-		            // Directions API (lat,lon order)
-		            String directionUrl = String.format(
-		                    "https://us1.locationiq.com/v1/directions/driving/%f,%f;%f,%f?key=%s",
-		                    srcLat, srcLon, destLat, destLon, API_KEY
-		            );
+        ValidatingDestination[] destData =
+                restTemplate.getForObject(destUrl, ValidatingDestination[].class);
 
-		            JsonNode dirJson = objectMapper.readTree(restTemplate.getForObject(directionUrl, String.class));
+        LocationRangeDTO dto = new LocationRangeDTO();
 
-		            if (dirJson == null || !dirJson.has("routes") || dirJson.get("routes").isEmpty()) {
-		                throw new RuntimeException("No route found between " + source + " and " + destination);
-		            }
+        dto.setFromLatitude(Double.parseDouble(sourceData[0].getLat()));
+        dto.setFromLongitude(Double.parseDouble(sourceData[0].getLon()));
+        dto.setToLatitude(Double.parseDouble(destData[0].getLat()));
+        dto.setToLongitude(Double.parseDouble(destData[0].getLon()));
 
-		            double distanceInMeters = dirJson.get("routes").get(0).get("distance").asDouble();
+        return dto;
+    }
 
-		            return distanceInMeters / 1000; // convert meters → km
+    // --------------------------------------------------
+    // ROAD DISTANCE (CORRECT & FIXED)
+    // --------------------------------------------------
+    public double getDistanceInKM(String source, String destination) {
 
-		        } catch (InvaildLocationException e) {
-		            throw e; // propagate invalid location exception
-		        } catch (Exception e) {
-		            e.printStackTrace(); // log full exception
-		            throw new RuntimeException("Error fetching distance from LocationIQ: " + e.getMessage(), e);
-		        }
-		    }
+        try {
+            // Encode city names
+            source = URLEncoder.encode(source + ", India", StandardCharsets.UTF_8);
+            destination = URLEncoder.encode(destination + ", India", StandardCharsets.UTF_8);
 
+            // ---------- SOURCE ----------
+            String srcUrl = String.format(
+                    "https://us1.locationiq.com/v1/search?key=%s&q=%s&format=json",
+                    API_KEY, source
+            );
 
-			        
-			
-	}    
-	
-	
+            JsonNode srcJson = objectMapper.readTree(
+                    restTemplate.getForObject(srcUrl, String.class)
+            );
 
+            if (srcJson == null || srcJson.isEmpty()) {
+                throw new InvaildLocationException("Source location not found");
+            }
+
+            double srcLat = srcJson.get(0).get("lat").asDouble();
+            double srcLon = srcJson.get(0).get("lon").asDouble();
+
+            // ---------- DESTINATION ----------
+            String destUrl = String.format(
+                    "https://us1.locationiq.com/v1/search?key=%s&q=%s&format=json",
+                    API_KEY, destination
+            );
+
+            JsonNode destJson = objectMapper.readTree(
+                    restTemplate.getForObject(destUrl, String.class)
+            );
+
+            if (destJson == null || destJson.isEmpty()) {
+                throw new InvaildLocationException("Destination location not found");
+            }
+
+            double destLat = destJson.get(0).get("lat").asDouble();
+            double destLon = destJson.get(0).get("lon").asDouble();
+
+            // 🚨 IMPORTANT: Directions API expects (lon,lat)
+            String directionUrl = String.format(
+                    "https://us1.locationiq.com/v1/directions/driving/%f,%f;%f,%f?key=%s&overview=false",
+                    srcLon, srcLat, destLon, destLat, API_KEY
+            );
+
+            JsonNode dirJson = objectMapper.readTree(
+                    restTemplate.getForObject(directionUrl, String.class)
+            );
+
+            if (!dirJson.has("code") || !"Ok".equals(dirJson.get("code").asText())) {
+                throw new RuntimeException("No route found");
+            }
+
+            double distanceMeters =
+                    dirJson.get("routes").get(0).get("distance").asDouble();
+
+            return distanceMeters / 1000; // meters → KM
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error calculating road distance", e);
+        }
+    }
+}
 
