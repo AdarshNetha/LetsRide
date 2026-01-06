@@ -341,6 +341,26 @@ public class CustomerService {
 //	      rs.setData(customer);
 //	      return rs;
 //       } 
+
+	 public ResponseStructure<Customer> updateCustomer(double latitude, double longitude, long mobileNo) {
+		
+		 
+		 Customer customer = customerRepo.findByMobileno(mobileNo);
+		 if(customer==null) {
+			 throw new CustomerNotFoundWithMobile("Customer not found with mobile number: " + mobileNo);
+		 }
+		  String city=locationService.getCityFromCoordinates(latitude, longitude);
+		  customer.setCurrentLoc(city);
+		   customerRepo.save(customer);
+		   ResponseStructure<Customer> rs = new ResponseStructure<>();
+		    rs.setStatuscode(HttpStatus.ACCEPTED.value());
+		    rs.setMessage("Customer location updated successfully");
+		    rs.setData(customer);
+
+		    return rs;
+		 
+		
+	 }
 	 
 
 }
