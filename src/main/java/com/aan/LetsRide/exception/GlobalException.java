@@ -102,7 +102,24 @@ public class GlobalException {
     	   rs.setData(null);
     	   return rs;
        }
-	
+       @ExceptionHandler(AlradyHasBooking.class)
+       public ResponseStructure<String> alradyHasBooking(AlradyHasBooking alradyHasBooking) {
+    	   ResponseStructure<String> rs= new ResponseStructure<String>();
+    	   rs.setStatuscode(HttpStatus.NOT_FOUND.value());
+    	   rs.setMessage(alradyHasBooking.getMessage());
+    	   rs.setData(null);
+    	   return rs; 
+       }
+       
+       @ExceptionHandler(VechileNotAvailable.class)
+       public ResponseStructure<String> vechileNotAvailable(VechileNotAvailable vechileNotAvailable) {
+    	   ResponseStructure<String> rs= new ResponseStructure<String>();
+    	   rs.setStatuscode(HttpStatus.NOT_FOUND.value());
+    	   rs.setMessage(vechileNotAvailable.getMessage());
+    	   rs.setData(null);
+    	   return rs; 
+       }
+       
 	
 	}
 

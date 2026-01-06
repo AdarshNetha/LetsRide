@@ -22,6 +22,7 @@ import com.aan.LetsRide.entity.Customer;
 import com.aan.LetsRide.entity.Driver;
 import com.aan.LetsRide.entity.Userr;
 import com.aan.LetsRide.entity.Vehicle;
+import com.aan.LetsRide.exception.AlradyHasBooking;
 import com.aan.LetsRide.exception.BookingNotFoungWithThisID;
 import com.aan.LetsRide.exception.CustomerNotFoundWithMobile;
 import com.aan.LetsRide.exception.CustomerNotFoundWithThisID;
@@ -190,11 +191,20 @@ public class CustomerService {
 	
 	public ResponseStructure<Booking> bookVehicle(Long mobno, BookingDto bookingdto) {
 		Customer customer=customerRepo.findByMobileno(mobno);
+		if(customer.isActiveBookingFlag()==true)
+		{
+			throw new AlradyHasBooking("you have Active booking");
+		}
 		
-		Vehicle vehicle=vehiclerepo.findById(bookingdto.getVehicleid()).orElseThrow(() -> new RuntimeException("Vehicle not found for id: " + bookingdto.getVehicleid())); 
-		
+		Vehicle vehicle=vehiclerepo.findById(bookingdto.getVehicleid()).orElseThrow(() -> new RuntimeException("Vehicle not found for id: " + bookingdto.getVehicleid()));
+		if(vehicle.getAvailabilityStatus().equals("BOOKED"))
+		{
+			throw new RuntimeException("Vehicle not found for id: " + bookingdto.getVehicleid());
+		}
+		customer.setActiveBookingFlag(true);
 		 Booking booking = new Booking();
 		 booking .setCust(customer);
+		 
 		 booking.setDriver(vehicle.getDriver());
 		 booking.setSourceLocation(bookingdto.getSourceLocation());
 		 booking.setDestinationLocation(bookingdto.getDestinationLocation());
@@ -202,7 +212,7 @@ public class CustomerService {
 		 booking.setEstimationTravelTime(bookingdto.getEstimationTravelTime());
 		 booking.setDistanceTravelled(bookingdto.getDistanceTravelled());
 		 booking.setBookingDate(LocalDateTime.now());
-		 vehicle.setAvailabilityStatus("booked");
+		 vehicle.setAvailabilityStatus("BOOKED");
 		 int otp=generateOtp();
 	      booking.setOtp(otp);
 
@@ -230,6 +240,7 @@ public class CustomerService {
 		 mailService.sendMail(customer.getMail(),"Booking Detials","Dear "+confBooking.getCust().getName()+", /n Thankyou for choosing LetsRideyou. /n  You have booked a vechile /n from"+confBooking.getSourceLocation()+"/n to"+confBooking.getDestinationLocation()+"/n on date:"+confBooking.getBookingDate()+"/n Booking id:" +confBooking.getId()+"/n Diver Name"+confBooking.getDriver().getName()+"/n Driver phoneNo :"+confBooking.getDriver().getMobileNo()+"/n Vehicle No :"+confBooking.getDriver().getVehicle().getVehileno()+"/n Fair :"+confBooking.getFare()+"/n Distance  :"+confBooking.getDistanceTravelled());
 		 mailService.sendMail(driver.getMail(), "Booking Detials", "Dear"+confBooking.getDriver().getName()+"/n You have a booking on  "+confBooking.getBookingDate()+"/n You have booked a vehicle /n from"+confBooking.getSourceLocation()+"/n to"+confBooking.getDestinationLocation()+"/n Booking id "+confBooking.getId()+"/n Customer name :"+confBooking.getCust().getName()+"/n Custmoer MobileNo :"+confBooking.getCust().getMobileno()+"/n Distance"+confBooking.getDistanceTravelled()+"/n Fair :"+confBooking.getFare());
 		 return rs;
+		 
 		 		
 		
 	}
@@ -287,7 +298,7 @@ public class CustomerService {
 			 List<RideDTO> rideDTOs=new ArrayList<RideDTO>();
 			 double total=0;
 			 for(Booking b : bList) {
-				RideDTO rideDTO=new RideDTO(b.getSourceLocation(), b.getDestinationLocation(), b.getDistanceTravelled(), b.getFare());
+				RideDTO rideDTO=new RideDTO(b.getId(), b.getSourceLocation(), b.getDestinationLocation(), b.getDistanceTravelled(), b.getFare());
 				total+=b.getFare();
 				rideDTOs.add(rideDTO);			
 			}
@@ -306,7 +317,7 @@ public class CustomerService {
 		    double bookingFare = booking.getFare();
 		    double penaltyAmount = bookingFare * 0.10;
 			customer.setPenalty(customer.getPenalty()+penaltyAmount);
-			
+			customer.setActiveBookingFlag(false);
 			booking.setCancellationstatus("Cancelled by customer");
 			booking.setBookingStatus("CANCLED BY CUSTOMER");
 			customerRepo.save(customer);
@@ -317,19 +328,19 @@ public class CustomerService {
 			rs.setData(customer);
 			return rs;
 		}
-	 public ResponseStructure<Customer> SendotpToTheCustomer(int bookingid) {
-	       Booking booking=bookingrepo.findById(bookingid).orElseThrow();
-	      int otp=generateOtp();
-	      booking.setOtp(otp);
-	      bookingrepo.save(booking);
-	      Customer customer=booking.getCust();
-	      mailService.sendMail(customer.getMail(),"subject","content"+otp);
-	      ResponseStructure<Customer> rs=new ResponseStructure<Customer>();
-	      rs.setStatuscode(HttpStatus.ACCEPTED.value());
-	      rs.setMessage("otp is send success fully");
-	      rs.setData(customer);
-	      return rs;
-       } 
+//	 public ResponseStructure<Customer> SendotpToTheCustomer(int bookingid) {
+//	       Booking booking=bookingrepo.findById(bookingid).orElseThrow();
+//	      int otp=generateOtp();
+//	      booking.setOtp(otp);
+//	      bookingrepo.save(booking);
+//	      Customer customer=booking.getCust();
+//	      mailService.sendMail(customer.getMail(),"subject","content"+otp);
+//	      ResponseStructure<Customer> rs=new ResponseStructure<Customer>();
+//	      rs.setStatuscode(HttpStatus.ACCEPTED.value());
+//	      rs.setMessage("otp is send success fully");
+//	      rs.setData(customer);
+//	      return rs;
+//       } 
 	 
 
 }
