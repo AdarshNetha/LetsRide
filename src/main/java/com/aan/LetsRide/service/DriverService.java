@@ -35,6 +35,7 @@ import com.aan.LetsRide.exception.CustomeralreayExists;
 import com.aan.LetsRide.exception.DriverNOtFoundWiththismobileNO;
 import com.aan.LetsRide.exception.DriveralreayExists;
 import com.aan.LetsRide.exception.InvalidDestinationLocationException;
+import com.aan.LetsRide.exception.InvalidOTPException;
 import com.aan.LetsRide.exception.VehiclesareNotavilabletoDestinationLocation;
 import com.aan.LetsRide.repository.BookingRepo;
 import com.aan.LetsRide.repository.CustomerRepo;
@@ -278,8 +279,8 @@ public class DriverService {
 				return qr;
 			}
 		
-			public void ConfirmPaymentbyQR(int id, String paymentType) {
-				confirmPayment(id,paymentType);
+			public ResponseStructure<Payment> ConfirmPaymentbyQR(int id, String paymentType) {
+				return confirmPayment(id,paymentType);
 			
 			}
 		
@@ -385,7 +386,7 @@ public ResponseStructure<Booking> cancellationBookingByDriver(int driverId, int 
 			Booking booking=bookingrepo.findById(bookingid).orElseThrow();
 			
 		    if (booking.getOtp() != otp) {
-		        throw new RuntimeException("Invalid OTP");
+		        throw new InvalidOTPException("Invalid OTP");
 		    }
 		    
 		    booking.setOtpverified(true);

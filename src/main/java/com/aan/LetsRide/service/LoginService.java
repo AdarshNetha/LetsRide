@@ -11,6 +11,7 @@ import com.aan.LetsRide.DTO.LoginDTO;
 import com.aan.LetsRide.DTO.LoginResponceDTO;
 import com.aan.LetsRide.Security.JwtUtils;
 import com.aan.LetsRide.entity.Userr;
+import com.aan.LetsRide.exception.InvalidUser;
 import com.aan.LetsRide.repository.Userrepo;
 
 @Service
@@ -22,7 +23,7 @@ public class LoginService {
 	 @Autowired
 	private Userrepo userrRepository;
 	
-	 public ResponseEntity<ResponseStructure<LoginResponceDTO>> login(LoginDTO dto) {
+	 public ResponseStructure<LoginResponceDTO> login(LoginDTO dto) {
 
 	        // Authenticate using Spring Security
 	        authenticationManager.authenticate(
@@ -32,7 +33,8 @@ public class LoginService {
 	        Userr user = userrRepository.findByMobileno(dto.getMobileNo());
 	        
 	               if(user==null) { 
-	            	   throw new RuntimeException("User not found");
+	            	   System.out.println("onvalid");
+	            	   throw new InvalidUser("User not found");
 	            	   }
 
 	        // Generate JWT
@@ -40,7 +42,7 @@ public class LoginService {
 	                String.valueOf(dto.getMobileNo()),
 	                user.getRole()
 	        );
-	        
+	        token="Bearer "+token;
 	        LoginResponceDTO loginResponceDTO= new LoginResponceDTO(token, user.getRole());
 
 	        ResponseStructure<LoginResponceDTO> rs = new ResponseStructure<>();
@@ -48,7 +50,7 @@ public class LoginService {
 	        rs.setMessage("Login successful");
 	        rs.setData(loginResponceDTO);
 
-	        return ResponseEntity.ok(rs);
+	        return rs;
 	    }
 
 }

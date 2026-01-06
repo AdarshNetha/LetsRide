@@ -71,10 +71,10 @@ public class DriverController {
 
     //  Pay by QR
     @PostMapping("/payment/qr")
-    public void paymentByQr(
+    public ResponseStructure<Payment> paymentByQr(
             @RequestParam int bookingId,
             @RequestParam String paymentType) {
-        driverService.ConfirmPaymentbyQR(bookingId, paymentType);
+        return driverService.ConfirmPaymentbyQR(bookingId, paymentType);
     }
 
     //  Pay by cash
