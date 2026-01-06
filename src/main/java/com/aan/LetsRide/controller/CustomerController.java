@@ -21,6 +21,7 @@ import com.aan.LetsRide.DTO.BookingHistoryDto;
 import com.aan.LetsRide.DTO.CustomerDTO;
 import com.aan.LetsRide.entity.Booking;
 import com.aan.LetsRide.entity.Customer;
+import com.aan.LetsRide.entity.Driver;
 import com.aan.LetsRide.entity.Payment;
 import com.aan.LetsRide.service.CustomerService;
 import com.aan.LetsRide.service.DriverService;
@@ -83,4 +84,15 @@ public class CustomerController {
 //    public ResponseStructure<Customer> pickup(@RequestParam int bookingid) {
 //        return customerService.SendotpToTheCustomer(bookingid);
 //    }
+    
+    @PutMapping("/location")
+    public ResponseStructure<Customer> updateLocation(
+            @RequestParam double latitude,
+            @RequestParam double longitude,
+            @RequestParam long mobileNo) {
+
+        return customerService.updateCustomer(latitude, longitude, mobileNo);
+    }
+
+    
 }
