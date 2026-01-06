@@ -1,15 +1,20 @@
 
 package com.aan.LetsRide.entity;
 
-import jakarta.persistence.Column;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 
-
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id"
+)
 @Entity
 public class Userr {
 

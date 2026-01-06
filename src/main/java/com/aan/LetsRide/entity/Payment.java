@@ -14,7 +14,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id"
+)
 @Entity
 public class Payment {
 
@@ -23,16 +29,14 @@ public class Payment {
     private int paymentid;
 
     @ManyToOne
-    @JsonIgnore
+  
     private Customer customer;
 
     @ManyToOne
-    @JsonIgnore
     private Vehicle vehicle;
 
     @OneToOne
     @JoinColumn(name = "booking_id")
-    @JsonBackReference
     private Booking booking;
 
     private double amount;
