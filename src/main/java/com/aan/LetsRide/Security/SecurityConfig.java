@@ -35,15 +35,8 @@ public class SecurityConfig {
 
         http
 
-            
-
             .cors(cors -> cors.configurationSource(corsConfigurationSource())) // <-- enable CORS
-<<<<<<< HEAD
 
-=======
-            
-            
->>>>>>> c4f5550a4d237b96ce5088cdeb8ed47a35de09e2
             .csrf(csrf -> csrf.disable())
             .sessionManagement(session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
