@@ -1,5 +1,6 @@
 package com.aan.LetsRide.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
@@ -28,7 +29,7 @@ public class Vehicle {
     @OneToOne
     @MapsId
     @JoinColumn(name = "id")
-    @JsonIgnore
+    @JsonBackReference
     private Driver driver;
 public int getAveragespeed() {
 	return averagespeed;
