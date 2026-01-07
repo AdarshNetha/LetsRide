@@ -320,6 +320,9 @@ public class CustomerService {
 			customer.setActiveBookingFlag(false);
 			booking.setCancellationstatus("Cancelled by customer");
 			booking.setBookingStatus("CANCLED BY CUSTOMER");
+			Vehicle vehicle  =booking.getDriver().getVehicle();
+			vehicle.setAvailabilityStatus("AVAILABLE");
+			vehiclerepo.save(vehicle);
 			customerRepo.save(customer);
 			bookingrepo.save(booking);
 			ResponseStructure<Customer> rs=new ResponseStructure<Customer>();

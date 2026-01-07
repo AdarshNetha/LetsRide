@@ -148,18 +148,30 @@ public class DriverService {
 	    
 
 
-		public ResponseStructure<Driver> updateDriver(
-		        double latitude, double longitude, Long mobileNumber) {
+//		public ResponseStructure<Driver> updateDriver(double lattitude, double longitude, Long mobilenumber) {
+//		      Driver d = driverrepo.findByMobileNo(mobilenumber);
+//		      
+//		      String city = locationService.getCityFromCoordinates(lattitude, longitude);
+//		      Vehicle v = d.getVehicle();
+//		      v.setCurrentcity(city);
+//		      d.setVehicle(v);
+//		       driverrepo.save(d);
+//		      ResponseStructure<Driver> Rs = new ResponseStructure<>();
+//		      Rs.setStatuscode(HttpStatus.ACCEPTED.value());
+//		      Rs.setMessage("Location updated");
+//		      Rs.setData(d);
+//		      return Rs;
+//		   }
 
-		    Driver d = driverrepo.findByMobileNo(mobileNumber);
-
-		    if (d == null) {
-		        throw new RuntimeException("Driver not found with mobile: " + mobileNumber);
+	 
+		public ResponseStructure<Driver> updateDriver(double latitude, double longitude, Long mobileNumber) {
+            Driver d = driverrepo.findByMobileNo(mobileNumber);
+            if (d == null) {
+		        throw new DriverNOtFoundWiththismobileNO("Driver not found with mobile: " + mobileNumber);
 		    }
 
 		    String city = locationService.getCityFromCoordinates(latitude, longitude);
-
-		    Vehicle v = d.getVehicle();
+             Vehicle v = d.getVehicle();
 
 		    // 🔥 FIX: handle null vehicle
 		    if (v == null) {
@@ -169,18 +181,13 @@ public class DriverService {
 		    }
 
 		    v.setCurrentcity(city);
-
-		    driverrepo.save(d); // Cascade will save vehicle
-
-		    ResponseStructure<Driver> rs = new ResponseStructure<>();
+            driverrepo.save(d); // Cascade will save vehicle
+            ResponseStructure<Driver> rs = new ResponseStructure<>();
 		    rs.setStatuscode(HttpStatus.OK.value());
 		    rs.setMessage("Location updated successfully");
 		    rs.setData(d);
-
-		    return rs;
+            return rs;
 		}
-
-	 
 
 
 
@@ -372,17 +379,26 @@ public ResponseStructure<Booking> cancellationBookingByDriver(int driverId, int 
 		 }
 	 }
 		 Driver d=driverrepo.findById(driverId).get();
+		 Vehicle v=d.getVehicle();
 		 if(consecutiveCancelCount >=4) {
-			 d.setStatus("BOOKED");
-			 book.setBookingStatus("Cancelled");
+			 v.setAvailabilityStatus("BOOKED");
+			 book.setBookingStatus("BOOKED");
 		 }else if(consecutiveCancelCount <4){
+			 v.setAvailabilityStatus("AVAILABLE");
 			 book.setBookingStatus("Cancelled");
+			 mailService.sendMail(book.getCust().getMail(),"Cancellation","Driver cancelled the booking");
+			 mailService.sendMail(d.getMail(),"Cancellation","Driver cancelled the booking");
 		 }
+		 vehiclerepo.save(v);
 		 bookingrepo.save(book);
 		 driverrepo.save(d);
+		 
 		 ResponseStructure<Booking> response= new ResponseStructure<>();
 		 response.setStatuscode(HttpStatus.OK.value());
 		 response.setData(booking);
+		
+		 
+		 
          return response;
 		 
 		 
@@ -442,7 +458,7 @@ public ResponseStructure<Booking> cancellationBookingByDriver(int driverId, int 
 					if(booking.getBookingStatus().equals("BOOKED"))
 					{
 						
-						ActiveDriverBookingDto activeDriverBookingDto=new ActiveDriverBookingDto(booking.getId(), booking.getCust().getName(), booking.getCust().getMobileno(), booking.getSourceLocation(), booking.getDestinationLocation(), booking.getDistanceTravelled(), booking.getFare());
+						ActiveDriverBookingDto activeDriverBookingDto=new ActiveDriverBookingDto(booking.getId(), booking.getCust().getName(), booking.getCust().getMobileno(), booking.getSourceLocation(), booking.getDestinationLocation(), booking.getDistanceTravelled(), booking.getFare(), booking.getBookingStatus());
 						
 //						activebooking.setBooking(booking);
 						activebooking1.setStatuscode(HttpStatus.ACCEPTED.value());
