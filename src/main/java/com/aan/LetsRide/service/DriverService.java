@@ -148,20 +148,37 @@ public class DriverService {
 	    
 
 
-		public ResponseStructure<Driver> updateDriver(double lattitude, double longitude, Long mobilenumber) {
-		      Driver d = driverrepo.findByMobileNo(mobilenumber);
-		      
-		      String city = locationService.getCityFromCoordinates(lattitude, longitude);
-		      Vehicle v = d.getVehicle();
-		      v.setCurrentcity(city);
-		      d.setVehicle(v);
-		       driverrepo.save(d);
-		      ResponseStructure<Driver> Rs = new ResponseStructure<>();
-		      Rs.setStatuscode(HttpStatus.ACCEPTED.value());
-		      Rs.setMessage("Location updated");
-		      Rs.setData(d);
-		      return Rs;
-		   }
+		public ResponseStructure<Driver> updateDriver(
+		        double latitude, double longitude, Long mobileNumber) {
+
+		    Driver d = driverrepo.findByMobileNo(mobileNumber);
+
+		    if (d == null) {
+		        throw new RuntimeException("Driver not found with mobile: " + mobileNumber);
+		    }
+
+		    String city = locationService.getCityFromCoordinates(latitude, longitude);
+
+		    Vehicle v = d.getVehicle();
+
+		    // 🔥 FIX: handle null vehicle
+		    if (v == null) {
+		        v = new Vehicle();
+		        v.setDriver(d);      // important for mapping
+		        d.setVehicle(v);
+		    }
+
+		    v.setCurrentcity(city);
+
+		    driverrepo.save(d); // Cascade will save vehicle
+
+		    ResponseStructure<Driver> rs = new ResponseStructure<>();
+		    rs.setStatuscode(HttpStatus.OK.value());
+		    rs.setMessage("Location updated successfully");
+		    rs.setData(d);
+
+		    return rs;
+		}
 
 	 
 
