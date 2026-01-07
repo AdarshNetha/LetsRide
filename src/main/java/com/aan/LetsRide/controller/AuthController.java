@@ -2,10 +2,11 @@ package com.aan.LetsRide.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+
 import org.springframework.web.bind.annotation.RestController;
 
 import com.aan.LetsRide.ResponseStructure;
@@ -21,16 +22,19 @@ import com.aan.LetsRide.service.LoginService;
 
 @RestController
 @RequestMapping("/auth")
+@CrossOrigin(origins = "*")
 public class AuthController {
 
     @Autowired
     private DriverService driverService;
 
     @Autowired
-    private LoginService loginService;
+    private LoginService loginService; 
     
     @Autowired
     private CustomerService customerService;
+    
+    
 
     @PostMapping("/register/customer")
     public ResponseStructure<Customer> registerCustomer(

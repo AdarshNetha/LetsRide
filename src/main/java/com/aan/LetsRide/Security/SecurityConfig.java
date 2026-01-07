@@ -1,7 +1,10 @@
 package com.aan.LetsRide.Security;
 
+import java.util.List;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,7 +17,9 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+
 import java.util.List;
+
 
 @Configuration
 public class SecurityConfig {
@@ -29,14 +34,15 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
+
             .cors(cors -> cors.configurationSource(corsConfigurationSource())) // <-- enable CORS
-            
-            
+
             .csrf(csrf -> csrf.disable())
             .sessionManagement(session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
             .authorizeHttpRequests(auth -> auth
+               
                 .requestMatchers("/auth/**").permitAll()
                 .requestMatchers("/customer/**").hasRole("CUSTOMER")
                 .requestMatchers("/driver/**").hasRole("DRIVER")
@@ -46,6 +52,9 @@ public class SecurityConfig {
 
         return http.build();
     }
+
+    
+
 
     // 🔹 Global CORS configuration for frontend
     @Bean
@@ -69,7 +78,17 @@ public class SecurityConfig {
         return source;
     }
 
-    @Bean
+
+   
+
+
+   
+
+
+    
+   
+
+	@Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
