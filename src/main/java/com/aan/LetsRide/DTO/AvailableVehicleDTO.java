@@ -5,21 +5,24 @@ import java.util.List;
 import com.aan.LetsRide.entity.Customer;
 
 public class AvailableVehicleDTO {
-private Customer c;
+private int cid;
+
 private double distance;
 private String sourceLocation;
 private String destinationLocation;
 private List<Vehicledetails> availablevehicles;
-public Customer getC() {
-	return c;
+public int getCid() {
+	return cid;
 }
-public void setC(Customer c) {
-	this.c = c;
+public void setCid(int cid) {
+	this.cid = cid;
 }
 public double getDistance() {
 	return distance;
 }
-
+public void setDistance(double distance) {
+	this.distance = distance;
+}
 public String getSourceLocation() {
 	return sourceLocation;
 }
@@ -38,34 +41,18 @@ public List<Vehicledetails> getAvailablevehicles() {
 public void setAvailablevehicles(List<Vehicledetails> availablevehicles) {
 	this.availablevehicles = availablevehicles;
 }
-
-public void setDistance(double distance) {
-	this.distance = distance;
-}
-public AvailableVehicleDTO() {
-	super();
-
-	
-	
-}
-
-
-
-
-
-public AvailableVehicleDTO(Customer c, double distance, String sourceLocation, String destinationLocation,
+public AvailableVehicleDTO(int cid, double distance, String sourceLocation, String destinationLocation,
 		List<Vehicledetails> availablevehicles) {
 	super();
-	this.c = c;
+	this.cid = cid;
 	this.distance = distance;
 	this.sourceLocation = sourceLocation;
 	this.destinationLocation = destinationLocation;
 	this.availablevehicles = availablevehicles;
 }
-@Override
-public String toString() {
-	return "AvailableVehicleDTO [c=" + c + ", distance=" + distance + ", sourceLocation=" + sourceLocation
-			+ ", destinationLocation=" + destinationLocation + ", availablevehicles=" + availablevehicles + "]";
+public AvailableVehicleDTO() {
+	super();
+	// TODO Auto-generated constructor stub
 }
 
 
