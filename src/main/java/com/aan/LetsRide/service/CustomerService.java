@@ -154,7 +154,7 @@ public class CustomerService {
 
 	    // 6. Prepare DTO
 	    AvailableVehicleDTO dto = new AvailableVehicleDTO();
-	    dto.setC(customer);
+	    dto.setCid(customer.getId());
 	    dto.setSourceLocation(sourceLocation);
 	    dto.setDestinationLocation(destinationLocation);
 	    dto.setDistance(distance);
