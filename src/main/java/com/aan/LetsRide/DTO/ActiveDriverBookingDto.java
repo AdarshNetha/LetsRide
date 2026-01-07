@@ -8,6 +8,7 @@ public class ActiveDriverBookingDto {
 	private String destination;
 	private double distance;
 	private double cost;
+	private String bookingstatus;
 	public int getBookingid() {
 		return bookingid;
 	}
@@ -50,8 +51,14 @@ public class ActiveDriverBookingDto {
 	public void setCost(double cost) {
 		this.cost = cost;
 	}
+	public String getBookingstatus() {
+		return bookingstatus;
+	}
+	public void setBookingstatus(String bookingstatus) {
+		this.bookingstatus = bookingstatus;
+	}
 	public ActiveDriverBookingDto(int bookingid, String customerName, long mobileNo, String source, String destination,
-			double distance, double cost) {
+			double distance, double cost, String bookingstatus) {
 		super();
 		this.bookingid = bookingid;
 		this.customerName = customerName;
@@ -60,6 +67,7 @@ public class ActiveDriverBookingDto {
 		this.destination = destination;
 		this.distance = distance;
 		this.cost = cost;
+		this.bookingstatus = bookingstatus;
 	}
 	public ActiveDriverBookingDto() {
 		super();
@@ -69,10 +77,8 @@ public class ActiveDriverBookingDto {
 	public String toString() {
 		return "ActiveDriverBookingDto [bookingid=" + bookingid + ", customerName=" + customerName + ", mobileNo="
 				+ mobileNo + ", source=" + source + ", destination=" + destination + ", distance=" + distance
-				+ ", cost=" + cost + "]";
+				+ ", cost=" + cost + ", bookingstatus=" + bookingstatus + "]";
 	}
-	
-	
 	
 
 }
