@@ -455,7 +455,7 @@ public ResponseStructure<Booking> cancellationBookingByDriver(int driverId, int 
 				
 				ResponseStructure<ActiveDriverBookingDto> activebooking1=new ResponseStructure<ActiveDriverBookingDto>();
 				for (Booking booking : bookinglist) {
-					if(booking.getBookingStatus().equals("BOOKED"))
+					if(booking.getBookingStatus().equals("on Going"))
 					{
 						
 						ActiveDriverBookingDto activeDriverBookingDto=new ActiveDriverBookingDto(booking.getId(), booking.getCust().getName(), booking.getCust().getMobileno(), booking.getSourceLocation(), booking.getDestinationLocation(), booking.getDistanceTravelled(), booking.getFare(), booking.getBookingStatus());
