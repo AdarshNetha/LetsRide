@@ -1,6 +1,7 @@
 package com.aan.LetsRide.entity;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.Entity;
@@ -8,10 +9,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
-@JsonIdentityInfo(
-		 generator = ObjectIdGenerators.PropertyGenerator.class,
-		 property = "id"
-		)
 
 @Entity
 public class Vehicle {
@@ -32,6 +29,7 @@ public class Vehicle {
     @OneToOne
     @MapsId
     @JoinColumn(name = "id")
+    @JsonIgnore
     private Driver driver;
 public int getAveragespeed() {
 	return averagespeed;

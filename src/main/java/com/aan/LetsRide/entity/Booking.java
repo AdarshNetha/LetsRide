@@ -17,10 +17,7 @@ import jakarta.persistence.OneToOne;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id"
-)
+
 
 @Entity
 public class Booking {
@@ -175,6 +172,14 @@ public class Booking {
 		this.otpverified = otpverified;
 		this.payment = payment;
 		this.bookingStatus = bookingStatus;
+	}
+	@Override
+	public String toString() {
+		return "Booking [id=" + id + ", sourceLocation=" + sourceLocation + ", destinationLocation="
+				+ destinationLocation + ", distanceTravelled=" + distanceTravelled + ", fare=" + fare
+				+ ", estimationTravelTime=" + estimationTravelTime + ", bookingDate=" + bookingDate
+				+ ", cancellationstatus=" + cancellationstatus + ", paymentStatus=" + paymentStatus + ", otp=" + otp
+				+ ", otpverified=" + otpverified + ", bookingStatus=" + bookingStatus + "]";
 	}
 
 	
