@@ -232,6 +232,7 @@ public class CustomerService {
 		 driverookinglist.add(booking);
 		 driver.setBookinglist(driverookinglist);
 		 driverrepo.save(driver);
+		 vehiclerepo.save(vehicle);
 		
 		 ResponseStructure<Booking> rs= new ResponseStructure<Booking>();
 		 rs.setMessage("booking succesfullay");
@@ -319,7 +320,7 @@ public class CustomerService {
 			customer.setPenalty(customer.getPenalty()+penaltyAmount);
 			customer.setActiveBookingFlag(false);
 			booking.setCancellationstatus("Cancelled by customer");
-			booking.setBookingStatus("CANCLED BY CUSTOMER");
+			booking.setBookingStatus("CANCELLED");
 			Vehicle vehicle  =booking.getDriver().getVehicle();
 			vehicle.setAvailabilityStatus("AVAILABLE");
 			vehiclerepo.save(vehicle);

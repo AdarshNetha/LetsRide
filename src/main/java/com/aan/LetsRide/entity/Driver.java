@@ -39,7 +39,7 @@ public class Driver {
     private String mail;
 
     @OneToOne(mappedBy = "driver", cascade = CascadeType.ALL)
-    @JsonIgnore
+//    @JsonIgnore
     private Vehicle vehicle;
 
     @OneToMany(mappedBy = "driver", cascade = CascadeType.ALL)
