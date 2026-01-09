@@ -173,6 +173,14 @@ public class Booking {
 		this.payment = payment;
 		this.bookingStatus = bookingStatus;
 	}
+	@Override
+	public String toString() {
+		return "Booking [id=" + id + ", sourceLocation=" + sourceLocation + ", destinationLocation="
+				+ destinationLocation + ", distanceTravelled=" + distanceTravelled + ", fare=" + fare
+				+ ", estimationTravelTime=" + estimationTravelTime + ", bookingDate=" + bookingDate
+				+ ", cancellationstatus=" + cancellationstatus + ", paymentStatus=" + paymentStatus + ", otp=" + otp
+				+ ", otpverified=" + otpverified + ", bookingStatus=" + bookingStatus + "]";
+	}
 
 	
 	

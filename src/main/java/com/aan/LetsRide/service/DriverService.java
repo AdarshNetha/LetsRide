@@ -386,6 +386,10 @@ public ResponseStructure<Booking> cancellationBookingByDriver(int driverId, int 
 		 }else if(consecutiveCancelCount <4){
 			 v.setAvailabilityStatus("AVAILABLE");
 			 book.setBookingStatus("Cancelled");
+			 book.setCancellationstatus("Cancelled By Driver");
+			 Customer customer=book.getCust();
+			 customer.setActiveBookingFlag(false);
+			 customerRepo.save(customer);
 			 mailService.sendMail(book.getCust().getMail(),"Cancellation","Driver cancelled the booking");
 			 mailService.sendMail(d.getMail(),"Cancellation","Driver cancelled the booking");
 		 }
@@ -452,10 +456,9 @@ public ResponseStructure<Booking> cancellationBookingByDriver(int driverId, int 
 				
 				List<Booking> bookinglist=new ArrayList<Booking>();
 				bookinglist=driver.getBookinglist();
-				
 				ResponseStructure<ActiveDriverBookingDto> activebooking1=new ResponseStructure<ActiveDriverBookingDto>();
 				for (Booking booking : bookinglist) {
-					if(booking.getBookingStatus().equals("BOOKED"))
+					if("BOOKED".equals(booking.getBookingStatus())||"on Going".equals(booking.getBookingStatus()))
 					{
 						
 						ActiveDriverBookingDto activeDriverBookingDto=new ActiveDriverBookingDto(booking.getId(), booking.getCust().getName(), booking.getCust().getMobileno(), booking.getSourceLocation(), booking.getDestinationLocation(), booking.getDistanceTravelled(), booking.getFare(), booking.getBookingStatus());
@@ -464,18 +467,12 @@ public ResponseStructure<Booking> cancellationBookingByDriver(int driverId, int 
 						activebooking1.setStatuscode(HttpStatus.ACCEPTED.value());
 						activebooking1.setMessage("Active Booking");
 						activebooking1.setData(activeDriverBookingDto);
-					}
-					else {
-						
-						activebooking1.setStatuscode(HttpStatus.ACCEPTED.value());
-						activebooking1.setMessage("Active Booking");
-						activebooking1.setData(null);
-						
-						
-						
+						return activebooking1;
 					}
 				}
-				
+						activebooking1.setStatuscode(HttpStatus.ACCEPTED.value());
+						activebooking1.setMessage("NO Active Booking");
+						activebooking1.setData(null);
 				
 				return activebooking1;
 		
