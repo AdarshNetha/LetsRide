@@ -24,7 +24,7 @@ public class LocationService {
     @Autowired
     private RestTemplate restTemplate;
 
-    private final String API_KEY = "pk.cdbf144c3f4e1414bbf33896132f331d";
+    private final String API_KEY = "pk.929f1e28f3a694a6e5ae03ff370ee618";
 
     // --------------------------------------------------
     // Get city from latitude & longitude

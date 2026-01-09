@@ -428,7 +428,7 @@ public ResponseStructure<Booking> cancellationBookingByDriver(int driverId, int 
 		    }
 		    
 		    booking.setOtpverified(true);
-		    booking.setBookingStatus("on Going");
+		    booking.setBookingStatus("STARTED");
 		    bookingrepo.save(booking);
 		    ResponseStructure<Booking> rs=new ResponseStructure<Booking>();
 		    rs.setStatuscode(HttpStatus.OK.value());
