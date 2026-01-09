@@ -482,12 +482,12 @@ public ResponseStructure<Booking> cancellationBookingByDriver(int driverId, int 
 
 
 
-		 public ResponseStructure<Driver> AvailableDriver(long mobileno) {
+		 public ResponseStructure<Driver> AvailableDriver(long mobileno,String status) {
 			 
 			Driver driver = driverrepo.findByMobileNo(mobileno);
 			
-			driver.setStatus("Unavailable");
-			driver.getVehicle().setAvailabilityStatus("Unavailable");
+			driver.setStatus(status);
+			driver.getVehicle().setAvailabilityStatus(status);
 			driverrepo.save(driver);
 			
 			 ResponseStructure<Driver> rs=new ResponseStructure<Driver>();

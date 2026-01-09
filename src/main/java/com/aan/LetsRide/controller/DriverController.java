@@ -101,8 +101,8 @@ public class DriverController {
     
     @GetMapping("/AvailableDriver")
     public ResponseStructure<Driver> AvailableDriver(
-            @RequestParam long mobileno) {
-        return driverService.AvailableDriver(mobileno);
+            @RequestParam long mobileno,@RequestParam String status) {
+        return driverService.AvailableDriver(mobileno,status);
     }
     
     
