@@ -98,4 +98,16 @@ public class DriverController {
             @RequestParam long mobileno) {
         return driverService.getCurrentBooking(mobileno);
     }
+    
+    @GetMapping("/AvailableDriver")
+    public ResponseStructure<Driver> AvailableDriver(
+            @RequestParam long mobileno,@RequestParam String status) {
+        return driverService.AvailableDriver(mobileno,status);
+    }
+    
+    
+    
+    
+    
+    
 }

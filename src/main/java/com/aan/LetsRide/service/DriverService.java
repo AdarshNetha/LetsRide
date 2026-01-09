@@ -4,6 +4,7 @@ package com.aan.LetsRide.service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -476,6 +477,24 @@ public ResponseStructure<Booking> cancellationBookingByDriver(int driverId, int 
 				
 				return activebooking1;
 		
+		 }
+
+
+
+
+		 public ResponseStructure<Driver> AvailableDriver(long mobileno,String status) {
+			 
+			Driver driver = driverrepo.findByMobileNo(mobileno);
+			
+			driver.setStatus(status);
+			driver.getVehicle().setAvailabilityStatus(status);
+			driverrepo.save(driver);
+			
+			 ResponseStructure<Driver> rs=new ResponseStructure<Driver>();
+			    rs.setStatuscode(HttpStatus.OK.value());
+			    rs.setData(driver);
+				return rs;
+			
 		 }
         	
 
