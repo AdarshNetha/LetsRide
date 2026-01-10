@@ -325,6 +325,8 @@ public class DriverService {
 		    customer.setActiveBookingFlag(false);
 		    
 		    Vehicle vehicle = booking.getDriver().getVehicle();
+		    Driver driver=booking.getDriver();
+		    driver.setStatus("AVAILABLE");
 		    vehicle.setAvailabilityStatus("AVAILABLE");
 		    Payment payment = new Payment();
 		    payment.setVehicle(vehicle);
@@ -333,9 +335,12 @@ public class DriverService {
 		    payment.setAmount(booking.getFare());
 		    payment.setPaymentType(paymentType);
 		    Payment paymentsave  = paymentre.save(payment);
-		    bookingrepo.save(booking);
 		    customerRepo.save(customer);
 		    vehiclerepo.save(vehicle);
+		    driverrepo.save(driver);
+		    bookingrepo.save(booking);
+		   
+		    
             ResponseStructure<Payment> response = new ResponseStructure<>();
 		    response.setStatuscode(HttpStatus.OK.value());
 		    response.setMessage("Payment confirmed successfully");
@@ -459,7 +464,7 @@ public ResponseStructure<Booking> cancellationBookingByDriver(int driverId, int 
 				bookinglist=driver.getBookinglist();
 				ResponseStructure<ActiveDriverBookingDto> activebooking1=new ResponseStructure<ActiveDriverBookingDto>();
 				for (Booking booking : bookinglist) {
-					if("BOOKED".equals(booking.getBookingStatus())||"on Going".equals(booking.getBookingStatus()))
+					if("BOOKED".equals(booking.getBookingStatus())||"STARTED".equals(booking.getBookingStatus()))
 					{
 						
 						ActiveDriverBookingDto activeDriverBookingDto=new ActiveDriverBookingDto(booking.getId(), booking.getCust().getName(), booking.getCust().getMobileno(), booking.getSourceLocation(), booking.getDestinationLocation(), booking.getDistanceTravelled(), booking.getFare(), booking.getBookingStatus());

@@ -268,7 +268,7 @@ public class CustomerService {
 			
 			ResponseStructure<ActiveBookingDTO> activebooking1=new ResponseStructure<ActiveBookingDTO>();
 			for (Booking booking : bookinglist) {
-				if(booking.getBookingStatus().equals("BOOKED"))
+				if(booking.getBookingStatus().equals("BOOKED")|| booking.getBookingStatus().equals("STARTED"))
 				{
 					
 					activebooking.setBooking(booking);
